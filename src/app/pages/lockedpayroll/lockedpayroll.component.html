@@ -1,0 +1,212 @@
+<!-- <p>lockedpayroll works!</p> -->
+<div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted">
+          <div class="row">
+            <div class="col-8">
+              <h4 class="mb-0 font-header">Locked Payroll Details</h4>
+            </div>
+            <div class="col-4">
+              <button type="button" class="btn blue-btn btn-sm float-right" (click)="Refresh()" [disabled]="global.globalAgencyId == 0">
+                <i class="fa fa-repeat"> </i>Refresh
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+          <div class="row no-gutters ">
+            <div class="col-lg-5 ml-0">
+              <div class="row">
+                <div class="col-lg-6 mt-2">
+                  <div class="row">
+                    <div class="col-lg-5">
+                      Start Date
+                    </div>
+                    <div class="col-lg-7">
+                      <my-date-picker [selDate]="fromDate" [options]="myDatePickerOptionsEFF" class="widthfull"
+                        placeholder="mm/dd/yyyy"  (inputFieldChanged)="newdates($event,'inputchage','start')"
+                        (dateChanged)="newdates($event,'datechagned','start')" [disabled]="global.globalAgencyId == 0" >
+                      </my-date-picker>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6 mt-2">
+                  <div class="row">
+                    <div class="col-lg-5">
+                      End Date
+                    </div>
+                    <div class="col-lg-7">
+                      <my-date-picker [selDate]="toDate" [options]="myDatePickerOptionsEFF" class="widthfull"
+                        placeholder="mm/dd/yyyy"  (inputFieldChanged)="newdates($event,'inputchage','end')"
+                        (dateChanged)="newdates($event,'datechagned','end')" [disabled]="global.globalAgencyId == 0">
+                      </my-date-picker>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 ol-xs-12 mt-2 aligned_form" no-padding>
+                    &nbsp;&nbsp;Employee &nbsp;
+                    <select [(ngModel)]="employee" class="form-control col-lg-6 col-md-6 col-sm-8 col-xs-4" [disabled]="global.globalAgencyId == 0">
+                      <option [value]="item.value" *ngFor="let item of employeelists">{{item.label}}</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 ol-xs-12 mt-2 aligned_form" no-padding>
+                  Client &nbsp;
+                  <select [(ngModel)]="Client" class="form-control col-lg-6 col-md-6 col-sm-8 col-xs-4" [disabled]="global.globalAgencyId == 0">
+                    <option [value]="item.value" *ngFor="let item of clientlist">{{item.label}}</option>
+                  </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 ol-xs-12 mt-2 aligned_form" no-padding>
+                  Pay Date &nbsp;
+                  <select [(ngModel)]="status" class="form-control col-lg-6 col-md-6 col-sm-8 col-xs-4" [disabled]="global.globalAgencyId == 0">
+                    <option [value]="0" [selected]="true">ALL</option>
+                    <option [value]="item.value" *ngFor="let item of statusList">{{item.label}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+              <div class="col-lg-1">
+                <div class="row">
+                  <div class="col-lg-4">
+                    <button type="button" class="btn blue-btn btn-sm" (click)="ApplyFilter()" [disabled]="global.globalAgencyId == 0 ||
+                    (fromDate==null||fromDate==''||fromDate==undefined)||(toDate==null||toDate==''||toDate==undefined)&&
+                    
+                    (status==null||status==''||status==undefined)">
+                        Apply
+                    </button>&nbsp;&nbsp;
+                  </div>
+                  <div class="col-lg-7">
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================grid======================================= -->
+
+  <div class="row mb-2 mt-0">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-body  widget-body pt-2">
+          <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+            <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view
+                details</label>
+        </div>
+      <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true' allowPaging='true' [allowFiltering]='true' (resizeStop)="onResize($event)"
+            [pageSettings]='initialPage' [filterSettings]='filterOptions'   (dataStateChange)= 'dataStateChange($event)' (actionBegin)="onActionComplete($event)" [showColumnChooser]= 'true'>
+            <e-columns>
+              <e-column minWidth= 100 field="employeeName" headerText="Employee" type="string">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 field="payDate" headerText="Paid On" type="date" [allowEditing]='false'
+                width=100 type='date' [format]='formatOptions'></e-column>
+              <e-column minWidth= 100 field="totalAmount" headerText="Total Amt." type="number"></e-column>
+              <e-column minWidth= 100 field="totalWorkedHrs" headerText="Total hrs." type="number"></e-column>
+              <e-column minWidth= 100 field="lockStatus" headerText="Lock Status">
+                <ng-template #template let-data>
+                  {{data.islocked== true ? "Locked" : "Unlocked"}}
+                  <!-- <label *ngIf="data.islocked == true">Locked</label>
+                  <label *ngIf="data.islocked != true">UnLocked</label> -->
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 uid="action" headerText="Actions" textAlign="center" [showInColumnChooser]='false'>
+                <ng-template #template let-data> 
+                  <button class="btn btn-edit-table" data-toggle="modal" data-target="#modal" (click)="paydateUpdate(data)"
+                    ><i class="fa fa-edit"></i></button>&nbsp;
+                  <button class="btn btn-edit-table" data-toggle="modal" data-target="#lockmodal" (click)="lockPayroll(data)"
+                    ><i class="fa fa-unlock"></i></button>
+                </ng-template>
+              </e-column>
+              <!--------------------------------table header icon---------------->
+              <e-column width="50" [showInColumnChooser]='false'>
+                <ng-template #headerTemplate let-data>
+                  <div>
+                   <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                  </div>
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <span id="openModal1" data-target="#modal" data-toggle="modal"></span>
+  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog create-update-zip1" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-header" id="exampleModalLabel" >Edit Pay date</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-5">
+                <label>Pay Date</label>
+              </div>
+              <div class="col-lg-6">
+                <!-- <my-date-picker [selDate]="payrollDate" [options]="myDatePickerOptions"
+                  placeholder="mm/dd/yyyy"  (inputFieldChanged)="newdates($event,'inputchage','pay')"
+                  (dateChanged)="newdates($event,'datechagned','pay')" >
+                </my-date-picker> -->
+                <my-date-picker [selDate]="SaveList.PayDate" [options]="myDatePickerOptionsEFF"
+                  placeholder="mm/dd/yyyy"  (inputFieldChanged)="newdates($event,'inputchage','pay')"
+                  (dateChanged)="newdates($event,'datechagned','pay')" >
+                </my-date-picker>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn blue-btn btn-sm" (click)="updatePayDate()">Update & Close</button>
+          <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal" data-target="#modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <span id="openModal2" data-target="#lockmodal" data-toggle="modal"></span>
+<div class="modal fade" id="lockmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog create-update-zip1" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="ispayrolllocked">Unlock Payroll</h5>
+          <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="!ispayrolllocked">Lock Payroll</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                  <label *ngIf="ispayrolllocked">
+                    Do you want to unlock this record ?</label>
+                  <label *ngIf="!ispayrolllocked">
+                    Do you want to lock this record ?</label>
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn blue-btn btn-sm"  *ngIf="ispayrolllocked" (click)="unlockPR()">Yes</button>
+          <button class="btn blue-btn btn-sm"  *ngIf="!ispayrolllocked" (click)="lockPR()">Yes</button>
+          <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal" data-target="#lockmodal">No</button>
+        </div>
+      </div>
+    </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

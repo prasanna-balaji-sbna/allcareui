@@ -1,0 +1,577 @@
+<!-- ////////////////////////////////////////////////////////////////////////////// -->
+
+<div class="row mb-2" *ngIf="!NewIntake && !EditIntake">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted">
+          <div class="row">
+            <div class="col-10">
+              <h4 class="mb-0 font-header">Intake Form</h4>
+            </div>
+            <div class="col-2">
+              <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId==0" *ngIf="fp.intakecreate" (click)="newIntake()" >New Intake</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+          <div class="row alert ml-3 mr-3 alert-warning" *ngIf="warning1==true">
+            <strong>{{err1}}</strong>
+          </div>
+          <div class="row no-gutters ">
+            
+               
+                <div class="col-lg-2 col-md-6 col-sm-12 ol-xs-12 mt-2 aligned_form" >
+                    <label class="">Status&nbsp;</label>
+                    <select [disabled]="global.globalAgencyId==0" class="form-control widthfull ml-1" [(ngModel)]="status" >
+                     <option></option>
+                        <option  *ngFor="let i of statusList">{{i.Value}}</option>
+                    </select>
+                  </div>
+
+                  <div class="col-lg-3 col-md-6 col-sm-12 ol-xs-12 mt-2 aligned_form" >
+                    <label class="ml-1">Start Date</label>
+                    <my-date-picker [disabled]="global.globalAgencyId==0" class="col-lg-8 ml-1"  [selDate]="filters.start" [options]="myDatePickerOptions"  
+                    placeholder="mm/dd/yyyy"  (inputFieldChanged)="newdates($event,'inputchage','Start')"
+                    (dateChanged)="newdates($event,'datechagned','Start')" >
+                  </my-date-picker>
+
+                  </div>
+                  <div class="col-lg-3 col-md-6 col-sm-12 ol-xs-12 mt-2 aligned_form" >
+                    <label class="ml-1">End Date</label>
+                    <my-date-picker [disabled]="global.globalAgencyId==0" class="col-lg-8 ml-1"  [selDate]="filters.end" [options]="myDatePickerOptions"  
+                    placeholder="mm/dd/yyyy"  (inputFieldChanged)="newdates($event,'inputchage','End')"
+                    (dateChanged)="newdates($event,'datechagned','End')" >
+                  </my-date-picker>
+                  </div>
+
+                  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 mt-2 aligned_form padding-0">
+                    <div class="row">
+                          <div class="col-lg-6 aligned_form padding-0">
+                            <label>Client&nbsp;</label>
+                            <select [disabled]="global.globalAgencyId==0"
+                              class="form-control widthfull ml-1" [(ngModel)]="client" >
+                             <option></option>
+                              <option [value]="i.Key" *ngFor="let i of ClientList">{{i.Value}}</option>
+                            </select>
+                          </div>
+                          <div class="col-lg-2">
+                            <button (click)="filterChanged(status)" type="button"  [disabled]="global.globalAgencyId==0" class="btn blue-btn btn-sm">
+                              Apply
+                            </button>
+                          </div>
+                          <div class="col-lg-4 d-none d-lg-block ml-0">
+                            <button type="button" class="btn blue-btn btn-sm"  (click)="Refresh()" [disabled]="global.globalAgencyId==0">
+                              <i class="fa fa-repeat"> </i>Refresh
+                            </button>
+                          </div>
+                    </div>
+                  </div>
+              <div class="row d-lg-none">
+                <div class="col">
+                  <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId==0" (click)="newIntake()" >New Intake</button>
+                </div>
+                <div class="col text-right">
+                <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId==0" (click)="Refresh()" >
+                    <i class="fa fa-repeat" >Refresh </i>
+                  </button>
+                </div>
+            </div>
+            <div class="row" *ngIf="status == ''">
+              <label class="text-primary ml-2" ><i><i class="fa fa-info-circle fa-lg"></i>&nbsp;&nbsp;select status to view details</i></label>
+            </div>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- //////////////////////////////Pending List////////////////////////////////////// -->
+<div class="row mb-2"  *ngIf="!NewIntake && !EditIntake" [hidden]="isApproved||isRej">
+  <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+          <!-- <div class="card-header transparent  text-muted">
+              <h4 class="mb-0 font-header">ZipCode</h4>           
+          </div> -->
+          <div class="card-body  widget-body pt-2"> 
+            <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+              <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+            </div>
+                <!-- <div *ngIf="ZipcodeDetailArray.length==0" style="text-align: center;font-weight: 800;">
+                  No data available!
+                </div> -->
+                <!-- Zip code table -->
+                <ejs-grid #grid [dataSource]='Pendingdata | async' [allowResizing]='true' [allowSorting]='true' *ngIf="global.globalAgencyId!=0" (resizeStop)="onResize($event)"
+                [allowPaging]='true' [pageSettings]='initialPage' [filterSettings]='filterSettings' [allowFiltering]='true' (actionBegin)="onActionComplete($event)" 
+                [showColumnChooser]= 'true' (dataStateChange)= 'dataStateChange($event)' >
+                
+                  <e-columns>
+                    <!-- <e-column field="id" headerText="S.No"></e-column> -->
+                    <e-column minWidth= 100 field="clientName" headerText="Client Name"  type='string'>
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="date" headerText="Intaken Date" [format]='formatOptions' type='date'></e-column>
+                    <e-column minWidth= 100 field="email" headerText="Email"  type='string'>
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="phone" headerText="Phone"  type='string'>
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 uid='action' headerText="Actions" [showInColumnChooser]='false'>
+                      <ng-template #template let-data>
+                        <button  class="btn btn-edit-table" (click)="showpendingIntakeData(data)"><i class="fa fa-edit"></i></button> 
+                        <!-- <button class="btn btn-delete-table" data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash"></i></button> -->
+                      </ng-template>
+                    </e-column>
+                    <e-column width="50" [showInColumnChooser]='false'>
+                      <ng-template #headerTemplate let-data>
+                        <div>
+                        <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                        </div>
+                      </ng-template>
+                    </e-column>
+                  </e-columns>
+                </ejs-grid> 
+          </div>
+      </div>
+  </div>
+</div>
+<!-- ///////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- //////////////////////////////Approved table List////////////////////////////////////// -->
+<div class="row mb-2"  *ngIf="!NewIntake && !EditIntake && isApproved">
+  <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+          <!-- <div class="card-header transparent  text-muted">
+              <h4 class="mb-0 font-header">ZipCode</h4>           
+          </div> -->
+          <div class="card-body  widget-body pt-2"> 
+            <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+              <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+            </div>
+                <!-- <div *ngIf="ZipcodeDetailArray.length==0" style="text-align: center;font-weight: 800;">
+                  No data available!
+                </div> -->
+                <!-- Zip code table -->
+                <ejs-grid #grid [dataSource]='Approveddata | async ' [allowResizing]='true' [allowSorting]='true' *ngIf="global.globalAgencyId!=0" 
+                [allowPaging]='true' [pageSettings]='initialPage' [filterSettings]='filterSettings' [allowFiltering]='true' (actionBegin)="onActionComplete($event)" 
+                [showColumnChooser]= 'true' (dataStateChange)= 'dataStateChange($event)' >
+                  <e-columns>
+                    <!-- <e-column field="id" headerText="S.No"></e-column> -->
+                    <e-column minWidth= 100 field="clientName" headerText="Client Name">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="date" headerText="Intaken Date" [format]='formatOptions' type='date'></e-column>
+                    <e-column minWidth= 100 field="email" headerText="Email" type="string">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="phone" headerText="Phone"  type="string">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 headerText="Actions" [showInColumnChooser]='false'>
+                      <ng-template #template let-data>
+                        <button  class="btn btn-edit-table" (click)="showapprovedIntakeData(data)"><i class="fa fa-eye"></i></button> 
+                        <!-- <button class="btn btn-delete-table" data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash"></i></button> -->
+                      </ng-template>
+                    </e-column>
+                    <e-column width="50" [showInColumnChooser]='false'>
+                      <ng-template #headerTemplate let-data>
+                        <div>
+                        <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                        </div>
+                      </ng-template>
+                    </e-column>
+                  </e-columns>
+                </ejs-grid> 
+          </div>
+      </div>
+  </div>
+</div>
+<!-- /////////////////////////////////////////////////////Rejected Array/////////////////////////////////////////////////////////////////////// -->
+<div class="row mb-2"  *ngIf="!NewIntake && !EditIntake && isRej">
+  <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+          <!-- <div class="card-header transparent  text-muted">
+              <h4 class="mb-0 font-header">ZipCode</h4>           
+          </div> -->
+          <div class="card-body  widget-body pt-2"> 
+            <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+              <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+            </div>
+                <!-- <div *ngIf="ZipcodeDetailArray.length==0" style="text-align: center;font-weight: 800;">
+                  No data available!
+                </div> -->
+                <!-- Zip code table -->
+                <ejs-grid #grid [dataSource]='rejectdata | async ' [allowResizing]='true' [allowSorting]='true' *ngIf="global.globalAgencyId!=0" 
+                [allowPaging]='true' [pageSettings]='initialPage' [filterSettings]='filterSettings' [allowFiltering]='true' (actionBegin)="onActionComplete($event)" 
+                [showColumnChooser]= 'true' (dataStateChange)= 'dataStateChange($event)'  >
+                  <e-columns>
+                    <!-- <e-column field="id" headerText="S.No"></e-column> -->
+                    <e-column minWidth= 100 field="clientName" headerText="Client Name">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="date" headerText="Intaken Date" [format]='formatOptions' type='date'></e-column>
+                    <e-column minWidth= 100 field="email" headerText="Email">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="phone" headerText="Phone">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 headerText="Actions" [showInColumnChooser]='false'>
+                      <ng-template #template let-data>
+                        <button  class="btn btn-edit-table" (click)="showrejIntakeData(data)"><i class="fa fa-eye"></i></button> 
+                        <!-- <button class="btn btn-delete-table" data-toggle="modal" data-target="#deletemodal"><i class="fa fa-trash"></i></button> -->
+                      </ng-template>
+                    </e-column>
+                    <e-column width="50" [showInColumnChooser]='false'>
+                      <ng-template #headerTemplate let-data>
+                        <div>
+                        <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                        </div>
+                      </ng-template>
+                    </e-column>
+                  </e-columns>
+                </ejs-grid> 
+          </div>
+      </div>
+  </div>
+</div>
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- Add New intake -->
+<div *ngIf="NewIntake||EditIntake">
+  <form [formGroup]="ClientIntakeDataForm">
+      <div class="row mb-2">
+          <div class="col pl-0">
+              <div widget class="card border-0 box-shadow">
+                  <div class="card-header transparent  text-muted">
+                      <h4 class="mb-0 font-header">Prospective Client Questionnaire</h4>
+                    
+                  </div>
+                  <div class="card-body  widget-body pt-2"> 
+                  <div class="row">
+                    <label class="mb-0 font-header ml-3 font-weight-bold">Personal Info</label>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                        <label class="label padding0 col-lg-5">First Name <sup class="super-script">&nbsp;*</sup></label>
+                        <input type="text" class="form-control" formControlName="clientName" [(ngModel)]="intakeList.clientName" (ngModelChange)="valuechangefunction('firstname');"  >                      
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                      <label class="label col-lg-5 padding0">Last Name <sup class="super-script">&nbsp;*</sup></label>
+                      <input type="text" class="form-control" formControlName="lastName"  (ngModelChange)="valuechangefunction('lastname');"  [(ngModel)]="intakeList.lastName " >                     
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                        <label class="label  col-lg-4 padding0">Date<sup class="super-script">&nbsp;*</sup></label>
+                        <my-date-picker id="fromdate"  class="col-lg-9 col-md-6 col-sm-12 col-xs-12" [options]="myDatePickerOptionsDate" [selDate]="intakeList.date"  
+                        placeholder="mm/dd/yyyy"  formControlName="date"
+                        (inputFieldChanged)="newdates($event,'inputchage','Create');"
+                        (dateChanged)="newdates($event,'datechagned','Create');">
+                      </my-date-picker>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                        <label class="label  col-lg-4  padding0">DOB<sup class="super-script">&nbsp;*</sup></label>
+                        <my-date-picker  class="col-lg-8 col-md-6 col-sm-12  col-xs-12" [options]="myDatePickerOptionsDOB" [selDate]="intakeList.dOB"   formControlName="dOB"
+                        placeholder="mm/dd/yyyy" 
+                        (inputFieldChanged)="newdates($event,'inputchage','DOB');"
+                          (dateChanged)="newdates($event,'datechagned','DOB');valuechangefunction('DOB')"  [disabled]="isRej || isApproved"  (focusout)="calculateAge(intakeList)"  >
+                      </my-date-picker>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                          <label class="label col-lg-5 padding0">Email </label>
+                          <input type="text" class="form-control"  [(ngModel)]="intakeList.email" formControlName="email" (ngModelChange)="valuechangefunction('email');" >                      
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                         <label class="label col-lg-5 padding0">Gender<sup class="super-script">&nbsp;*</sup></label>
+                         <select class="form-control" [(ngModel)]="intakeList.genderLid" formControlName="genderLid"  (change)="valuechangefunction('gender');Change()" >
+                           <option></option>
+                           <option  [value]=gen.Key *ngFor="let gen of genderList">{{gen.Value}}</option>
+                         </select>
+                       </div>
+                       <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                          <label class="label col-lg-5 padding0">Age</label>
+                          <input type="text" class="form-control" [(ngModel)]="intakeList.age"formControlName="age"  (ngModelChange)="valuechangefunction('Age');" >                      
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                          <label class="label col-lg-5 padding0" >Phone</label>
+                          <input type="text" class="form-control "  [(ngModel)]="intakeList.phone" formControlName="phone"  (keypress)="numberOnly($event)" (ngModelChange)="formatPhoneNumber($event,intakeList.phone);valuechangefunction('Phone')"  maxlength="14" >                      
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                        <label class="label col-lg-5 padding0">Street</label>
+                        <input type="text" class="form-control" [(ngModel)]="intakeList.street" formControlName="street" (ngModelChange)="valuechangefunction('street');">                      
+                      </div>
+                          <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                            <label class="label col-lg-5 padding0">City </label>
+                            <input type="text" class="form-control " [(ngModel)]="intakeList.city" formControlName="city"  (ngModelChange)="valuechangefunction('city');" >                      
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                           <label class="label col-lg-5 padding0">State</label>
+                           <ng-select [items]="stateList" class="max-290" [searchable]="true" [clearable]="true"
+                           bindLabel="name" bindValue="abbreviation" formControlName="state"
+                           [(ngModel)]="intakeList.state"         (ngModelChange)="valuechangefunction('state')"     >
+                         </ng-select>
+
+
+                           <!-- <input type="text" class="form-control " [(ngModel)]="intakeList.state" formControlName="state" (ngModelChange)="valuechangefunction('state');" >                 -->
+                         </div>
+                          <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                            <label class="label col-lg-5 padding0">Apt#</label>
+                            <input type="text" class="form-control " [(ngModel)]="intakeList.aptNumber" formControlName="aptNumber"  (ngModelChange)="valuechangefunction('apt');Change()" >                     
+                          </div>
+                       
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                        <label class="label col-lg-5 padding0">County</label>
+                        <input type="text" class="form-control " [(ngModel)]="intakeList.county" formControlName="county"  (ngModelChange)="valuechangefunction('country');">                      
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">
+                        <label class="label col-lg-5 pr-0 padding0">Zip Code</label>
+                        <input type="text" class="form-control "  maxlength="10"  formControlName="zipcode"  [(ngModel)]="intakeList.zipcode"  (ngModelChange)="valuechangefunction('zipcode');">
+                       
+                      </div>
+                    <div class="col-lg-2">
+                      <button type="button" class="btn blue-btn btn-sm"[disabled]="intakeList.street==''||intakeList.street==undefined||intakeList.street==null||intakeList.city==''||intakeList.city==null||intakeList.city==undefined||intakeList.state==''||intakeList.state==undefined||intakeList.state==null"  (click)="getzipcode()">Get Zip</button>
+                    </div>
+                    </div>
+                           <div class="row mt-1">
+                            <label class="mb-0 font-header ml-3 font-weight-bold">General Info</label>
+                            </div>
+                            <hr/>
+                            <div class="row mt-1">
+                              <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                                <label class="label col-5">Responsilbe Party </label>
+                                <input type="text" class="form-control "  [(ngModel)]="intakeList.responsibleParty" formControlName="responsibleParty"  (ngModelChange)="valuechangefunction('responsile');Change()"  >                      
+                              </div>
+                              <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                               <label class="label col-5">Phone</label>
+                               <input type="text" class="form-control " [(ngModel)]="intakeList.responsiblePartyPhone" formControlName="responsiblePartyPhone"  (keypress)="numberOnly($event)"  maxlength="14"  (ngModelChange)="formatPhoneNumberresponsiblePartyPhone($event,intakeList.responsiblePartyPhone);valuechangefunction('Phone1')"  >                
+                             </div>
+                        
+                              <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                                <label class="label col-5">Referral or Phone call from
+                                </label>
+                                <input type="text" class="form-control " [(ngModel)]="intakeList.refferalPhone" formControlName="refferalPhone"   (keypress)="numberOnly($event)" maxlength="14"  (ngModelChange)="formatPhoneNumbergetPhoneNumberFormat($event,intakeList.refferalPhone);valuechangefunction('refferalPhone')"  >                      
+                              </div>
+                               </div>
+                               <div class="row mt-1">
+                                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                                  <label class="label col-lg-6">Do you have a current assessment?</label>
+                                  <div class="ml-2" *ngFor="let i of CurrentassessmentList">
+                                    <input type="radio" [value]="i.Key"   [(ngModel)]="intakeList.currentAssessmentLid" formControlName="currentAssessmentLid"  (ngModelChange)="valuechangefunction('currentAssessment')" />
+                                     {{i.Value}}
+                                    </div>                          
+                                </div>
+                                <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                  <label class="label col-5">Hours a Day</label>
+                                  <input type="text" class="form-control " [(ngModel)]="intakeList.hoursaday"  formControlName="hoursaday" (ngModelChange)="valuechangefunction('hoursaday')">                
+                                </div>
+                               <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12 aligned_form">                       
+                                      
+                              </div>
+                          
+                                 </div>
+                                 <div class="row mt-1">
+                                
+                              <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                <label class="label col-6 ">Are you currently with an agency?</label>
+                                <div  *ngFor="let i of CurrentagencyList" >
+                                  <input type="radio"  name="clicurrentagency" [value]="i.Key" formControlName="currentlywithanagencyLid"  [(ngModel)]="intakeList.currentlywithanagencyLid" (ngModelChange)="valuechangefunction('currentagency')">
+                                {{i.Value}}
+                                </div>                   
+                                </div>
+                                  </div>
+                                  <div class="row mt-2">
+                                    <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label col-6 ">If Yes, Who?</label>
+                                      <input type="text" class="form-control"  [(ngModel)]="intakeList.currentAgency" formControlName="currentAgency"  (ngModelChange)="valuechangefunction('currentagency1');Change()" >                
+                                    </div>
+                                     </div>
+                                     <div class="row mt-2">
+                                      <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                        <label class="label col-6  ">Reason for Leaving?</label>
+                                        <input type="text" class="form-control" [(ngModel)]="intakeList.reasonForLeaving" formControlName="reasonForLeaving" (ngModelChange)="valuechangefunction('reasonforleaving')" >                
+                                      </div>
+                                       </div>
+                                       <div class="row mt-1">
+                                        <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                                          <label class="col-lg-6">Do you have staffing?</label>
+                                          <div class="ml-2"  *ngFor="let i of staffingList" >
+                                            <input type="radio" [value]="i.Key"   [(ngModel)]="intakeList.staffingLid" formControlName="staffingLid" (ngModelChange)="valuechangefunction('staffing')"/>
+                                             {{i.Value}}
+                                            </div>                          
+                                        </div>
+                                        <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                          <label class="label col-lg-7">What days/shifts are you needing PCA?
+                                          </label>
+                                          <input type="text" class="form-control " [(ngModel)]="intakeList.needDaysAndShift" formControlName="needDaysAndShift" (ngModelChange)="valuechangefunction('dayandshift')" >                
+                                        </div>
+                                       
+                                  
+                                         </div>
+                                         <div class="row">
+                                          <label class="mb-0 font-header ml-3 font-weight-bold">Follow up/Additional notes</label>
+                                          </div><hr>
+                                          <div class="row">
+                                            <textarea class="form-control my-test-test" formControlName="followup" [(ngModel)]="intakeList.followup" (ngModelChange)="valuechangefunction('followup')" rows="5" cols="70"></textarea>
+                                            </div>
+                                          <div class="row">
+                                            <label class="mb-0 font-header ml-3 font-weight-bold">Pending Assessment</label>
+                                          </div><hr>
+                                         <div class="row">
+                                            <textarea class="form-control my-test-test" formControlName="pendingAssessment" [(ngModel)]="intakeList.pendingAssessment" (ngModelChange)="valuechangefunction('pendingassement')" rows="5" cols="70"></textarea>
+                                          </div>
+                                         <hr/>
+                                            <div class="row ">
+                                              <div class="col-lg-6">
+                                              <label class="mb-0 text-danger font-italic">Note:* Fiels are mandatory</label>
+                                            </div> 
+                                            <div class="col-lg-6 text-right">
+                                                    <button type="button" class="btn blue-btn btn-sm" (click)="saveintake()" *ngIf="NewIntake" [hidden]="isRej" [disabled]="!ClientIntakeDataForm.valid">Save & Close</button> &nbsp;  
+                                                    <button type="button" class="btn blue-btn btn-sm" (click)="saveintake()" *ngIf="!NewIntake||EditIntake"  [disabled]="isRej || !ClientIntakeDataForm.valid ">Save</button> &nbsp;  
+                                                    <button type="button" class="btn blue-btn btn-sm" (click)="checkvaluechnage(SelectedStatus)">Close</button> &nbsp;                  
+                                                    <button type="button" class="btn btn-success btn-sm" [disabled]="NewIntake||!ClientIntakeDataForm.valid" (click)="ApprovedList()"[hidden]="isRej">Approve</button> &nbsp;                   
+                                                    <button type="button" class="btn btn-danger btn-sm"  (click)="rejectList()"  [hidden]="isRej" *ngIf=" isPending || NewIntake" [disabled]="NewIntake||!ClientIntakeDataForm.valid">Reject</button> &nbsp;                   
+                                              
+                                            </div>     
+                                            </div>
+                  </div>
+              
+              </div>
+          </div>
+      </div>
+  </form>
+</div>
+<!-- ////////////////////////////////////////////////Close Modal///////////////////////////////////////////////////////// -->
+<!-- Close Modal -->
+<span id="openModal1" data-target="#CloseModal" data-toggle="modal"></span>
+<div class="modal" id="CloseModal" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Close</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        You want to close without save?
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn" (click)="cancelYes()">Yes</button>
+        <button type="button" class="btn blue-btn" data-dismiss="modal">No</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<!-- ////////////////////////////////////////////////Reject Modal///////////////////////////////////////////////////////// -->
+<!-- Close Modal -->
+<span id="openModal2" data-target="#RejectModal" data-toggle="modal"></span>
+<div class="modal" id="RejectModal" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Reject Close Alert</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure you want to Reject Intake
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button class="btn blue-btn" type="button" (click)="rejYes()">Yes</button>
+        <button type="button" class="btn blue-btn" data-dismiss="modal">No</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<!-- ////////////////////////////////////////////////Reject Confirmation Modal///////////////////////////////////////////////////////// -->
+<!-- Close Modal -->
+<span id="openModal3" data-target="#ClientRejection" data-toggle="modal"></span>
+<div class="modal" id="ClientRejection" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Client Rejection</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        
+        <label class="label-header" >Rejection Notes&nbsp;:</label>
+        <textarea class="form-control" [(ngModel)]="IntakeApprovalBO.reasonForRejection"></textarea>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button class="btn blue-btn" type="button" [disabled]="!IntakeApprovalBO.reasonForRejection"  (click)="saverejectedlist();">Reject</button>
+        <button type="button" class="btn blue-btn" data-dismiss="modal">Cancel</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<!-- ////////////////////////////////////////////////Approve Modal///////////////////////////////////////////////////////// -->
+<!-- Close Modal -->
+<span id="openModal4" data-target="#ApproveModal" data-toggle="modal"></span>
+<div class="modal" id="ApproveModal" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">
+          Approve Alert</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure you want to Approve Intake
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button class="btn blue-btn" type="button" (click)="ApprovedYes()">Yes</button>
+        <button type="button" class="btn blue-btn" data-dismiss="modal">No</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<ngx-ui-loader *ngIf="global.globalAgencyId!=0"></ngx-ui-loader>
+

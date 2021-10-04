@@ -1,0 +1,794 @@
+
+
+  
+<div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted">
+          <h4 class="mb-0 font-header">Timesheet Verification</h4>
+        </div>
+        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+
+          <div class="row d-lg-none">
+            <div class="col">
+              <label>From Date</label>  
+               <my-date-picker class="col-lg-2 col-md-3 col-sm-4 col-xs-5 " [options]="myDatePickerOptions"[selDate]="fromdate"
+              (dateChanged)="onDateChanged($event)" (inputFieldChanged)="datechange($event)"  placeholder="mm/dd/yyyy"  ></my-date-picker>
+            </div>
+            <div class="col text-right">
+              <label>To Date</label>
+              <my-date-picker class="col-lg-2 col-md-3 col-sm-4 col-xs-5 " [options]="myDatePickerOptions" (dateChanged)="onDateChangedend($event)"
+              (inputFieldChanged)="datechangend($event)" [selDate]="todate" placeholder="mm/dd/yyyy"  ></my-date-picker>
+            </div>
+        </div>
+          <div class="row  mt-1">
+            <div class="col-lg-3">
+              <div class="row">
+                <label class="col-lg-5 col-md-5 col-sm-12 col-xs-12 d-none d-lg-block mr-0">From Date</label>
+                <my-date-picker class="col-lg-7 col-md-7 col-sm-12 col-xs-12 d-none d-lg-block ml-0 mr-0" [options]="myDatePickerOptions"[selDate]="fromdate"
+              (dateChanged)="onDateChanged($event)" (inputFieldChanged)="datechange($event)"  placeholder="mm/dd/yyyy"  ></my-date-picker>
+              </div>
+            </div>
+            
+        
+              
+            <div class="col-lg-3">
+              <div class="row">
+                <label class="col-lg-5 col-md-5 col-sm-12 col-xs-12 d-none d-lg-block mr-0">To Date</label>
+                <my-date-picker class="col-lg-7 col-md-7 col-sm-12 col-xs-12 d-none d-lg-block" [options]="myDatePickerOptions" (dateChanged)="onDateChangedend($event)"
+                (inputFieldChanged)="datechangend($event)" [selDate]="todate" placeholder="mm/dd/yyyy"  ></my-date-picker>
+              </div>
+            </div>
+
+           <div class="col-lg-1 col-md-2 col-sm-12 col-xs-12 ">
+            <button type="button" class="btn blue-btn btn-sm mr-0" (click)="gettimesheetdata()"  [disabled]="global.globalAgencyId==0"
+           >Apply</button>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 ">
+            <button type="button" class="btn blue-btn btn-sm ml-0"  (click)="selecttobill()"  [disabled]="global.globalAgencyId==0"
+            >Send to bill</button>
+          </div>
+          <!-- (click)="gettimesheetdata()" -->
+          <!-- (click)="selecttobill('success')" -->
+         
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col pl-0">
+  
+      <div widget class="card border-0 box-shadow">
+        <div class="card-body  widget-body pt-2">
+
+          <div class="row">
+            <div class="col-lg-2">
+              <button type="button"  [disabled]="global.globalAgencyId==0"(click)="Refresh()" class="btn blue-btn btn-sm text-right"
+               >
+                <i class="fa fa-repeat">&nbsp;</i>Refresh
+              </button>
+            </div>
+      
+      
+          </div>
+          <div *ngIf="global.globalAgencyId==0"  class="text-center">
+            <label class="agencywarn"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+          </div>
+  <div class="control-section" *ngIf="global.globalAgencyId!=0"> 
+    <div >
+    <ejs-grid #grid id='grid' [allowResizing]='true' [dataSource]='data | async' (checkBoxChange)="show1($event)"
+      (queryCellInfo)='validatebutton($event)'allowPaging='true' [allowFiltering]='true' [allowSorting]='true' [pageSettings]='initialPage'
+      (toolbarclick)="getdata($event)" (dataSourceChanged)='dataSourceChanged($event)'  (recordDoubleClick)="recordDoubleClick($event)"   
+      [filterSettings]='filterOptions' (dataStateChange)= 'dataStateChange($event)'  [selectionSettings]='selectionOptions' (cellEdit)="cellEdit($event)" [editSettings]='editSettings'
+      (rowDataBound)='rowDataBound($event)' (resizeStop)="onResize($event)"  [childGrid]='childGrid' (actionComplete)="onActionComplete($event)"
+      [showColumnChooser]= 'true' >
+      <!--allowPaging='true' [allowFiltering]='true' [allowSorting]='true' [pageSettings]='initialPage' -->
+      <!-- (dataSourceChanged)='dataSourceChanged($event)'  (recordDoubleClick)="recordDoubleClick($event)"-->
+      <!-- [selectionSettings]='selectionOptions' (cellEdit)="cellEdit($event)" [editSettings]='editSettings' -->
+      <e-columns>
+      
+        <e-column   type='checkbox'[showInColumnChooser]='false' uid="checkbox"maxWidth= 50 textAlign='center' [allowEditing]='true' editType="booleanedit"
+          [edit]='checkparams'></e-column>
+        <e-column field='clientName' headerText="Client"  minWidth= 160 textAlign='left' [allowEditing]='false' type='string'>
+        <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+        </e-column>
+        <e-column field='insuredId' headerText="Insured ID" textAlign='left' minWidth= 100 [allowEditing]='false'  type='string'>
+        <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+        </e-column>
+        <e-column field='payer' headerText="Payer" textAlign='left' minWidth= 100 [allowEditing]='false'  type='string'>
+          <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+        </e-column>
+        <e-column field='fromDate' headerText="From Date" minWidth= 130 textAlign='left'[format]='formatOptions' [allowEditing]='false'  type='date'  [allowFiltering]='false' >
+        </e-column>
+        <e-column field='toDate' headerText="To Date"  minWidth= 130 textAlign='left' [format]='formatOptions' [allowEditing]='false'  [allowFiltering]='false'  type='date'></e-column>
+        <e-column field='totalHours'  headerText="Total Hours"   minWidth= 130 textAlign='right' [allowEditing]='false'  type='string'>
+        <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+        </e-column>
+        <e-column field='employee' headerText="Employee"   minWidth= 130 textAlign='left' [allowEditing]='false' type='string'>
+        <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+        </e-column>
+        <e-column field='employeeUMPI' headerText="UMPI"  minWidth= 120 textAlign='left' [allowEditing]='false'  type='string' >
+        <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+        </e-column>
+        <e-column field='payorID'headerText="Payor ID"   minWidth= 100 textAlign='left' [allowEditing]='false'  type='string' >
+        <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+        </e-column>
+        <e-column field='totalAmountBIlled'headerText="Billed Amt."   minWidth= 120 textAlign='right'
+          [allowEditing]='false'  type='string'>
+          <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template></e-column>
+          <e-column field='claimStatus'headerText="Claim Status"  minWidth= 120 textAlign='right'
+          [allowEditing]='false'   type='string' >
+          <ng-template #filterTemplate let-data>
+            <ejs-dropdownlist id='dropdown'placeholder='Select a  Claim Status' [dataSource]='dropdata'
+             [popupHeight]='height' ></ejs-dropdownlist>
+       </ng-template>
+      </e-column>
+        <!-- <e-column field='claimStatus' headerText='Claim Status' width='100' [allowEditing]='true' textAlign='left'
+          [edit]='countryParams' editType='dropdownedit'></e-column> -->
+        <e-column field='service' headerText="Service"  minWidth= 90 textAlign='center' [allowEditing]='false'  type='string'>
+          <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+        </e-column>
+        <e-column field='validate'  headerText="Validate"  minWidth= 100 textAlign='center' [allowEditing]='false'  [allowFiltering]="false">
+          <ng-template #template let-data>
+            <div>
+              <button class="btn blue-btn btn-sm"
+              data-toggle="modal" data-target="#showerror"  (click)="showerrors($event)">Validate</button>
+               
+            </div>
+          </ng-template>
+        </e-column>
+        <e-column width="50" [showInColumnChooser]='false'>
+          <ng-template #headerTemplate let-data>
+            <div>
+              <span id='show' (click)='show()'><i class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+            </div>
+          </ng-template>
+        </e-column>
+      <!-- [style.background]="buttoncolor" -->
+      </e-columns>
+   
+    </ejs-grid>
+  </div>
+    <!-- ------------------------------------template for childgrid------------------------------- -->
+    <ng-template #childtemplate let-data>
+      <div><button class="btn btn-edit-table"  style="height: 24px" (click)="splitup($event)" data-toggle="modal" data-target="#splitday"><i class="fa fa-edit"></i>
+      </button></div>
+    </ng-template>
+    <!-- ---------------------------------------template for validate button------------------- -->
+    <span id="OpenModal2" data-target="#showerror" data-toggle="modal"></span>
+    <span id="authedit" data-target="#solveerr" data-toggle="modal"></span>
+    <div class="modal fade" id="showerror" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+      <div class="modal-dialog " role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <label class="font-header">Check Validation Status</label>
+              <button class="btn blue-btn btn-sm" type="button" 
+              data-dismiss="modal">Close</button>
+              </div>
+              <div class="modal-body">
+                  <div class="container scrolltbody">
+              <div class="mb-2 row">
+                <input type="checkbox" class="mr-2 mt-1" [(ngModel)]="isEnabled"  (change)="SelectErrorData()"/>
+                  <label for="radio-1" >Show errors only</label>      
+                </div>
+              <div  >
+                <table class="table table-responsive table-hover table-bordered" style="margin-left: 0px">
+                  <thead>
+                    <!-- <tr> -->
+                    <th  style="background: #004290;width: 255px" class="pointer">Column</th>
+                    <th style="background: #004290;width: 150px" class="pointer">Status</th>
+                    <!-- </tr> -->
+                  </thead>
+                  <tbody>
+                    <!-- paginate:{ id:'employee', itemsPerPage: 10, currentPage: p ,totalItems:showerrolist.length };let i=index  -->
+                    <tr *ngFor="let c of showerrolist" class="row1">
+    
+                      <!--  -->
+                      <td  *ngIf="c.color == 'Red' && c.columnName!= 'Zero Bill'&& c.columnName != 'Client_ServiceAgreementNo' && c.columnName!='CertificateICD10_01' && c.columnName != 'Icd10'  && c.columnName != 'StartofCareId' 
+                      &&c.columnName!='EmployeePayorUMPI'" 
+                      [style.color]="c.color" class="row1 font-weight"  data-toggle="modal"  (click)="errmodal(c.columnName)">{{c.columnName}}</td>
+                      <td  *ngIf="c.color == 'Red' && (c.columnName == 'Client_ServiceAgreementNo' || c.columnName=='CertificateICD10_01'|| c.columnName == 'Icd10' || c.columnName == 'StartofCareId'|| c.columnName=='EmployeePayorUMPI' )" [style.color]="c.color" class="row1 font-weight"  (click)="errmodal(c.columnName)">{{c.columnName}}</td>
+                      <td  *ngIf="c.color == 'Green'"  [style.color]="c.color" class="row1 font-weight"  >{{c.columnName}}</td>
+                      <td  *ngIf=" c.color == 'Red' && ( c.columnName== 'Zero Bill' )" [style.color]="c.color" class="row1 font-weight"  >{{c.columnName}}</td>
+                      <!-- <td [style.color]="c.color" class="row1 font-weight" >{{c.columnName}}</td> -->
+                      <td [style.color]="c.colr"   >{{c.status}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              </div>
+            </div>
+            </div>
+            </div>
+          </div>
+   <!-- ----------------------------------------split day button template------------------------ -->
+  
+  <span id="OpenModal3" data-target="#splitday" data-toggle="modal"></span>
+        <div class="modal fade" id="splitday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+              <label class="font-header" >Split Day</label>
+              <button class="btn blue-btn btn-sm text-right" type="button"
+                data-dismiss="modal">Close</button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <table class="table table-responsive table-hover table-bordered ml-0" >
+                      <thead class="colr">
+                        <tr>
+                          <th class="pointer"> LineStatus
+        
+                          </th>
+                          <th class="pointer"> ServiceDate
+                          </th>
+                          <th class="pointer text-right" > Daily Hours
+        
+                          </th>
+                          <th class="pointer"> Procedure Code
+        
+                          </th>
+                          <th class="pointer"> Mod
+        
+                          </th>
+                          <th class="pointer"> Mod
+        
+                          </th>
+                          <th class="pointer"> Mod
+        
+                          </th>
+                          <th class="pointer text-right" > Over 275 Hours
+        
+                          </th>
+                          <th class="pointer text-right"> Remaining Authorized Hours
+        
+                          </th>
+                          <th class="pointer text-right"> Over Daily 16 hours
+        
+                          </th>
+                        
+                        </tr>
+                      </thead>
+        
+                      <tbody>
+                      
+                        <tr *ngFor="let c of detailstime">
+                        
+                          <td class="dodgerblue" data-toggle="modal" data-target="#Edittimesheet" (click)="Edittimesheets(c)">
+                            {{c.lineStatus}}
+                          </td>
+                          <td class="dodgerblue" data-toggle="modal" data-target="#Edittimesheet" (click)="Edittimesheets(c)">
+                            {{c.serviceDate}}
+                          </td>
+                          <td class="dodgerblue text-right"  data-toggle="modal" data-target="#Edittimesheet"(click)="Edittimesheets(c)">
+                            {{c.dailyHours}}
+                          </td>
+                          <td class="dodgerblue" data-toggle="modal" data-target="#Edittimesheet" (click)="Edittimesheets(c)">
+                            {{c.procedureCode}}
+                          </td>
+                          <td class="dodgerblue" data-toggle="modal" data-target="#Edittimesheet" (click)="Edittimesheets(c)">
+                            {{c.moD1}}
+                          </td>
+                          <td class="dodgerblue"  data-toggle="modal" data-target="#Edittimesheet"(click)="Edittimesheets(c)">
+                            {{c.moD2}}
+                          </td>
+                          <td class="dodgerblue" data-toggle="modal" data-target="#Edittimesheet" (click)="Edittimesheets(c)">
+                            {{c.moD3}}
+                          </td>
+                          <td class="dodgerblue text-right" data-toggle="modal" data-target="#Edittimesheet" (click)="Edittimesheets(c)">
+                            {{c.over275Hrs}}
+                          </td>
+                          <td class="dodgerblue text-right" data-toggle="modal" data-target="#Edittimesheet" (click)="Edittimesheets(c)">
+                            {{c.remaimimgAuthorizedHours}}
+                          </td>
+                          <td class="dodgerblue text-right" data-toggle="modal" data-target="#Edittimesheet"  (click)="Edittimesheets(c)">
+                            {{c.overDaily16Hours}}
+                          </td>
+        
+        
+                        </tr>
+                      </tbody>
+        
+                    </table>
+                  </div>
+                </div>
+           
+            </div>
+          </div>
+          </div>
+          </div>
+        </div>
+         <!-- --------------------------------------templatefor editing the split day record-------------------- -->
+     
+     <span id="OpenModal4" data-target="#Edittimesheet" data-toggle="modal"></span>
+        <div class="modal fade" id="Edittimesheet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+            <label class="font-header">Update record</label>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <div class="container">
+          <div class="col-lg-12 mt-1" >
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col">
+                    <label class="font-weight" >Line Status</label>
+                  </div>
+                  <div class="col">
+                    <input type=text class="form-control" [disabled]="true" [(ngModel)]="lineStatus" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col">
+                    <label class="font-weight">Service Date</label>
+                  </div>
+                  <div class="col">
+                    <my-date-picker [options]="myDatePickerOptions" [selDate]="serviceDate" placeholder="mm/dd/yyyy" 
+                    (inputFieldChanged)="newdates($event,'inputchage')"
+                    (dateChanged)="newdates($event,'datechagned')">
+                    </my-date-picker>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12 mt-1" >
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col">
+                    <label class="font-weight" >Daily Hours</label>
+                  </div>
+                  <div class="col">
+                    <input type=text class="form-control"  [disabled]="true" [(ngModel)]="dailyHours" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col">
+                    <label class="font-weight">Procedure Code</label>
+                  </div>
+                  <div class="col">
+                    <!-- <input type=text class="form-control" [(ngModel)]="procedureCode" /> -->
+                    <select class="form-control" [(ngModel)]="procedureCode"  
+                   >
+                      <option [value]=st.Key *ngFor="let st of Allservice">{{st.Value}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-lg-12 mt-1" >
+            <div class="row">
+
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col">
+                    <label class="font-weight">Mod</label>
+                  </div>
+                  <div class="col">
+                    <input type=text class="form-control"   [disabled]="true"[(ngModel)]="mOD1" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col">
+                    <label class="font-weight">Mod</label>
+                  </div>
+                  <div class="col">
+                    <input type=text class="form-control"   [disabled]="true"[(ngModel)]="mOD2" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div class="col-lg-12 mt-1" >
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col">
+                    <label class="font-weight">Over 275 hours</label>
+                  </div>
+                  <div class="col">
+                    <input type=text class="form-control" [disabled]="true" [(ngModel)]="over275Hrs" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col">
+                     <label class="font-weight">Daily over 16 hours</label>
+                  </div>
+                  <div class="col">
+                    <input type=text class="form-control"  [disabled]="true"width="30%"  [(ngModel)]="overDaily16Hours" />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-lg-12 mt-1" >
+            <div class="row">
+              <!-- <div class="col-lg-5">
+                <div class="row">
+                  <div class="col-lg-7">
+                    <label class="font-weight">Daily over 16 hours</label>
+                  </div>
+                  <div class="col-lg-5">
+                    <input type=text class="form-control"  [disabled]="true"width="30%"  [(ngModel)]="overDaily16Hours" />
+                  </div>
+                </div>
+              </div> -->
+
+
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <label class="font-weight">Remaining Authorized Hours</label>
+                  </div>
+                  <div class="col-lg-6">
+                    <input type=text class="form-control" [disabled]="true" width="50%" [(ngModel)]="remaimimgAuthorizedHours" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+        
+            <div class="row w-100" >
+              <span style="color: red;" class="w-75">Note:Only Procedure code and Service date are editable</span>
+              <button class="btn blue-btn btn-sm  text-right" type="button" 
+                (click)="save()">Update & Close</button>&nbsp;&nbsp;
+              <button class="btn blue-btn btn-sm  text-right" type="button" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+            </div>
+            </div>
+          </div>
+       
+   
+  </div>
+  </div>
+  </div>
+  </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>
+
+
+<!-- ////////////////////////Error edt modal/////////////////////////// -->
+<span id="OpenModal1" data-target="#solveerr" data-toggle="modal"></span>
+<div class="modal fade " id="solveerr" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="ErrModalclientAuth.length!=0">Update Client Authorization</h5>
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="ErrModalClient.length!=0">Update Client</h5>
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="ErrModalCompany.length!=0">Update Company</h5>
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="ErrModalGrouppayor.length!=0">Update Grouppayor</h5>
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="ErrModalGrouppayorService.length!=0">Update Grouppayorservice</h5>
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="ErrModalIcd10.length!=0">Update Client Certification</h5>
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="ErrModalemployee.length!=0">Update Employee</h5>
+        <button type="button" class="close" data-dismiss="modal" (click)="closeerromodal()">&times;</button>
+      </div>
+      <div class="modal-body">
+     
+
+        <div *ngIf="ErrModalClient.length != 0">
+          <div class="row" *ngFor="let c of ErrModalClient ; let i = index">
+            <div class="col">
+              <div class="row">
+                <div class="col-lg-5">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;">{{c.columnName}}
+                  </label>
+                </div>
+                <div class="col-lg-7">
+                  <select *ngIf="c.columnName == 'Client_Gender'" [ngModelOptions]="{standalone: true}"  [(ngModel)]="c.columnName_i"
+                  class="form-control w-100" name="genderLid" [ngModelOptions]="{standalone: true}"
+                 >
+                  <option [value]=gen.Key *ngFor="let gen of genderList">{{gen.Value}}</option>
+                </select>
+                  <input  *ngIf="c.columnName != 'Client_Gender'" type="text" class="form-control"
+                   [(ngModel)]="c.columnName_i" required>
+
+                </div>
+              </div>
+           
+            </div>
+
+          </div>
+      
+        </div>
+
+        <div *ngIf="ErrModalclientAuth.length != 0">
+          <div class="row" *ngFor="let c of ErrModalclientAuth ; let i = index">
+            <div class="col">
+              <div class="row">
+                <div class="col-lg-5">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;">{{c.columnName}}
+                  </label>
+                </div>
+                <div class="col-lg-7">
+                
+                  <input   type="text" class="form-control"
+                   [(ngModel)]="c.columnName_i" required>
+
+                </div>
+              </div>
+           
+            </div>
+
+          </div>
+      
+        </div>
+
+        
+        <div *ngIf="ErrModalemployee.length != 0">
+          <div class="row" *ngFor="let c of ErrModalemployee ; let i = index">
+            <div class="col">
+              <div class="row">
+                <div class="col-lg-5">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;">{{c.columnName}}
+                  </label>
+                </div>
+                <div class="col-lg-7">
+                
+                  <input   type="text" class="form-control"
+                   [(ngModel)]="c.columnName_i"  (change)="valuechange()" required>
+
+                </div>
+              </div>
+           
+            </div>
+
+          </div>
+      
+        </div>
+        <div *ngIf="ErrModalCompany.length != 0">
+          <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr" role="alert">
+            <p>kindly assign company to the payor {{payrname}} in group payor</p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                (click)="saveErr= false">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+          <div class="row" *ngFor="let c of ErrModalCompany ; let i = index">
+            <div class="col">
+              <div class="row">
+                <div class="col-lg-5">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;">{{c.columnName}}
+                  </label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" class="form-control"
+                   [(ngModel)]="c.columnName_i" required>
+
+                </div>
+              </div>
+           
+            </div>
+
+          </div>
+      
+        </div>
+
+        <div *ngIf="ErrModalGrouppayor.length != 0">
+          <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr" role="alert">
+            <p>kindly assign company to the payor {{payrname}} in group payor</p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                (click)="saveErr= false">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+          <div class="row" *ngFor="let c of ErrModalGrouppayor ; let i = index">
+               
+            <div class="col" *ngIf="c.columnName == 'GroupPayorId'  || c.columnName == 'Group' ">
+              <div class="row">
+                <div class="col-lg-6">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;" [(ngModel)]="c.columnName" >Group                </label>
+                </div>
+                <div class="col-lg-6">
+                 
+                <select class="form-control" 
+                [(ngModel)]="c.columnName_i"  >
+                <option [value]=""></option>
+                <option [value]=i.Key *ngFor="let i of GroupPayorlist">{{i.Value}}</option>
+              </select>
+             
+                </div>
+              </div>
+           
+            </div> 
+  
+            <div class="col" *ngIf="c.columnName != 'GroupPayorId' ">
+              <div class="row">
+                <div class="col-lg-6">
+                  <label *ngIf="c.columnName != 'CompanyId' " style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;">{{c.columnName}}
+                  </label>
+                </div>
+                <div class="col-lg-6">
+                  <select  *ngIf="c.columnName  == 'I837PInsTypeLid' " class="form-control" 
+                  [(ngModel)]="c.columnName_i"  name="InsID"  >
+                  <option [value]=""></option>
+                  <option [value]=i.Key *ngFor="let i of I837">{{i.Value}}</option>
+                </select>
+                <!-- <select *ngIf="c.columnName  == 'Group'"   class="form-control" 
+                [(ngModel)]="c.columnName_i"  >
+                <option [value]=""></option>
+                <option [value]=i.Key *ngFor="let i of GroupPayorlist">{{i.Value}}</option>
+              </select> -->
+              <!-- <select *ngIf="c.columnName  == 'PayorName'"  class="form-control" 
+              [(ngModel)]="c.columnName_i"  >
+              <option [ngValue]=""></option>
+              <option [value]=i.Key *ngFor="let i of payorList">{{i.Value}}</option>
+            </select> -->
+                  <input  *ngIf="c.columnName  != 'I837PInsTypeLid' && c.columnName  != 'Group' &&c.columnName != 'CompanyId'  "  type="text" class="form-control"
+                   [(ngModel)]="c.columnName_i" required>
+
+                </div>
+              </div>
+           
+            </div>
+
+          </div>
+      
+        </div>
+        <div *ngIf="ErrModalGrouppayorService.length != 0">
+          <div class="row" *ngFor="let c of ErrModalGrouppayorService ; let i = index">
+
+            <div class="col" *ngIf="c.columnName == 'GroupPayorServiceId' ">
+              <div class="row">
+                <div class="col-lg-6">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;" [(ngModel)]="c.columnName" >Group                </label>
+                </div>
+                <div class="col-lg-6">
+                 
+                <select class="form-control"  
+                [(ngModel)]="grouplid"  (ngModelChange)="groupchange(grouplid)">
+                <option [value]=""></option>
+                <option [value]=i.Key *ngFor="let i of GroupPayorlist">{{i.Value}}</option>
+              </select>
+             
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;" [(ngModel)]="Payor" >Payor                </label>
+                </div>
+                <div class="col-lg-6">
+                 
+                <select class="form-control" 
+                [(ngModel)]="c.columnName_payor" >
+                <option [value]=""></option>
+                <option [value]=i.value *ngFor="let i of payorListgroup">{{i.label}}</option>
+              </select>
+             
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;" [(ngModel)]="Service" >Service                </label>
+                </div>
+                <div class="col-lg-6">
+                 
+                <select class="form-control"  
+                [(ngModel)]="c.columnName_service"  >
+                <option [value]=""></option>
+                <option [value]=i.Key *ngFor="let i of Allservice">{{i.Value}}</option>
+              </select>
+             
+                </div>
+              </div>
+           
+            </div> 
+  
+            <div class="col" *ngIf="c.columnName != 'GroupPayorServiceId' ">
+              <div class="row">
+                <div class="col-lg-6">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;">{{c.columnName}}
+                  </label>
+                </div>
+                <div class="col-lg-6">
+                  <input type="text" class="form-control" *ngIf="c.columnName != 'BillingUnit' "
+                   [(ngModel)]="c.columnName_i" required>
+                   <select class="form-control"   *ngIf="c.columnName == 'BillingUnit' "
+                   [(ngModel)]="c.columnName_i" >
+                   <option [value]=""></option>
+                   <option [value]=i.value *ngFor="let i of billingUnit">{{i.label}}</option>
+                 </select>
+                </div>
+              </div>
+           
+            </div>
+
+          </div>
+      
+        </div>
+
+        <div *ngIf="ErrModalIcd10.length != 0">
+          <div class="row" *ngFor="let c of ErrModalIcd10 ; let i = index">
+            <div class="col">
+              <div class="row">
+                <div class="col-lg-3">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;">{{c.columnName}}
+                  </label>
+                </div>
+                <div class="col-lg-9">
+                  <input type="text" class="form-control"
+                   [(ngModel)]="c.columnName_i" required>
+
+                </div>
+              </div>
+           
+            </div>
+
+          </div>
+      
+        </div>
+      </div>
+      <div class="modal-footer">
+
+        <button class="btn blue-btn" type="button" (click)="updatemodal()">Update</button>
+        <button class="btn blue-btn" type="button" data-dismiss="modal" (click)="closeerromodal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!------------------------------client Authorization--------------------------------------------------------------->
+<div *ngIf="EditAuthorization">
+  <app-client-authorization-edit *ngIf="EditAuthorization" (EventToEditAuth)="dataEmitfromChild($event)"
+      [DataFromAuthorizationList]="authinput">
+  </app-client-authorization-edit>
+</div>
+<div *ngIf="EditICD">
+<!--==================================Add and Edit certificate=========================================-->
+<app-certificateedit *ngIf="Editcert "  [certificate]="EditCertificateoption"   (DatafromCertificate)="dataEmitFromCertificate($event)"></app-certificateedit>
+</div>
+<div *ngIf="EditStartofcare">
+  <app-startofcareedit *ngIf="EditSOC" [DataFromSOC]="EditSOCOptions" (BacktoClientSOC)="EventfromSOCEdit($event)">
+  </app-startofcareedit>
+</div>
+
+<!--===============================Add payor required===================================================================-->
+<app-payor-required-ids-edit *ngIf="enablepayrate"
+    (IsViewEditpayorequired)="dataEmitpayfromChild($event)" [payoRequiredViewEditdata]="payoRequiredViewEdit">
+</app-payor-required-ids-edit>

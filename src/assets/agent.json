@@ -1,0 +1,38 @@
+[{
+    "id": 1,
+    "name": "agent1",
+    "mobileNumber": 9963258787,
+    "email": "agent1@dk.in",
+    "active": true,
+    "agentRole": "Head",
+    "agentCSP": "Coimbatore"
+    
+},
+{
+    "id": 2,
+    "name": "agent2",
+    "mobileNumber": 9964258787,
+    "email": "agent2@dk.in",
+    "active": false,
+    "agentRole": "Sub",
+    "agentCSP": "Chennai"
+},
+{
+    "id": 1,
+    "name": "agent3",
+    "mobileNumber": 9575258787,
+    "email": "agent3@dk.in",
+    "active": false,
+    "agentRole": "Sub",
+    "agentCSP": "Chennai"
+},
+{
+    "id": 4,
+    "name": "agent4",
+    "mobileNumber": 9963254823,
+    "email": "agent4@dk.in",
+    "active": true,
+    "agentRole": "Head",
+    "agentCSP": "Coimbatore"
+}
+]

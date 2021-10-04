@@ -1,0 +1,1791 @@
+<form>
+  <div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted">
+          <div class="row">
+            <div class="col-lg-6">
+              <h4 class="mb-0 font-header" *ngIf="DataFromList.isEditClient==false">New Client</h4>
+              <h4 class="mb-0 font-header" *ngIf="DataFromList.isEditClient==true">Update Client</h4>
+            </div>
+            <div class="col-lg-6 text-right">
+              <label class="notealert">Note: * fields are mandatory</label>
+            </div>
+          </div>
+        </div>
+        <!--------------------------------------Card body starts here----------------->
+        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+          <div class="row no-gutters">
+            <div class="col-lg-2 d-inline-flex">
+              <label class="ml-1 label-bold">Status<sup class="super-script mr-1">*</sup></label>
+              <select [ngModelOptions]="{standalone: true}" [(ngModel)]="ClientList.statusLid" class="form-control"
+                [ngModelOptions]="{standalone: true}" (change)="changefunction()">
+                <option [value]=st.Key *ngFor="let st of statusList">{{st.Value}}</option>
+              </select>
+            </div>
+            <div class="col-lg-2 d-inline-flex">
+              <label class="mr-1 label-bold">Location</label>
+              <select [ngModelOptions]="{standalone: true}" [(ngModel)]="ClientList.locationStatusLid"
+                class="form-control" [ngModelOptions]="{standalone: true}" (change)="changefunction()">
+                <option [value]=st.Key *ngFor="let st of locationList">{{st.Value}}</option>
+              </select>
+            </div>
+            <div class="col-lg-1" *ngIf="global.clientId==0">
+              <button type="button" class="btn btn-primary btn-sm w-100 " [disabled]=" ClientList.statusLid==0||(phone12.invalid&&phone12.dirty&&(ClientList.phone1!=null&&ClientList.phone1!=''&&ClientList.phone1!=undefined))
+              ||(phone22.invalid&&phone22.dirty&&(ClientList.phone2!=null&&ClientList.phone2!=''&&ClientList.phone2!=undefined))
+              ||ClientList.firstName =='' || ClientList.firstName==null || ClientList.firstName==undefined
+              ||ClientList.lastName=='' || ClientList.lastName==null || ClientList.lastName==undefined 
+              ||ClientList.dOB =='' || ClientList.dOB==null || ClientList.dOB==undefined
+              ||ClientList.genderLid==0||ClientList.genderLid==undefined||email_form.invalid
+              || (ClientList.requiredEVV&& (ClientList.userName==null||ClientList.userName==undefined||
+              ClientList.userName==''||ClientList.password==undefined||ClientList.password==null||
+              ClientList.password=='' ||passerror) )
+              "  tabindex="22"
+                (click)="SaveClientDetails()">Save</button>
+            </div>
+            <div class="col-lg-2" *ngIf=" global.clientId!=0">
+             <div class="row no-gutters"><div class="col-lg-8"> <button type="button" class="btn btn-primary btn-sm " [disabled]=" ClientList.statusLid==0||(phone12.invalid&&phone12.dirty&&(ClientList.phone1!=null&&ClientList.phone1!=''&&ClientList.phone1!=undefined))
+              ||(phone22.invalid&&phone22.dirty&&(ClientList.phone2!=null&&ClientList.phone2!=''&&ClientList.phone2!=undefined))
+              ||ClientList.firstName =='' || ClientList.firstName==null || ClientList.firstName==undefined
+              ||ClientList.lastName=='' || ClientList.lastName==null || ClientList.lastName==undefined 
+              ||ClientList.dOB =='' || ClientList.dOB==null || ClientList.dOB==undefined
+              ||ClientList.genderLid==0||ClientList.genderLid==undefined|| email_form.invalid
+              ||(ClientList.loginUserId!=null && (ClientList.requiredEVV&& (ClientList.userName==null||ClientList.userName==undefined||
+              ClientList.userName=='')))||  (ClientList.loginUserId==null&& (ClientList.requiredEVV&& (ClientList.userName==null||ClientList.userName==undefined||
+              ClientList.userName==''||ClientList.password==undefined||ClientList.password==null||
+              ClientList.password=='' ||passerror) ))"
+                (click)="SaveClientDetails()"  tabindex="22">Update & Close</button></div>
+                <div class="col-lg-4"> <button type="button" class="btn btn-primary btn-sm"
+                  (click)="clientvaluechange()" tabindex="22">Close</button></div></div>
+            </div>
+            <div class="col-lg-1 pl-1 pr-1" *ngIf="global.clientId==0"> <button type="button" class="btn btn-primary btn-sm w-100"
+              (click)="clientvaluechange()" tabindex="22">Close</button></div>
+            <div class="col-lg-2">
+              <div class="row no-gutters">
+              
+                <div class="col-lg-6 pr-1"> <button type="button" class="btn btn-primary btn-sm w-100" data-toggle="modal"
+                    data-target="#notes" (click)="opennote()" [disabled]="global.clientId==0">Notes</button></div>
+
+
+
+                <div class="col-lg-6 pr-1"> <button type="button" [disabled]="global.clientId==0" class="btn btn-primary btn-sm w-100" data-toggle="modal" data-target="#servicModal"
+                  (click)="Service()">Service</button></div>
+
+
+              </div>
+            </div>
+            <div class="col-lg-1">
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                (click)="enablerelation=true;relationenable=true;" data-target="#clientEmployeeRelationship"
+                [disabled]="global.clientId==0">Relationship</button>
+            </div>
+            <div class="col-lg-1 pl-1">
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                (click)="getDocumnets();getDocumnetNamelst()" data-target="#Documetns"
+                [disabled]="global.clientId==0">Documents </button>
+            </div>
+
+            <div class="col-lg-2 pl-1">
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"  (click)="Goconsumer()">Consumer
+                Assesment</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-----------------------------Info starts-------------------------------->
+  <div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent text-muted">
+          <div class="row">
+            <div class="col-lg-6">
+              <h5 class="mb-0 font-header">General Info</h5>
+            </div>
+            <div class="col-lg-6">
+              <h5 class="mb-0 font-header">Contact Info</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card-body widget-body pt-2">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 d-inline-flex ">
+              <label class="mr-1 label-bold w-75">First Name<sup class="super-script">*</sup></label>
+              <input type="text" class="form-control w-100" name="firstName"  [ngModelOptions]="{standalone: true}" 
+                [(ngModel)]="ClientList.firstName" [ngModelOptions]="{standalone: true}" tabindex="2"  (change)="changefunction()" id="fname" />
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex ">
+              <label class="mr-1 label-bold  w-75">Middle Name</label>
+              <input type="text" class="form-control w-100" name="middleName" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.middleName" [ngModelOptions]="{standalone: true}" tabindex="2" (change)="changefunction()" />
+            </div>
+            <div class="col-lg-6 col-md-12 d-inline-flex ">
+              <label class="mr-1 label-bold  w-25">Street</label>
+              <input type="text" class="form-control w-100" name="street" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.street" [ngModelOptions]="{standalone: true}" (change)="changefunction()" tabindex="12"/>
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">Last Name<sup class="super-script">*</sup></label>
+              <input type="text" class="form-control w-100" name="lastName" [ngModelOptions]="{standalone: true}" 
+                [(ngModel)]="ClientList.lastName" [ngModelOptions]="{standalone: true}"  tabindex="3"   (change)="changefunction();" />
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">DOB<sup class="super-script">*</sup></label>
+              <my-date-picker class="w-100" placeholder="mm/dd/yyyy" name="dOB"  id="dob"
+                [selDate]="ClientList.dOB" [options]="myDatePickerOptionsDOB" (dateChanged)="onDateChanged($event)"
+                (inputFieldChanged)="DOBdatechange($event)"  tabindex="4"  (keyup.Tab)="onKey($event,'lastname')" (keydown.Tab)="onKey($event,'gender')">
+              </my-date-picker>
+
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">Apt</label>
+              <input type="text" class="form-control w-100" name="apt" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.apt" (change)="changefunction()"  tabindex="13"/>
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex" [formGroup]="email_form">
+              <label class="mr-1 label-bold  w-75">Email</label>
+              <input type="text" class="form-control w-100" name="email" formControlName="Email" email="true"
+                [(ngModel)]="ClientList.email" [ngModelOptions]="{standalone: true}" (change)="changefunction()"  tabindex="14" />
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">Gender<sup class="super-script">*</sup></label>
+              <select [ngModelOptions]="{standalone: true}" [(ngModel)]="ClientList.genderLid"
+                class="form-control w-100 " id="genderselect" name="genderLid" [ngModelOptions]="{standalone: true}"
+                (change)="changefunction()" tabindex="5">
+                <option [value]=gen.Key *ngFor="let gen of genderList">{{gen.Value}}</option>
+              </select>
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">Age</label>
+              <input type="text" class="form-control w-50 ml-3" name="age" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.age" [ngModelOptions]="{standalone: true}" (change)="changefunction()"  tabindex="6"/>
+              <button type="button" class="btn btn-primary btn-sm w-25 ml-4 mr-2" data-toggle="modal"
+                data-target="#modalSSN" tabindex="7">SSN</button>
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">Phone 1</label>
+              <input type="text" class="form-control w-100" name="phone12" #phone12="ngModel" maxlength="14"
+                minlength="14" required [(ngModel)]="ClientList.phone1" (ngModelChange)="DemographicPhoneFormat()"
+                (change)="changefunction()" (keypress)="keyPress($event)"  tabindex="15"/>
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">Phone 2</label>
+              <input type="text" class="form-control w-100" name="phone22" #phone22="ngModel" maxlength="14"
+                minlength="14" [(ngModel)]="ClientList.phone2" (ngModelChange)="DemographicPhoneAltFormat()"
+                (change)="changefunction()" (keypress)="keyPress($event)"  tabindex="16"/>
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">AKA</label>
+              <input type="text" class="form-control w-100" name="aKA" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.aKA" (change)="changefunction()" tabindex="8" />
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">Weight</label>
+              <input type="text" class="form-control w-100" name="weight" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.weight" (change)="changefunction()"  tabindex="9"/>
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">City</label>
+              <input type="text" class="form-control w-100" name="city" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.city" (change)="changefunction()"  tabindex="17"/>
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">State</label>
+              <!-- <input type="text" class="form-control w-100" name="state" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.state" (change)="changefunction()"  /> -->
+                <ng-select [items]="stateList" class="w-100" [searchable]="true" [clearable]="true" bindLabel="name"
+                bindValue="abbreviation" [ngModelOptions]="{standalone: true}"  tabindex="18" [(ngModel)]="ClientList.state">
+              </ng-select>
+            </div>
+
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">Medicaid#</label>
+              <input type="text" class="form-control w-100" name="medicaid" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.medicaid" minlength="20" maxlength="20" (keypress)="keyPress($event)"
+                (change)="changefunction()" tabindex="10"/>
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">Medicare#</label>
+              <input type="text" class="form-control w-100" name="medicare" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.medicare" minlength="20" maxlength="20" (keypress)="keyPress($event)"
+                (change)="changefunction()" tabindex="11"/>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">County</label>
+              <input type="text" class="form-control w-100" name="county" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.county" (change)="changefunction()"  tabindex="19"/>
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold  w-75">ZIP Code</label>
+              <input type="text" class="form-control mr-1 w-50" name="zipCode" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="ClientList.zipCode" (keypress)="keyPress($event)" minlength="5" maxlength="10"
+                (change)="changefunction()"  tabindex="20"/>
+              <button type="button " class="btn btn-primary btn-sm  zipcode pl-0" (click)="getzipcodeClient()" [disabled]="ClientList.state ==null 
+              || ClientList.state =='' ||
+              ClientList.state ==undefined || ClientList.city ==null || ClientList.city =='' || 
+              ClientList.city ==undefined"  tabindex="21"> Get Zip </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-header transparent text-muted">
+          <div class="row">
+            <div class="col-lg-6">
+              <h5 class="mb-0 font-header">Login Info</h5>
+            </div>
+            <div class="col-lg-6">
+            </div>
+          </div>
+        </div>
+        <div class="card-body widget-body pt-2">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 d-inline-flex">
+              <label class="mr-1 label-bold w-75">User Name
+                <sup class="super-script" *ngIf="ClientList.requiredEVV">&nbsp;*</sup>
+              </label>
+              <input type="text" class="form-control w-100" name="userName" 
+                [(ngModel)]="ClientList.userName" [ngModelOptions]="{standalone: true}" [disabled]="!ClientList.requiredEVV"  />
+            </div>
+            <div class="col-lg-3 col-md-6 d-inline-flex" *ngIf="ClientList.loginUserId==null">
+              <label class="mr-1 label-bold  w-75">Password 
+                <sup class="super-script" *ngIf="ClientList.requiredEVV">&nbsp;*</sup></label>
+              <input type="password" class="form-control w-100" name="password"   (keyup)="passvalid($event)"
+                [(ngModel)]="ClientList.password" [ngModelOptions]="{standalone: true}" [disabled]="!ClientList.requiredEVV"  autocomplete="off" />
+            </div>
+            <div class="col-lg-2" *ngIf="ClientList.loginUserId!=null&&ClientList.id!=0"> 
+              <button class="btn blue-btn btn-sm" type="button" 
+                  data-target="#Reset_Confirmation" data-toggle="modal" [disabled]="!ClientList.requiredEVV">
+                  Reset Password</button>
+          </div>
+          <div class="custom-control custom-switch col-lg-2">
+              <input type="checkbox" class="custom-control-input" id="customSwitch1" [(ngModel)]="ClientList.requiredEVV"
+              (change)="switchchange()" [ngModelOptions]="{standalone: true}"   >
+              <label class="custom-control-label" for="customSwitch1">Evv</label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!------------------------------------------------Tab starts--------------------------------->
+
+  <div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <nav>
+              <div class="nav nav-tabs nav-fill " id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-soc-tab" data-toggle="tab" href="#nav-soc" role="tab"
+                  [ngClass]="{'disabled':global.clientId===0}" aria-controls="nav-soc" aria-selected="true"
+                  (click)="getTabActiveData('nav-soc')">Start of care</a>
+                <a class="nav-item nav-link" id="nav-certification-tab" data-toggle="tab" href="#nav-certification"
+                  [ngClass]="{'disabled':global.clientId===0}" role="tab" aria-controls="nav-certification"
+                  aria-selected="false" (click)="getTabActiveData('nav-certification')">Certification</a>
+                <a class="nav-item nav-link " id="nav-authorization-tab" data-toggle="tab" href="#nav-authorization"
+                  [ngClass]="{'disabled':global.clientId===0}" role="tab" aria-controls="nav-authorization"
+                  aria-selected="false" (click)="getTabActiveData('nav-authorization')">Authorization</a>
+                <a class="nav-item nav-link  " id="nav-evaluation-tab" data-toggle="tab" href="#nav-evaluation"
+                  role="tab" aria-controls="nav-evaluation"  [ngClass]="{'disabled':global.clientId===0}"
+                  aria-selected="false" (click)="getTabActiveData('nav-evaluation')">Evaluation and Notes</a>
+                <a class="nav-item nav-link " id="nav-contacts-tab" data-toggle="tab" href="#nav-contacts" role="tab"
+                  [ngClass]="{'disabled':global.clientId===0}" aria-controls="nav-contacts" aria-selected="false"
+                  (click)="getTabActiveData('nav-contacts')">Contacts</a>
+                <a class="nav-item nav-link " id="nav-carecoordinators-tab" data-toggle="tab"
+                  [ngClass]="{'disabled':global.clientId===0}" href="#nav-carecoordinators" role="tab"
+                  aria-controls="nav-carecoordinators" aria-selected="false"
+                  (click)="getTabActiveData('nav-carecoordinators') ">Care Coordinators</a>
+                <a class="nav-item nav-link " id="nav-casemanagers-tab" data-toggle="tab" href="#nav-casemanagers"
+                  [ngClass]="{'disabled':global.clientId===0}" role="tab" aria-controls="nav-casemanagers"
+                  aria-selected="false" (click)="getTabActiveData('nav-casemanagers')">Case Managers</a>
+              </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent" *ngIf="global.clientId!=0">
+              <!-----------------------------start of care-------------------------------------------------->
+              <div class="tab-pane fade active show" id="nav-soc" role="tabpanel" aria-labelledby="nav-soc">
+               
+                <app-startofcarelist *ngIf="!EditSOC && ActiveTab== 'nav-soc'" (EventToEditSOC)="dataEmitfromChildSOC($event)">
+                </app-startofcarelist>
+             
+              </div>
+                 <!-----------------------------Certificate-------------------------------------------------->
+              <div class="tab-pane fade" id="nav-certification" role="tabpanel" aria-labelledby="nav-certification">
+                <!-- <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                  <div class="row">
+                    <div class="offset-lg-10 col-lg-2">
+                      <button class="btn btn-primary btn-sm w-100 ml-3" data-toggle="modal"
+                        data-target="#modalCertification" (click)="AddNewCertification('new')" *ngIf="fp.cretificationcreate">Add
+                        Certification</button>
+                    </div>
+                    <ejs-grid #grid [dataSource]='LCertificationList' [allowSorting]='true' allowPaging='true'
+                      [pageSettings]='initialPage' >
+                      <e-columns>
+                        <e-column field="socDate" headerText="Start of care" type='date' [format]='formatOptions'>
+                        </e-column>
+                        <e-column field="startDate" headerText="Start date" type='date' [format]='formatOptions'>
+                        </e-column>
+                        <e-column field="endDate" headerText="End date" type='date' [format]='formatOptions'></e-column>
+                        <e-column field="companyName" headerText="Company"></e-column>
+                        <e-column field="icD10PrimaryId" headerText="ICD10(Primary)"></e-column>
+                        <e-column field="npi" headerText="NPI"></e-column>
+                        <e-column field="physician" headerText="Physician"></e-column>
+                        <e-column field="clinic" headerText="Clinic"></e-column>
+                        <e-column headerText="Actions">
+                          <ng-template #template let-data>
+                            <button class="btn btn-sm btn-edit-table" data-toggle="modal"
+                              data-target="#modalCertification"
+                              (click)="AddNewCertification('edit');Certificationdatabind(data)" *ngIf="fp.startofcareupdate"><i
+                                class="fa fa-edit"></i></button>
+                            <button class="btn btn-sm btn-delete-table" data-toggle="modal"
+                              data-target="#modalCertificationdelete" data-target="#deletecer"
+                              (click)="deletecertificate=data.id"  *ngIf="fp.startofcaredelete"><i class="fa fa-trash fa-lg"></i></button>
+                          </ng-template>
+                        </e-column>
+                      </e-columns>
+                    </ejs-grid>
+                  </div>
+                </div> -->
+              
+                <app-certificatelist *ngIf="!Editcert && ActiveTab== 'nav-certification' " (DatafromCertificate)="dataEmitFromCertificate($event)">
+
+                </app-certificatelist>
+            
+              </div>
+              
+               <!-----------------------------Authorization-------------------------------------------------->
+              <div class="tab-pane fade" id="nav-authorization" role="tabpanel" aria-labelledby="nav-authorization-tab">
+               
+                <app-client-authorization *ngIf="!EditAuthorization &&ActiveTab== 'nav-authorization'" (EventToEditAuth)="dataEmitfromChild($event)">
+                </app-client-authorization>
+              
+              </div>
+                <!-----------------------------Contact-------------------------------------------------->
+              <div class="tab-pane fade" id="nav-contacts" role="tabpanel" aria-labelledby="nav-contacts">
+                <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                  <div class="row">
+                    <div class="offset-lg-10 col-lg-2 text-right">
+                      <button class="btn btn-primary btn-sm" [disabled]="ClientContactList.emergencName==null||
+                      ClientContactList.emergencName==''||ClientContactList.emergencName==undefined||
+                      (emergencyContact.invalid&&emergencyContact.dirty&&(ClientContactList.emergencyPhone!=null&&ClientContactList.emergencyPhone!=''&&ClientContactList.emergencyPhone!=undefined))
+                      ||(emergencyAlterContact.invalid&&emergencyAlterContact.dirty&&(ClientContactList.emergencyAlternatePhone!=null&&ClientContactList.emergencyAlternatePhone!=''&&ClientContactList.emergencyAlternatePhone!=undefined))
+                      ||(gardian.invalid&&gardian.dirty&&(ClientContactList.guardianPhone!=null&&ClientContactList.guardianPhone!=''&&ClientContactList.guardianPhone!=undefined))
+                      ||(responsible.invalid&&responsible.dirty&&(ClientContactList.responsiblePartyPhone!=null&&ClientContactList.responsiblePartyPhone!=''&&ClientContactList.responsiblePartyPhone!=undefined))"
+                     
+                      
+                      (click)="saveContact(ClientContactList)">Save</button>
+                    </div>
+                    <div class="col-lg-12">
+                      <label class="labelheader">Emergency or Alternate :</label>
+                    </div>
+                    <div class="col-lg-2">
+                      <label>Full Name<sup class="super-script">*</sup></label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencName" class="form-control"
+                        (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1">
+                      <label>Relationship</label>
+                      <select class="form-control w-100" [(ngModel)]="ClientContactList.emergencyRelationLid"  [ngModelOptions]="{standalone: true}"
+                        (ngModelChange)="contactvaluechangefunction()">
+                        <option></option>
+                        <option  [value]=st.Key  *ngFor="let st of conatactRelList">
+                          {{st.Value}}</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-2">
+                      <label>Phone</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyPhone" maxlength="14"
+                        minlength="14"  (keypress)="keyPress($event)"  (ngModelChange)="EmergencyFormatPhone();contactvaluechangefunction()" name="emergencyContact" #emergencyContact="ngModel" />
+                    </div>
+                    <div class="col-lg-2">
+                      <label>Street</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencySteet" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1">
+                      <label>City</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyCity" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1">
+                      <label>State</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyState" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1 pl-0 pr-0">
+                      <label>ZIP Code</label>
+                      <input type="text" class="form-control w-75" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyZipCode" (keypress)="keyPress($event)" minlength="5" maxlength="10" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1 pl-0 pr-0">
+                      <label>&nbsp;</label>
+                      <br />
+                      <button class="btn btn-primary btn-sm w-100" type="button" (click)="getzipcodeEmergency()"
+                        [disabled]="ClientContactList.emergencyState ==null 
+                      || ClientContactList.emergencyState =='' ||
+                      ClientContactList.emergencyState ==undefined || ClientContactList.emergencyCity ==null
+                       || ClientContactList.emergencyCity =='' || 
+                      ClientContactList.emergencyCity ==undefined">Get Zip</button>
+                    </div>
+                    <div class="col-lg-1">
+                      <label>Live with </label>
+                      <select class="form-control w-100" [(ngModel)]="ClientContactList.emergencyLiveWithLid" [ngModelOptions]="{standalone: true}"
+                         (ngModelChange)="contactvaluechangefunction()">
+                        <option></option>
+                        <option [value]=st.Key *ngFor="let 
+                          st of conatactLiveWithList" >
+                          {{st.Value}}</option>
+                      </select>
+                    </div>
+                    <!---------------------------------------------Second row without label------------------------------------->
+
+                    <div class="col-lg-2 mt-1">
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyAlternateName" class="form-control"
+                        (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1  mt-1">
+                      <select class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyAlternateRelationLid"
+                        (ngModelChange)="contactvaluechangefunction()">
+                        <option [ngValue]=""></option>
+                        <option *ngFor="let st of conatactRelList" [value]=st.Key>
+                          {{st.Value}}</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-2  mt-1">
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyAlternatePhone" 
+                        minlength="14"   (keypress)="keyPress($event)"   maxlength="14" (ngModelChange)="AlternateFormatPhone();contactvaluechangefunction()"
+                        name="emergencyAlterContact" #emergencyAlterContact="ngModel"
+                         />
+                    </div>
+                    <div class="col-lg-2  mt-1">
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyAlternateSteet"
+                        (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1  mt-1">
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyAlternateCity"
+                        (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1  mt-1">
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyAlternateState"
+                        (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1  mt-1 pl-0 pr-0 ">
+                      <input type="text" class="form-control w-75" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyAlternateZipCode" (keypress)="keyPress($event)"
+                        minlength=5 maxlength=10 (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1  mt-1 pl-0 pr-0">
+                      <button class="btn btn-primary btn-sm w-100" type="button" (click)="getzipcodeAlternate()"
+                        [disabled]="ClientContactList.emergencyAlternateCity ==null 
+                      || ClientContactList.emergencyAlternateCity =='' ||
+                      ClientContactList.emergencyAlternateCity ==undefined || ClientContactList.emergencyAlternateState ==null
+                       || ClientContactList.emergencyAlternateState =='' || 
+                      ClientContactList.emergencyAlternateState ==undefined">Get Zip</button>
+                    </div>
+                    <div class="col-lg-1  mt-1">
+                      <select class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.emergencyAlternateLiveWithLid"
+                        (ngModelChange)="contactvaluechangefunction()">
+                        <option [ngValue]=""></option>
+                        <option *ngFor="let st of conatactLiveWithList" [value]=st.Key>
+                          {{st.Value}}</option>
+                      </select>
+                    </div>
+                    <!----------------------------------------------------------Third contact starts---------------------------------------->
+                    <div class="col-lg-12">
+                      <label class="labelheader">Guardian :</label>
+                    </div>
+                    <div class="col-lg-1  pr-0">
+                      <label>Full Name</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.guardianName" class="form-control"
+                        (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-2">
+                      <label>Phone</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.guardianPhone"  maxlength="14"
+                        minlength="14"   (keypress)="keyPress($event)"   name="gardian"  (ngModelChange)="GuardianFormatPhone();contactvaluechangefunction()" #gardian="ngModel" />
+                    </div>
+                    <div class="col-lg-1">
+                      <label>Email</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.guardianEmail" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-2">
+                      <label>Street</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.guardianSteet" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1">
+                      <label>City</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.guardianCity" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1">
+                      <label>State</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.guardianState" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1 ">
+                      <label>ZIP Code</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.guardianZipCode" (keypress)="keyPress($event)" minlength="5" maxlength="10" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1 pl-0 pr-0">
+                      <label>&nbsp;</label>
+                      <br />
+                      <button class="btn btn-primary btn-sm w-100" type="button" (click)="getzipcodeGuradian()"
+                        [disabled]="ClientContactList.guardianState ==null 
+                      || ClientContactList.guardianState =='' ||
+                      ClientContactList.guardianState ==undefined || ClientContactList.guardianCity ==null
+                       || ClientContactList.guardianCity =='' || 
+                      ClientContactList.guardianCity ==undefined">Get Zip</button>
+                    </div>
+                    <div class="col-lg-2">
+                      <label>Phone Carrier </label>
+                      <select class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.guardianPhoneCarrierLid" (ngModelChange)="contactvaluechangefunction()">
+                        <option [ngValue]=""></option>
+                        <option *ngFor="let st of phoneCarrierList" [value]=st.Key>
+                          {{st.Value}}</option>
+                      </select>
+                    </div>
+                    <!----------------------------------------------------------Third contact starts---------------------------------------->
+                    <div class="col-lg-12 d-inline-flex">
+                      <label class="labelheader">Responsible Party :</label>
+                      <input type="checkbox" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.isSameAsGuardian"
+                        (change)="sameAsGuardian(ClientContactList);contactvaluechangefunction()">
+                      <label>Same as Guardian</label>
+                    </div>
+                    <div class="col-lg-1  pr-0">
+                      <label>Full Name</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.responsiblePartyName" class="form-control"
+                        (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-2">
+                      <label>Phone</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.responsiblePartyPhone" 
+                        minlength="14"  (keypress)="keyPress($event)"   name="responsible"   maxlength="14" (ngModelChange)="RPFormatPhone();contactvaluechangefunction()" #responsible="ngModel"  />
+                    </div>
+                    <div class="col-lg-1">
+                      <label>Email</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.responsiblePartyEmail" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-2">
+                      <label>Street</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.responsiblePartySteet" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1">
+                      <label>City</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.responsiblePartyCity" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1">
+                      <label>State</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.responsiblePartyState" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1">
+                      <label>ZIP Code</label>
+                      <input type="text" class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.responsiblePartyZipCode" (keypress)="keyPress($event)"
+                        minlength="5" maxlength="10" (ngModelChange)="contactvaluechangefunction()" />
+                    </div>
+                    <div class="col-lg-1 pl-0 pr-0">
+                      <label>&nbsp;</label>
+                      <br />
+                      <button class="btn btn-primary btn-sm w-100" type="button" (click)="getzipcodeRP()" [disabled]="ClientContactList.responsiblePartyState ==null 
+          || ClientContactList.responsiblePartyState =='' ||
+          ClientContactList.responsiblePartyState ==undefined || ClientContactList.responsiblePartyCity ==null
+           || ClientContactList.responsiblePartyCity =='' || 
+          ClientContactList.responsiblePartyCity ==undefined">Get Zip</button>
+                    </div>
+                    <div class="col-lg-2">
+                      <label>Phone Carrier </label>
+                      <select class="form-control w-100" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="ClientContactList.responsiblePartyCarrierLid"
+                        (ngModelChange)="contactvaluechangefunction()">
+                        <option [ngValue]=""></option>
+                        <option *ngFor="let st of phoneCarrierList" [value]=st.Key>
+                          {{st.Value}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <!-----------------------------Care coordinator-------------------------------------------------->
+              <div class="tab-pane fade" id="nav-carecoordinators" role="tabpanel" style="width: 100%;overflow-x: auto;"
+                aria-labelledby="nav-carecoordinators">
+                <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                  <div class="row">
+                    <div class="offset-lg-8 col-lg-4">
+                      <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#carecoordinator"
+                        (click)="careenable=true;caretype='edit'">Assign Care Coordinator</button>
+                      <button class="btn btn-primary btn-sm ml-3" data-toggle="modal" data-target="#carecoordinator"
+                        (click)="careenable=true;caretype='view'">Add
+                        Care Coordinator</button>
+                    </div>
+                    <ejs-grid #gridcarecoordinator [dataSource]='datacare | async' [allowResizing]='true' allowPaging='true' [pageSettings]='initialPage' (headerCellInfo)='headerCellInfo($event)'(queryCellInfo)='tooltip($event)'(resizeStop)="onResize($event)"
+                    (dataStateChange)='dataStateChangeCare($event)'  (actionBegin)="onActionCompleteCare($event)">
+                      <e-columns>
+
+                        <e-column minWidth= 100 field="careCoordinatorName" headerText="Name"></e-column>
+                        <e-column minWidth= 100 field="county" headerText="County"></e-column>
+                        <e-column minWidth= 100 field="telephone" headerText="Telephone"></e-column>
+                        <e-column minWidth= 100 field="fax" headerText="Fax"></e-column>
+                        <e-column minWidth= 100 field="alternateFax" headerText="Alternative Fax"></e-column>
+                        <e-column minWidth= 100 field="email" headerText="Email"></e-column>
+                        <e-column minWidth= 100 headerText="Actions" uid="action" textAlign="center" [showInColumnChooser]='false'>
+                          <ng-template #template let-data>
+
+                            <button class="btn btn-delete-table" data-toggle="modal" (click)="deletecareId=data.id"
+                              data-target="#deletecare"><i class="fa fa-trash"></i></button>
+                          </ng-template>
+
+                        </e-column>
+
+
+                      </e-columns>
+                    </ejs-grid>
+                  </div>
+                </div>
+              </div>
+                 <!-----------------------------Case Manager-------------------------------------------------->
+              <div class="tab-pane fade" id="nav-casemanagers" role="tabpanel" aria-labelledby="nav-casemanagers" style="width: 100%;overflow-x: auto;">
+                <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                  <div class="row">
+                    <div class="offset-lg-8 col-lg-4">
+                      <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#casemanager"
+                        (click)="caseenable=true;casetype='edit'">Assign Case Manager</button>
+                      <button class="btn btn-primary btn-sm ml-3" data-toggle="modal" data-target="#casemanager"
+                        (click)="caseenable=true;casetype='view'">Add
+                        Case Manager</button>
+                    </div>
+                    <ejs-grid #gridcasemanager [dataSource]='datacase | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0"[allowPaging]='true'
+                      [pageSettings]='initialPage' (headerCellInfo)='headerCellInfo($event)'(queryCellInfo)='tooltip($event)' (resizeStop)="onResizeCase($event)"
+                      (dataStateChange)='dataStateChangeCasemanager($event)'  (actionBegin)="onActionCompleteCasemanager($event)">
+                      <e-columns>
+                        <e-column minWidth= 100 field="caseManagerName" headerText="Name"></e-column>
+                        <e-column minWidth= 100 field="county" headerText="County"></e-column>
+                        <e-column minWidth= 100 field="telephone" headerText="Telephone"></e-column>
+                        <e-column minWidth= 100 field="fax" headerText="Fax"></e-column>
+                        <e-column minWidth= 100 field="alternate_Fax" headerText="Alternative Fax"></e-column>
+                        <e-column minWidth= 100 field="email" headerText="Email"></e-column>
+                        <e-column minWidth= 100 headerText="Actions" uid="action" textAlign="center" [showInColumnChooser]='false'>
+                          <ng-template #template let-data>
+
+                            <button class="btn btn-delete-table" data-toggle="modal" (click)="deletecaseId=data.id"
+                              data-target="#deletecase"><i class="fa fa-trash"></i></button>
+                          </ng-template>
+                        </e-column>
+
+                      </e-columns>
+                    </ejs-grid>
+                  </div>
+                </div>
+              </div>
+                <!-----------------------------Evaluation-------------------------------------------------->
+              <div class="tab-pane fade" id="nav-evaluation" role="tabpanel" aria-labelledby="nav-evaluation" style="width: 100%;overflow-x: auto;">
+                <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                  <div class="row">
+                    <ejs-grid #gridEvaluation  [dataSource]="data|async" [allowResizing]='true' [allowSorting]='true' *ngIf="global.globalAgencyId!=0" [allowPaging]='true'
+                      [pageSettings]='initialPage' [allowFiltering]='true'   (actionBegin)="onActionComplete($event)" [filterSettings]='filterOptions'(resizeStop)="onResizeEvaluation($event)" [showColumnChooser]='true' (headerCellInfo)='headerCellInfo($event)'(queryCellInfo)='tooltip($event)'
+                      (dataStateChange)='dataStateChangeEvaluation($event)'>
+                      <e-columns>
+
+                        <e-column minWidth= 100 field="Name" headerText="Client Name" type="string" [allowFiltering]="false">
+                          <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                          </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="phone" headerText="Phone" type="string"  [allowFiltering]="false">
+                          <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                          </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="ages" headerText="Age(in days)" type="number" ></e-column>
+                        <e-column minWidth= 100 field="callDate" headerText="Last Call Date" type="date"  [allowFiltering]="false" [format]='formatOptions'></e-column>
+                        <e-column minWidth= 100 field="isAnsweredCall" headerText="Last Call Status"  [allowFiltering]="false">
+                          <ng-template #filterTemplate let-data>
+                            <ejs-dropdownlist id='dropdown'placeholder='Select a Status' [dataSource]='dropdata'
+                             [popupHeight]='height' ></ejs-dropdownlist>
+                       </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="isPCAPresent" headerText="PCA Present"  [allowFiltering]="false">
+                         
+            <ng-template #filterTemplate let-data>
+              <ejs-dropdownlist id='dropdown1'placeholder='Select a Status' [dataSource]='dropdata'
+               [popupHeight]='height' ></ejs-dropdownlist>
+         </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="reviewDate" headerText="Last Reviewed Date" type="date"  [format]='formatOptions' [allowFiltering]="false"></e-column>
+                        <e-column minWidth= 100 field="reviewedBy" headerText="Last Reviewed By" type="string"  [allowFiltering]="false">
+                          <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                          </ng-template>
+                        </e-column>
+
+
+                      </e-columns>
+                    </ejs-grid>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<app-startofcareedit *ngIf="EditSOC" [DataFromSOC]="EditSOCOptions" (BacktoClientSOC)="EventfromSOCEdit($event)">
+</app-startofcareedit>
+<app-client-authorization-edit *ngIf="EditAuthorization" (EventToEditAuth)="dataEmitfromChild($event)"
+  [DataFromAuthorizationList]="EditOptions">
+</app-client-authorization-edit>
+
+<!-------------------------------------------Client certificaion save or update modal------------------------>
+<!-- <span id="opencertificate" data-target="#modalCertification" data-toggle="modal"></span>
+<div class="modal fade" id="modalCertification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">
+          <span *ngIf="ModelType =='new'"> Create Certification</span>
+          <span *ngIf="ModelType =='edit'">Update Certification</span>
+        </h5>
+      </div>
+      <div class="row alert ml-3 mr-3 alert-danger text-dark" *ngIf="saveorUpdatecertificationErr!=''">
+        <strong>{{saveorUpdatecertificationErr}}</strong>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-6">
+            <label>Start Of Care
+              <sup class="super-script">&nbsp;*</sup></label>
+          </div>
+          <div class="col-lg-6">
+            <ng-select [items]="CLientSOCList" class="w-100" [searchable]="true" [clearable]="true" bindLabel="Value"
+              bindValue="Key" [ngModelOptions]="{standalone: true}" [(ngModel)]="ClientCertificationList.startOfCareId">
+            </ng-select>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <label>Start Date
+              <sup class="super-script">&nbsp;*</sup></label>
+          </div>
+          <div class="col-lg-6">
+            <my-date-picker [options]="myDatePickerOptions" [selDate]="ClientCertificationList.startDate"
+              placeholder="mm/dd/yyyy" (inputFieldChanged)="Certificationstartdatechange($event)"
+              (dateChanged)="onDateChangedCertificationStart($event)">
+            </my-date-picker>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <label>End Date</label>
+          </div>
+          <div class="col-lg-6">
+            <my-date-picker [options]="myDatePickerOptions" [selDate]="ClientCertificationList.endDate"
+              placeholder="mm/dd/yyyy" (inputFieldChanged)="Certificationenddatechange($event)"
+              (dateChanged)="onDateChangedCertificationEnd($event)">
+            </my-date-picker>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <label>Company
+              <sup class="super-script">&nbsp;*</sup></label>
+          </div>
+          <div class="col-lg-6">
+            <ng-select [items]="companyList" class="w-100" [searchable]="true" [clearable]="true" bindLabel="Value"
+              bindValue="Key" [ngModelOptions]="{standalone: true}" [(ngModel)]="ClientCertificationList.companyId">
+            </ng-select>
+
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-lg-6">
+            <label>ICD10(Primary)
+              <sup class="super-script">&nbsp;*</sup></label>
+          </div>
+          <div class="col-lg-5">
+            <ng-select [items]="ICD10List" [ngModelOptions]="{standalone: true}"
+              [(ngModel)]="ClientCertificationList.icD10PrimaryId" class="w-100" [searchable]="true" [clearable]="true"
+              bindLabel="Value" bindValue="Key">
+            </ng-select>
+          </div>
+
+          <div class="col-lg-1 paddingbtnl">
+            <button class="btn btn-sm btn-primary" data-target="#ICD10" data-toggle="modal" (click)="enableICD10=true;">
+              <i class="fa fa fa-eye"></i></button>
+          </div>
+
+        
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <label>Physician NPI</label>
+          </div>
+          <div class="col-lg-4">
+            <input type="text" placeholder="NPI" class="form-control" [ngModelOptions]="{standalone: true}"
+              [(ngModel)]="ClientCertificationList.npi" (keypress)="keyPress($event)" minlength=10 maxlength=10
+              (keyup.enter)="searchNPI(ClientCertificationList.npi)" />
+
+          </div>
+          <div class="col-lg-1" *ngIf="ClientCertificationList.npi!=null && ClientCertificationList.npi!=undefined">
+
+            <i class="fa fa-search" (click)="searchNPI(ClientCertificationList.npi)"></i>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <label>Physician</label>
+          </div>
+          <div class="col-lg-6">
+            <input type="text" placeholder="Physician" class="form-control" [ngModelOptions]="{standalone: true}"
+              [(ngModel)]="ClientCertificationList.physician" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <label>Clinic</label>
+          </div>
+          <div class="col-lg-6">
+            <textarea class="form-control" [ngModelOptions]="{standalone: true}"
+              [(ngModel)]="ClientCertificationList.clinic"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-sm"
+          [disabled]="ClientCertificationList.startOfCareId=='' || ClientCertificationList.startOfCareId==null || 
+      ClientCertificationList.startOfCareId==undefined 
+    ||ClientCertificationList.startDate =='' || ClientCertificationList.startDate==null || ClientCertificationList.startDate==undefined
+    ||ClientCertificationList.companyId =='' || ClientCertificationList.companyId==null || ClientCertificationList.companyId==undefined 
+    ||ClientCertificationList.icD10PrimaryId =='' || ClientCertificationList.icD10PrimaryId==null || ClientCertificationList.icD10PrimaryId==undefined ">
+          <span *ngIf="ModelType =='new'" (click)="checkCertificationValidation(ClientCertificationList)"> Save &
+            Close</span>
+          <span *ngIf="ModelType =='edit'" (click)="checkCertificationValidation(ClientCertificationList)">Update &
+            Close</span> </button>
+        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-----------------------------------------------ssn------------------------------------------------------------>
+
+<div class="modal fade" id="modalSSN" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">
+          <span>Social Security Number </span>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-2">
+            <label>SSN</label>
+          </div>
+          <div class="col-lg-10">
+            <input type=" text" class="form-control w-100" [(ngModel)]="ClientList.sSN" (keypress)="keyPress($event)"
+              minlength=9 maxlength=9 (change)="changefunction()">
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" [disabled]="ClientList.sSN" (click)="removeSSN()">
+          Remove
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <app-client-authorization-edit *ngIf="EditAuthorization" (EventToEdit)="dataEmitfromChild($event)" [DataFromAuthorizationList]="EditOptions"> -->
+<app-startofcareedit *ngIf="EditSOC" [DataFromSOC]="EditSOCOptions"></app-startofcareedit>
+
+<!-----------------------------------------------  ICD10       --------------------------------------------------------------->
+<!-- <span id="ICD10eopen" data-toggle="modal" data-target="#ICD10"></span>
+<div class="modal hide fade modalbackgrod" id="ICD10" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog  ICD-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+
+
+      </div>
+      <div class="modal-body ICD-modalbody">
+
+        <app-icd10 *ngIf="enableICD10" (dataFromICD10)=ICD10data($event) [ICD10input]="ICD10value"></app-icd10>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-sm btn-primary" (click)="Closedcdialog()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<!-------------------------------------------Delete Certificate------------------------------------------------------------>
+<!-- <span id="openModal1" data-toggle="modal" data-target="#deletecer"></span>
+<div class="modal hide fade modalbackgrod" id="deletecer" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog  ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      </div>
+      <div class="modal-body ">
+        Do you want to delete this record ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-primary" (click)="deleteCertificateConfirmation()">Yes</button>
+
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<!---------------------------------------close Aleart-------------------------------------------------------------------->
+<span id="cancelmodal" data-toggle="modal" data-target="#CloseModal"></span>
+<div class="modal fade" id="CloseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog create-update-zip " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Close</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        You want to close without save?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal" (click)="back()">Yes</button>
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!------------------care coordinator---------------------------------------------------------------------->
+<span id="Careopen" data-toggle="modal" data-target="#carecoordinator"></span>
+<div class="modal hide fade modalbackgrod" id="carecoordinator" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" >
+  <div class="modal-dialog  ICD-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Care Coordinator</h5>
+        <button type="button" class="close" (click)="closecarecoordinator();careenable=false;">&times;</button>
+
+      </div>
+      <div class="modal-body ICD-modalbody">
+        <app-care-coordinator *ngIf="careenable" (emitcarecode)="evenfromcare($event)" [fromClient]="caretype">
+        </app-care-coordinator>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-sm btn-primary" (click)="careenable=false;"
+          data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-----------------------------client Employee Relationship------------------------------------------------------------->
+<div class="modal fade " *ngIf="enablerelation" id="clientEmployeeRelationship" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Employee-Client Relationship</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <app-relationship [ClientEmployeeRelation]="relation" *ngIf="relationenable" #relationId>
+      </app-relationship>
+      <div class="modal-footer">
+
+        <button class="btn blue-btn" type="button" data-toggle="modal" data-target="#AddEditRelationship">Create
+          New
+          Relationship</button>&nbsp;&nbsp;
+        <button type="button" class="btn blue-btn" data-dismiss="modal" (click)="enablerelation=false">close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-------------------------------Case Manger--------------------------------------------------------------->
+<span id="Caseopen" data-toggle="modal" data-target="#casemanager"></span>
+<div class="modal hide fade modalbackgrod" id="casemanager" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" >
+  <div class="modal-dialog  ICD-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Case Manager</h5>
+        <button type="button" class="close" (click)="closecasemanager();caseenable=false;">&times;</button>
+
+      </div>
+      <div class="modal-body ICD-modalbody">
+        <app-case-manager *ngIf="caseenable" (emitcasemanger)="evenfromcase($event)" [fromClient]="casetype">
+        </app-case-manager>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-sm btn-primary" (click)="caseenable=false;closecase()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-------------------------------------------Delete care coordinator------------------------------------------------------------>
+<span id="deletecarecoordinator" data-toggle="modal" data-target="#deletecare"></span>
+<div class="modal hide fade modalbackgrod" id="deletecare" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      </div>
+      <div class="modal-body ">
+        Do you want to delete this record ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-primary" (click)="deleteCeare()">Yes</button>
+
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-------------------------------------------Delete Case Manger------------------------------------------------------------>
+<span id="deletecasemanger" data-toggle="modal" data-target="#deletecase"></span>
+<div class="modal hide fade modalbackgrod" id="deletecase" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog  ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      </div>
+      <div class="modal-body ">
+        Do you want to delete this record ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-primary" (click)="deleteCase()">Yes</button>
+
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!---------------------------------------------------------Documents --------------------------------------------->
+<span id="Documentopen" data-toggle="modal" data-target="#Documetns"></span>
+<div class="modal hide fade modalbackgrod" id="Documetns" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog  ICD-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Document</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      </div>
+      <div class="modal-body ICD-modalbody">
+        <ejs-grid #griddocument [dataSource]='datadocument | async' [allowResizing]='true'  *ngIf="global.globalAgencyId!=0" [pageSettings]='initialPage' (resizeStop)="onResizeDocuments($event)"
+        (actionBegin)="onActionCompleteDocuments($event)" allowPaging='true' [allowSorting]='true'   [pageSettings]='initialPage' (dataStateChange)='dataStateChangeDocuments($event)' >
+          <e-columns>
+            <e-column minWidth= 100 field="documentName" headerText="Document Name">
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="documentTitle" headerText="Document Title">
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="filepath" headerText="Filepath"></e-column>
+            <e-column minWidth= 100 field="attachedDate" headerText="Attached Date" type='date' [format]='formatOptions'></e-column>
+
+            <e-column minWidth= 100 headerText="Actions" uid="action" textAlign="center" [showInColumnChooser]='false'>
+              <ng-template #template let-data>
+
+
+                <button class="btn btn-edit-table"><i class="fa fa-download" (click)="downloadFile(data)"></i></button>
+                <button class="btn btn-delete-table" data-toggle="modal" data-target="#deletedoc"
+                  (click)="deletedocId=data.id"><i class="fa fa-trash"></i></button>
+              </ng-template>
+            </e-column>
+
+          </e-columns>
+        </ejs-grid>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" type="button" (click)="opennewDocument()" data-toggle="modal" data-target="#DocumentsAdd">
+          New Document
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!---------------------------------------------------------Documents Add --------------------------------------------->
+<span id="DocumentAddopen" data-toggle="modal" data-target="#DocumentsAdd"></span>
+<div class="modal hide fade modalbackgrod" id="DocumentsAdd" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Document</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      </div>
+      <div class="modal-body ">
+        <div class="row" style="margin-bottom:5px">
+          <div class="col-lg-3">
+            <label style="padding-top:8px;font-weight:bolder;">File
+              <sup class="super-script mr-1">*</sup></label>
+          </div>
+          <div class="col-lg-7">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="customFile" name="filename"
+                (change)="onDOCFileChanged($event.target.files)" [(ngModel)]="documentList.filepath">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-3">
+          </div>
+          <div class="col-lg-7">
+            <label style="color: #386AAB">{{selectedFileName}}</label>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom:5px">
+          <div class="col-lg-3">
+            <label style="font-weight:bolder;">Name
+              <sup class="super-script mr-1">*</sup></label>
+          </div>
+          <div class="col-lg-7">
+            <ng-select [(ngModel)]="documentList.documentNameLid" [items]="DocumentName">
+            </ng-select>
+          </div>
+          <div class="col-lg-2">
+            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#DocumentsLov">
+              <i class="fa fa-plus-circle"></i>
+            </button>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom:5px">
+          <div class="col-lg-3">
+            <label style="font-weight:bolder;">Title
+              <sup class="super-script mr-1">*</sup></label>
+          </div>
+          <div class="col-lg-7">
+            <input type="text" class="w-100" class="form-control" [(ngModel)]="documentList.documentTitle" />
+          </div>
+        </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" type="button"
+          [disabled]="documentList.filepath=='' || documentList.filepath==null || documentList.filepath==undefined
+            || documentList.documentNameLid==0
+            || documentList.documentTitle=='' || documentList.documentTitle==null || documentList.documentTitle==undefined" (click)="SaveDoc(documentList)">Save &
+          Close</button>&nbsp;&nbsp;
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!------------------------------------------------Add Lov-------------------------------------->
+<span id="DocumentsLovopen" data-toggle="modal" data-target="#DocumentsLov"></span>
+<div class="modal hide fade modalbackgrod" id="DocumentsLov" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog ">
+    <form [formGroup]="lovForm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-header" id="exampleModalLabel">Document</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+        <div class="modal-body ">
+          <div class="row">
+            <div class="col-lg-6">
+              <label style="font-weight: 600;margin-top:6px;">Document Name
+                <sup class="super-script mr-1">*</sup></label>
+            </div>
+            <div class="col-lg-6">
+              <input type="text" class="form-control" formControlName="Name" [(ngModel)]="Lov.lovName" name="Name">
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm btn-primary" type="button" [disabled]="!lovForm.valid" (click)="saveLov(Lov)">Save &
+            Close</button>&nbsp;&nbsp;
+          <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-------------------------------------------Delete Document------------------------------------------------------------>
+<span id="deletedocument" data-toggle="modal" data-target="#deletedoc"></span>
+<div class="modal hide fade modalbackgrod" id="deletedoc" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog  ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      </div>
+      <div class="modal-body ">
+        Do you want to delete this record ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-primary" (click)="deleteDoc()">Yes</button>
+
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!------------------------------------------------Notes-------------------------------------->
+<span id="notesopen" data-toggle="modal" data-target="#notes"></span>
+<div class="modal hide fade modalbackgrod" id="notes" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog notemodal">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="row w-100">
+          <div class="col-lg-6">
+            <h5 class="modal-title font-header" id="exampleModalLabel">Notes</h5>
+          </div>
+          <div class="col-lg-3">
+            <button data-target="#addnotes" (click)="opennewnote()" class="btn blue-btn btn-sm w-100"
+              data-toggle="modal">Add Notes</button>
+          </div>
+          <div class="col-lg-3">
+            <button class="btn blue-btn btn-sm w-75" data-target="#typelstmodal" (click)="getType();"
+              data-toggle="modal">Type List</button>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="modal-body ">
+        <ejs-grid #gridnotes [dataSource]='datanotes | async' [allowResizing]='true' [allowSorting]='true' [allowFiltering]='true'
+          [filterSettings]='filterOptions' allowPaging='true' [allowSorting]='true'   [pageSettings]='initialPage' (resizeStop)="onResizeNotes($event)" (actionBegin)="onActionCompleteNotes($event)" (dataStateChange)='dataStateChangeNotes($event)'>
+          <e-columns>
+            <e-column minWidth= 100 field="date" headerText="Date"  type='date' [format]='formatOptions1' ></e-column>
+            <e-column minWidth= 100 field="initial" headerText="Initials" type="string">
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="notes" headerText="Client Notes" type="string">
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="listName" headerText="Type" type="string">
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 headerText="Actions" uid="action">
+              <ng-template #template let-data>
+                <button class="btn btn-edit-table " data-target="#addnotes" data-toggle="modal"
+                  (click)="editNote(data)"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-delete-table " data-target="#deletenote" (click)="deleteNoteId=data.id"
+                  data-toggle="modal"><i class="fa fa-trash"></i></button>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-----------------------------------Add and Update Notes--------------------------------------->
+<span id="addnotesopen" data-toggle="modal" data-target="#addnotes"></span>
+<div class="modal hide fade modalbackgrod" id="addnotes" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog ">
+
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="Notes.id==0"> Add Notes</h5>
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="Notes.id!=0">Update Notes</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+      </div>
+      <div class="modal-body ">
+        <div class="row">
+          <div class="col-lg-3">
+            <label class="font-weight-bold">Date</label>
+          </div>
+          <div class="col-lg-9">
+            <input type="datetime-local" class="form-control w-100" [(ngModel)]="Notes.date" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">
+            <label class="font-weight-bold">Initials</label>
+          </div>
+          <div class="col-lg-9">
+            <input type="text" class="form-control w-100" [(ngModel)]="Notes.initial" disabled="true" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">
+            <label class="font-weight-bold">Notes<sup class="super-script">*</sup></label>
+          </div>
+          <div class="col-lg-9">
+            <input type="text" class="form-control w-100" [(ngModel)]="Notes.notes" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">
+            <label class="font-weight-bold"> Type <sup class="super-script">*</sup></label>
+          </div>
+          <div class="col-lg-9">
+            <ng-select *ngIf="Notes.id==0" [multiple]="true" [(ngModel)]="Notes.multipletype" [items]="typedropdown"
+              bindLabel="typeName" bindValue="id" [disabled]="Notes.notes==''
+              ||Notes.notes==null ">
+
+            </ng-select>
+            <ng-select *ngIf="Notes.id!=0" [(ngModel)]="Notes.typeListId" [items]="typedropdown" bindLabel="typeName"
+              bindValue="id">
+
+            </ng-select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" type="button" [disabled]="(Notes.multipletype.length==0)||
+          (Notes.notes==''|| Notes.notes==null||Notes.notes==undefined)" (click)="saveNote(Notes)"
+          *ngIf="Notes.id==0">Save &
+          Close</button>
+        <button class="btn btn-sm btn-primary" type="button" [disabled]="(Notes.typeListId==undefined||Notes.typeListId==null)||
+            (Notes.notes==''|| Notes.notes==null||Notes.notes==undefined)" (click)="saveNote(Notes)"
+          *ngIf="Notes.id!=0">Update &
+          Close</button>
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!--------------------------Type List-------------------------------------------------------->
+<span id="typeopen" data-toggle="modal" data-target="#typelstmodal"></span>
+<div class="modal hide fade modalbackgrod" id="typelstmodal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog ">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="row w-100">
+          <div class="col-lg-9">
+            <h5 class="modal-title font-header" id="exampleModalLabel">Type</h5>
+          </div>
+          <div class="col-lg-3">
+            <button data-target="#addtype" (click)="opennewnote();type.id=0;type.typeName=''"
+              class="btn blue-btn btn-sm w-100" data-toggle="modal">Add Type</button>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+        </div>
+
+
+      </div>
+      <div class="modal-body ">
+        <ejs-grid #grid [dataSource]='typelst' [allowResizing]='true'  [allowSorting]='true' [allowFiltering]='true'
+          [filterSettings]='filterOptions'>
+          <e-columns>
+            <e-column minWidth= 100 field="typeNumber" headerText="Number" type="number"></e-column>
+            <e-column minWidth= 100 field="typeName" headerText="Type Name">
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+
+            <e-column minWidth= 100 headerText="Actions">
+              <ng-template #template let-data>
+                <button class="btn btn-edit-table " data-target="#addtype" data-toggle="modal" (click)="type=data"><i
+                    class="fa fa-edit"></i></button>
+
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!------------------------Add Update Type-->
+<span id="addtypeopen" data-toggle="modal" data-target="#addtype"></span>
+<div class="modal hide fade modalbackgrod" id="addtype" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog ">
+
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="type.id==0"> Add Type</h5>
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="type.id!=0">Update Type</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+      </div>
+      <div class="modal-body ">
+        <div class="row">
+          <div class="col-lg-3">
+            <label class="font-weight-bold">Number</label>
+          </div>
+          <div class="col-lg-9">
+            <input type="text" class="form-control w-100" [(ngModel)]="type.typeNumber" [disabled]="true" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">
+            <label class="font-weight-bold">Type Name</label>
+          </div>
+          <div class="col-lg-9">
+            <input type="text" class="form-control w-100" [(ngModel)]="type.typeName" />
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" type="button" [disabled]="" (click)="savetype(type)"
+          *ngIf="type.id==0">Save &
+          Close</button>
+        <button class="btn btn-sm btn-primary" type="button" [disabled]="" (click)="savetype(type)"
+          *ngIf="type.id!=0">Update &
+          Close</button>
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!---------------------delete note alert---------------------------------------------------->
+<span id="openndeletenote" data-toggle="modal" data-target="#deletenote"></span>
+<div class="modal hide fade modalbackgrod" id="deletenote" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      </div>
+      <div class="modal-body ">
+        Do you want to delete this record ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" (click)="deleteNote()">Yes</button>
+
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-----------------------------contact save alert----------------------------------------->
+<span id="opensavealert" data-toggle="modal" data-target="#withoutsavealert"></span>
+<div class="modal hide fade modalbackgrod" id="withoutsavealert" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Alert</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      </div>
+      <div class="modal-body ">
+        Do you want to Move Without Save ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Yes</button>
+
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" (click)="saveContact(ClientContactList)">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ---------------------------------------Service---------------------------------------------------------- -->
+<div class="modal fade" id="servicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title font-header col-lg-7" id="exampleModalLabel" >Service</h5>
+            <button type="button" class="btn blue-btn btn-sm col-lg-4" data-toggle="modal" data-target="#configureService"  (click)="CreateupdateServiceActivity('new');">
+              Configure Service
+            </button>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+      
+          <div class="row">
+            <div class="col-lg-12">
+              <table class="table table-sm table-hover table-bordered">
+                <thead class="bg-primary text-white">
+                  <tr>
+                    <th class="pointer">S.No</th>
+                    <th>Service</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="row1" *ngFor="let s of serviceData;let i=index">
+                    <td style="text-align:right">
+                      {{i+1}}
+                    </td>
+                    <td >
+                      {{s.masterServiceName}}
+                    </td>
+                    <td>
+                      <button class="btn btn-edit-table" data-toggle="modal" data-target="#configureService"  (click)="CreateupdateServiceActivity('edit');selectdetailsservAct(s)"><i class="fa fa-edit fa-lg"></i></button>
+                      <!-- <button class="btn btnclass" style="background-color: red;color: white;width: 30%;"
+                        (click)="OpenDeleteNotesType(deleteMappedType,note);"><i class="fa fa-trash fa-lg"></i></button>               -->
+                     
+                    </td>
+                  </tr>
+                 
+                  <!-- </div> -->
+          
+                </tbody>
+          
+              </table>
+              <div *ngIf="serviceData.length == 0" class="text-primary text-center">
+                <p>No data available</p>
+              </div>
+            </div>
+          </div>
+      
+      </div>
+      <div class="modal-footer">
+            <button class="btn btn-sm blue-btn"  data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- --------------------------------------- Configure Service---------------------------------------------------------- -->
+<!-- <div class="modal fade" id="configureService" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel"   *ngIf="isServiceCreate && !isServiceUpdate">Service Configuration</h5>
+        <h5 class="modal-title font-header" id="exampleModalLabel"   *ngIf="!isServiceCreate && isServiceUpdate">Update Configuration</h5> 
+        <label class="text-primary"><i>Note:&nbsp;&nbsp;Drag and drop to add activities</i></label>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12 aligned_from">
+              <label  class="font-header">Service Type</label>
+              <select class="form-control col-lg-6" [(ngModel)]="servName" (ngModelChange)="onServiceChange(servName)">
+                <option *ngFor="let i of masterServiceList"  [ngValue]="i.id">{{i.masterServiceCode}}</option>
+              </select>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-lg-12 aligned_from">
+              <div class="row border-0 ml-2">
+                <div class="col-lg-5">
+               <label class="font-header">Available Activities</label>
+                
+               
+                </div>
+             <div class="col-lg-1"></div>
+               <div class="col-lg-5">
+               <label class="font-header">Selected Activities</label>
+               
+              
+               </div>
+             </div>
+             <div class="row border-0 ml-2 drag-drop-wrapper">
+             
+               <div class="col-lg-5 border">
+            
+              
+                  <div class="listbox-control1" *ngIf="availableActivities.length != 0">
+                  <ejs-listbox [dataSource]="availableActivities" [allowDragAndDrop]="true" [fields]="setfield" scope="combined-list"></ejs-listbox>
+                  </div>
+                <div *ngIf="availableActivities.length == 0 && !servName" >
+                  <p>Select service to view activities</p>
+                </div> 
+                <div *ngIf="availableActivities.length == 0 && servName" >
+                  <p>No data available</p>
+                </div> 
+              
+               </div>
+            <div class="col-lg-1"></div>
+              <div class="col-lg-5 border">
+            
+                <div class="listbox-control2" *ngIf="selectedActivities.length != 0">
+                  <ejs-listbox  [dataSource]="selectedActivities" [allowDragAndDrop]="true" [fields]="setfield" scope="combined-list"></ejs-listbox>
+                </div>
+
+               <div *ngIf="selectedActivities.length == 0">
+                <p>No data available</p>
+              </div>
+             
+              </div>
+            
+            </div>
+            </div>
+          </div>
+      
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm blue-btn" (click)="UpdateServiceActivity(selectedActivities)" *ngIf="isServiceCreate && !isServiceUpdate">Save & Close</button>
+        <button class="btn btn-sm blue-btn" (click)="UpdateServiceActivity(selectedActivities)" *ngIf="!isServiceCreate && isServiceUpdate">Update & Close</button>
+        <button class="btn btn-sm blue-btn"  data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+<span data-target="#configureService" data-toggle="modal" id="configservice"></span>
+<div class="modal fade" id="configureService" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog create-update-sa" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title font-header" id="exampleModalLabel" ><span
+                  *ngIf="ModalType =='new'"> Create ServiceActivity</span> <span *ngIf="ModalType =='edit'">Update ServiceActivity</span> </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-lg-4">
+                      <label>Service Type</label>
+                  </div>
+                  <div class="col-lg-8">
+                      <select [(ngModel)]="ServiceActivityArray1.masterServiceId" class="form-control" (ngModelChange)="getActivityTypeSatus(ServiceActivityArray1.masterServiceId)">
+                          <option ></option>
+                          <option *ngFor="let service of masterServiceList" [value]="service.Key">{{service.Value}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-lg-6">
+                      <div class="example-container">
+                          <label>Available Activities</label>
+                          <div cdkDropList #doneList="cdkDropList" class="example-list" [cdkDropListData]="availableActivities"
+                          (cdkDropListDropped)="drop($event);checkpopServiceActivity()" [cdkDropListConnectedTo]="[todoList]">
+                              <div *ngIf="availableActivities.length == 0 && ModalType == 'new'">
+                                  <p>Select service to view activities</p>
+                              </div> 
+                              <div *ngIf="availableActivities.length == 0 && ModalType == 'edit'">
+                                  <p>No data available!</p>
+                              </div> 
+                              <div *ngIf="availableActivities.length != 0">
+                                  <div class="example-box" *ngFor="let item of availableActivities" cdkDrag>
+                                  {{ item.Value }}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-6">
+                      <div class="example-container">
+                          <label>Selected Activities</label>
+                          <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="selectedActivities"
+                              [cdkDropListConnectedTo]="[doneList]" class="example-list" (cdkDropListDropped)="drop($event);checkpopServiceActivity()">
+                              <div *ngIf="selectedActivities.length == 0">
+                                  <p>No data available!</p>
+                              </div>
+                              <div *ngIf="selectedActivities.length != 0">
+                                  <div class="example-box" *ngFor="let item of selectedActivities" cdkDrag>
+                                  {{ item.Value }}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button class="btn blue-btn btn-sm" (click)="SaveOrUpdateServiceActivity(ServiceActivityArray1)"
+              [disabled]="ServiceActivityArray1.masterServiceId==null||ServiceActivityArray1.masterServiceId==''||ServiceActivityArray1.masterServiceId==undefined
+              ||selectedActivities.length==0"
+              ><span *ngIf="ModalType =='new'"> Save &
+                  Close</span> <span *ngIf="ModalType =='edit'">Update & Close</span> </button>
+              <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+
+<!--==================================Add and Edit certificate=========================================-->
+<app-certificateedit *ngIf="Editcert "  [certificate]="EditCertificateoption"   (DatafromCertificate)="dataEmitFromCertificate($event)"></app-certificateedit>

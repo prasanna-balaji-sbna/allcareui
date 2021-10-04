@@ -1,0 +1,3391 @@
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+        <section id="tabs" class="project-tab">
+          <!-- <div class="container"> -->
+          <div class="row">
+            <div class="col-lg-12">
+              <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                  <a class="nav-item nav-link active" id="nav-submission-tab" data-toggle="tab" href="#nav-submission"
+                    role="tab" aria-controls="nav-submission" aria-selected="true"
+                    (click)="tabchange('Submission Reports')"
+                    [ngClass]="{'mytab-inactive':selecctedTab!='Submission Reports','active':selecctedTab=='Submission Reports'}">Submission
+                    Report
+                  </a>
+                  <a class="nav-item nav-link" id="nav-exception-tab" data-toggle="tab" href="#nav-exception" role="tab"
+                    aria-controls="nav-exception" aria-selected="false" (click)="tabchange('Exception Reports')"
+                    [ngClass]="{'mytab-inactive':selecctedTab!='Exception Reports','active':selecctedTab=='Exception Reports'}">Exception
+                    Report</a>
+                  <a class="nav-item nav-link" id="nav-inactiveclient-tab" data-toggle="tab" href="#nav-inactiveclient"
+                    role="tab" aria-controls="nav-inactiveclient" aria-selected="false"
+                    (click)="tabchange('InactiveClientReport')"
+                    [ngClass]="{'mytab-inactive':selecctedTab!='InactiveClientReport','active':selecctedTab=='InactiveClientReport'}">InActive
+                    Client Report</a>
+                  <a class="nav-item nav-link" id="nav-spenddown-tab" data-toggle="tab" href="#nav-spenddown" role="tab"
+                    aria-controls="nav-spenddown" aria-selected="false" (click)="tabchange('SpenddownReport')"
+                    [ngClass]="{'mytab-inactive':selecctedTab!='SpenddownReport','active':selecctedTab=='SpenddownReport'}">SpendDown
+                    Report</a>
+                  <a class="nav-item nav-link" id="nav-revenue-tab" data-toggle="tab" href="#nav-revenue" role="tab"
+                    aria-controls="nav-revenue" aria-selected="false" (click)="tabchange('RevenueReport')"
+                    [ngClass]="{'mytab-inactive':selecctedTab!='RevenueReport','active':selecctedTab=='RevenueReport'}">Revenue
+                    Report</a>
+                  <a class="nav-item nav-link" id="nav-ClaimChargevsPaid-tab" data-toggle="tab"
+                    href="#nav-ClaimChargevsPaid" role="tab" aria-controls="nav-ClaimChargevsPaid" aria-selected="false"
+                    (click)="tabchange('ClaimChargevsPaid')"
+                    [ngClass]="{'mytab-inactive':selecctedTab!='ClaimChargevsPaid','active':selecctedTab=='ClaimChargevsPaid'}">Claim
+                    Charge vs Paid
+                    Report</a>
+                  <a class="nav-item nav-link" id="nav-Financial-tab" data-toggle="tab" href="#nav-Financial" role="tab"
+                    aria-controls="nav-Financial" aria-selected="false" (click)="tabchange('Financial')"
+                    [ngClass]="{'mytab-inactive':selecctedTab!='Financial','active':selecctedTab=='Financial'}">Financial
+                    Report</a>
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade  " id="nav-submission" role="tabpanel" aria-labelledby="nav-submission-tab"
+                  [ngClass]="{'active':selecctedTab=='Submission Reports','show':selecctedTab=='Submission Reports'}">
+
+
+                  <div class="row mb-2">
+                    <div class="col pl-0">
+                      <div widget class="card border-0 box-shadow">
+                        <div class="card-header transparent  text-muted">
+
+                          <div class="row">
+                            <div class="col-lg-6">
+                              <h4 class="mb-0 font-header">Submission Report</h4>
+                            </div>
+
+
+
+                          </div>
+
+                        </div>
+                        <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr!=''" role="alert">
+                          <p>{{saveErr}}</p>
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                            (click)="saveErr=''">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                          <div class="row">
+                            <div class="col-lg-4" style="border-right: solid 2px #004092;">
+                              <!-- <div class="row">
+                                <div class="col-lg-5">
+                                    <label class="manualentry-label">Group
+                                        </label>
+                                </div>
+                                <div class="col-lg-7">
+
+                                    <select class="form-control"
+                        [(ngModel)]="groupId"
+                        (ngModelChange)="setDefaultgroupval(groupId);checkOverallData()"
+                        [disabled]="global.globalAgencyId==0">
+                        <option></option>
+                        <option [value]=st.Key *ngFor="let st of groupList">{{st.Value}}</option>
+                      </select>
+                                    <!-- <ng-select [(ngModel)]="groupId" [searchable]="true" [clearable]="true"
+                                        [items]="groupList" bindLabel="label" class="tdropdown" bindValue="value"
+                                       >
+                                    </ng-select> -->
+                              <!-- </div>
+                            </div> -->
+
+
+
+                              <!-- <div class="row mt-3">
+                                <div class="col-lg-5">
+                                    <label class="manualentry-label">Payor
+                                        </label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <select class="form-control" [(ngModel)]="payorId"
+                                    (ngModelChange)="setDefaultpayorval(payorId);checkOverallData()"
+                                    [disabled]="groupId == ''">
+                                    <option></option>
+                                    <option [value]=st.Key *ngFor="let st of payorList">{{st.Value}}</option>
+                                  </select>
+                                   
+                                </div>
+                            </div> -->
+
+                              <div class="row mt-3">
+                                <div class="col-lg-5">
+                                  <label class="manualentry-label">Company</label>
+                                </div>
+                                <div class="col-lg-7">
+                                  <select class="form-control" [(ngModel)]="company"
+                                    [disabled]="global.globalAgencyId==0">
+                                    <option></option>
+                                    <option [value]=st.Key *ngFor="let st of companyList">{{st.Value}}</option>
+                                  </select>
+                                  <!-- <ng-select multiple="true" [(ngModel)]="company" [searchable]="true"
+                                        [clearable]="true" [items]="serviceList" class="tdropdown" bindLabel="Value"
+                                        bindValue="Key" (ngModelChange)="show(start,end,serviceName);"
+                                        [disabled]="eanbleservice">
+                                    </ng-select> -->
+                                </div>
+                              </div>
+
+                              <div class="row mt-3">
+                                <div class="col-lg-5">
+                                  <label class="manualentry-label">Clearing house</label>
+                                </div>
+                                <div class="col-lg-7">
+                                  <select class="form-control" [(ngModel)]="clearinghouse"
+                                    [disabled]="global.globalAgencyId==0">
+                                    <option></option>
+                                    <option [value]=st.Key *ngFor="let st of clearinghouseList">{{st.Value}}</option>
+                                  </select>
+                                  <!-- <ng-select multiple="true" [(ngModel)]="clearinghouse" [searchable]="true"
+                                        [clearable]="true" [items]="serviceList" class="tdropdown" bindLabel="Value"
+                                        bindValue="Key" (ngModelChange)="show(start,end,serviceName);"
+                                        [disabled]="eanbleservice">
+                                    </ng-select> -->
+                                </div>
+                              </div>
+                              <div class="row mt-3">
+                                <div class="col-lg-5">
+                                  <label class="manualentry-label">Start
+                                    Date</label>
+                                </div>
+                                <div class="col-lg-7">
+
+                                  <my-date-picker [options]="myDatePickerOptions" [selDate]="startdate"
+                                    [disabled]="global.globalAgencyId==0" placeholder="mm/dd/yyyy"
+                                    (inputFieldChanged)="newdates($event,'inputchage','start')"
+                                    (dateChanged)="newdates($event,'datechagned','start')">
+                                  </my-date-picker>
+                                </div>
+                              </div>
+                              <div class="row mt-3">
+                                <div class="col-lg-5">
+                                  <label class="manualentry-label">End
+                                    Date</label>
+                                </div>
+                                <div class="col-lg-7">
+
+                                  <my-date-picker [options]="myDatePickerOptions" [selDate]="enddate"
+                                    [disabled]="global.globalAgencyId==0" placeholder="mm/dd/yyyy"
+                                    (inputFieldChanged)="newdates($event,'inputchage','end')"
+                                    (dateChanged)="newdates($event,'datechagned','end')">
+                                  </my-date-picker>
+                                </div>
+
+                              </div>
+
+
+
+                              <div class="row mt-3">
+                                <div class="col-lg-3">
+                                </div>
+                                <div class="col">
+                                  <button type="button" class="btn blue-btn btn-sm right"
+                                    [disabled]="global.globalAgencyId==0" (click)="generatereportSubmission()">
+                                    Generate Report
+                                  </button>
+                                </div>
+
+                              </div>
+                            </div>
+
+                          </div>
+                          <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+                            <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view
+                              details</label>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="tab-pane fade  " id="nav-exception" role="tabpanel" aria-labelledby="nav-exception-tab"
+                  [ngClass]="{'active':selecctedTab=='Exception Reports','show':selecctedTab=='Exception Reports'}">
+
+
+                  <div class="row mb-2">
+                    <div class="col pl-0">
+                      <div widget class="card border-0 box-shadow">
+                        <div class="card-header transparent  text-muted">
+                          <div class="row">
+                            <div class="col-lg-6">
+                              <h4 class="mb-0 font-header">Exception Report</h4>
+                            </div>
+
+
+
+                          </div>
+                        </div>
+                        <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr!=''" role="alert">
+                          <p>{{saveErr}}</p>
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                            (click)="saveErr=''">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+
+                        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                         
+                                 
+                                    <div class="row">
+                                      <div class="col-lg-6" style="border-right: solid 2px #004092;">
+                                        <div>Exception report with filters</div>
+                                        <!--  <div class="row">
+                                           <div class="col-lg-5">
+                                            <label class="manualentry-label">Type<sup class="super-script">&nbsp; *</sup>
+                                            </label>
+                                          </div>
+                                          <div class="col-lg-7">
+          
+                                            <select class="form-control" [(ngModel)]="type" [disabled]="global.globalAgencyId==0">
+                                              <option></option>
+                                              <option [value]=st.Key *ngFor="let st of typeList">{{st.Value}}</option>
+                                            </select>
+          
+                                          </div>
+                                        </div> -->
+                                        <div class="row mt-3">
+                                          <div class="col-lg-3">
+                                            <label class="manualentry-label">Group
+                                            </label>
+                                          </div>
+                                          <div class="col-lg-7">
+
+                                            <select class="form-control" [(ngModel)]="groupId"
+                                              (ngModelChange)="setDefaultgroupval(groupId);checkOverallData()"
+                                              [disabled]="global.globalAgencyId==0">
+                                              <option></option>
+                                              <option [value]=st.Key *ngFor="let st of groupList">{{st.Value}}</option>
+                                            </select>
+
+                                          </div>
+                                        </div>
+
+
+
+                                        <div class="row mt-3">
+                                          <div class="col-lg-3">
+                                            <label class="manualentry-label">Payor
+                                            </label>
+                                          </div>
+                                          <div class="col-lg-7">
+                                            <select class="form-control" [(ngModel)]="payorId"
+                                              (ngModelChange)="setDefaultpayorval(payorId);checkOverallData()"
+                                              [disabled]="groupId == ''">
+                                              <option></option>
+                                              <option [value]=st.Key *ngFor="let st of payorList">{{st.Value}}</option>
+                                            </select>
+
+                                          </div>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                          <div class="col-lg-3">
+                                            <label class="manualentry-label">Company</label>
+                                          </div>
+                                          <div class="col-lg-7">
+                                            <select class="form-control" [(ngModel)]="company"
+                                              [disabled]="global.globalAgencyId==0">
+                                              <option></option>
+                                              <option [value]=st.Key *ngFor="let st of companyList">{{st.Value}}
+                                              </option>
+                                            </select>
+                                            <!-- <ng-select multiple="true" [(ngModel)]="company" [searchable]="true"
+                                                [clearable]="true" [items]="serviceList" class="tdropdown" bindLabel="Value"
+                                                bindValue="Key" (ngModelChange)="show(start,end,serviceName);"
+                                                [disabled]="eanbleservice">
+                                            </ng-select> -->
+                                          </div>
+                                        </div>
+
+
+
+                                        <div class="row mt-3">
+                                          <div class="col-lg-3">
+                                            <label class="manualentry-label">Client</label>
+                                          </div>
+                                          <div class="col-lg-7">
+                                            <select class="form-control" [(ngModel)]="client"
+                                              [disabled]="global.globalAgencyId==0">
+                                              <option></option>
+                                              <option [value]=st.id *ngFor="let st of ClinetDropDown">{{st.names}}
+                                              </option>
+                                            </select>
+
+                                          </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                          <div class="col-lg-3">
+                                            <label class="manualentry-label">Employee</label>
+                                          </div>
+                                          <div class="col-lg-7">
+                                            <select class="form-control" [(ngModel)]="employee"
+                                              [disabled]="global.globalAgencyId==0">
+                                              <option></option>
+                                              <option [value]=st.Key *ngFor="let st of EmployeeDropDown">{{st.Value}}
+                                              </option>
+                                            </select>
+
+                                          </div>
+                                        </div>
+
+
+                                        <div class="row mt-3">
+                                          <div class="col-lg-3">
+                                          </div>
+                                          <div class="col">
+                                            <button type="button" [disabled]=" global.globalAgencyId==0 "
+                                              class="btn blue-btn btn-sm right" (click)="generatereportException()">
+                                              Generate Report
+                                            </button>
+                                          </div>
+
+                                        </div>
+                                      </div>
+
+                                      <div class="col-lg-6 " >
+                                        <div class="row">Exception report from 835ERA</div>
+                                        <div class="row">
+                                          <div class="col-lg-3">
+                                            <label class="manualentry-label">835 File
+                                            </label>
+                                          </div>
+
+                                          <div class="col-lg-7">
+                                            <ng-select [searchable]="true" [clearable]="true" [items]="dropdown835"
+                                              bindLabel="Value" bindValue="Key"
+                                              [(ngModel)]="select835file">
+                                            </ng-select>
+                                          </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                          <div class="col">
+
+                                            <button type="button" [disabled]=" global.globalAgencyId==0 || select835file==''||select835file==null"  class="btn blue-btn btn-sm right"
+                                              (click)="sampleddata()">
+                                              Generate Report
+                                            </button>
+
+                                            <!-- [disabled]=" global.globalAgencyId==0 || select835file!=''" -->
+
+                                          </div>
+                                        </div>
+
+
+
+                                      </div>
+                                    </div>
+                                  
+
+
+                             
+                          
+
+                        </div>
+                        <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+                          <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view
+                            details</label>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+                <div class="tab-pane fade  " id="nav-inactiveclient" role="tabpanel"
+                  aria-labelledby="nav-inactiveclient-tab"
+                  [ngClass]="{'active':selecctedTab=='InactiveClientReport','show':selecctedTab=='InactiveClientReport'}">
+
+
+                  <div class="row mb-2">
+                    <div class="col pl-0">
+                      <div widget class="card border-0 box-shadow">
+                        <div class="card-header transparent  text-muted">
+
+                          <div class="row">
+                            <div class="col-lg-6">
+                              <h4 class="mb-0 font-header">Inactive Client Report</h4>
+                            </div>
+
+
+
+                          </div>
+
+                        </div>
+                        <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr!=''" role="alert">
+                          <p>{{saveErr}}</p>
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                            (click)="saveErr=''">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                          <div class="row">
+                            <div class="col-lg-4" style="border-right: solid 2px #004092;">
+                              <div class="row" *ngFor="let val of Reportfilter;let i=index">
+                                <div class="col-lg-5">
+                                  <label class="manualentry-label" *ngIf="i==0">Filter
+                                    <sup class="super-script">&nbsp;*</sup></label>
+
+                                </div>
+                                <div class="col-lg-7">
+
+                                  <input type="radio" value="{{val.Key}}" [(ngModel)]="Report.filter" name="i"
+                                    [disabled]="global.globalAgencyId==0">{{val.Value}}
+
+                                </div>
+                              </div>
+
+                              <div class="row mt-3">
+                                <div class="col-lg-5">
+                                  <label class="manualentry-label">Start
+                                    Date</label>
+                                </div>
+                                <div class="col-lg-7">
+
+                                  <my-date-picker [options]="myDatePickerOptions" [selDate]="Report.start"
+                                    placeholder="mm/dd/yyyy"
+                                    (inputFieldChanged)="newdates($event,'inputchage','inactivestart')"
+                                    (dateChanged)="newdates($event,'datechagned','inactivestart')"
+                                    [disabled]="global.globalAgencyId==0">
+                                  </my-date-picker>
+                                </div>
+                              </div>
+                              <div class="row mt-3">
+                                <div class="col-lg-5">
+                                  <label class="manualentry-label">End
+                                    Date</label>
+                                </div>
+                                <div class="col-lg-7">
+
+                                  <my-date-picker [options]="myDatePickerOptions" [selDate]="Report.end"
+                                    placeholder="mm/dd/yyyy"
+                                    (inputFieldChanged)="newdates($event,'inputchage','inactiveend')"
+                                    (dateChanged)="newdates($event,'datechagned','inactiveend')"
+                                    [disabled]="global.globalAgencyId==0">
+                                  </my-date-picker>
+                                </div>
+
+                              </div>
+
+
+
+
+                              <div class="row mt-3">
+                                <div class="col-lg-3">
+                                </div>
+                                <div class="col">
+                                  <button type="button" class="btn blue-btn btn-sm right"
+                                    [disabled]="Report.filter==null||Report.filter==undefined||global.globalAgencyId==0"
+                                    (click)="getinactive()">
+                                    Generate Report
+                                  </button>
+                                </div>
+
+                              </div>
+                            </div>
+
+                          </div>
+                          <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+                            <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view
+                              details</label>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+
+                <div class="tab-pane fade  " id="nav-revenue" role="tabpanel" aria-labelledby="nav-revenue-tab"
+                  [ngClass]="{'active':selecctedTab=='RevenueReport','show':selecctedTab=='RevenueReport'}">
+
+
+                  <div class="card-body  widget-body pb-0 pt-2 mb-4">
+
+                    <div class="row mb-2">
+                      <div class="col pl-0">
+                        <div widget class="card border-0 box-shadow">
+                          <div class="card-header transparent  text-muted">
+
+                            <div class="row">
+                              <div class="col-lg-6">
+                                <h4 class="mb-0 font-header">Revenue Report</h4>
+                              </div>
+
+
+
+                            </div>
+
+                          </div>
+
+                          <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                            <div class="row">
+                              <div class="col-lg-4" style="border-right: solid 2px #004092;">
+                                <div class="row">
+                                  <div class="col-lg-5">
+                                    Payor
+
+                                  </div>
+                                  <div class="col-lg-7">
+                                    <ng-select [searchable]="true" [clearable]="true" [items]="revenuePayorList"
+                                      bindLabel="Value" class="tdropdown" bindValue="Key" [(ngModel)]="selectedPayor">
+
+                                    </ng-select>
+                                  </div>
+                                </div>
+
+                                <div class="row mt-3" *ngFor="let val of DateFilterList;let i=index">
+                                  <div class="col-lg-5">
+
+
+                                  </div>
+                                  <div class="col-lg-7">
+
+                                    <input type="radio" value="{{val.Key}}" [(ngModel)]="DateFilter" name="'D'+i"
+                                      [disabled]="global.globalAgencyId==0">{{val.Value}}
+
+                                  </div>
+                                </div>
+                                <div class="row mt-3">
+                                  <div class="col-lg-5">
+                                    <label class="manualentry-label">Start Date<sup class="super-script">&nbsp;*</sup>
+                                    </label>
+                                  </div>
+                                  <div class="col-lg-7">
+
+                                    <my-date-picker [options]="Keystatusoption" [selDate]="revenueStart"
+                                      placeholder="mm/dd/yyyy"
+                                      (inputFieldChanged)="newdates($event,'inputchage','revenuestart')"
+                                      (dateChanged)="newdates($event,'datechagned','revenuestart')"
+                                      [disabled]="global.globalAgencyId==0">
+                                    </my-date-picker>
+                                  </div>
+                                </div>
+                                <div class="row mt-3">
+                                  <div class="col-lg-5">
+                                    <label class="manualentry-label">End
+                                      Date <sup class="super-script">&nbsp;*</sup></label>
+                                  </div>
+                                  <div class="col-lg-7">
+
+                                    <my-date-picker [options]="Keystatusoption" [selDate]="revenueEnd"
+                                      placeholder="mm/dd/yyyy"
+                                      (inputFieldChanged)="newdates($event,'inputchage','revenueend')"
+                                      (dateChanged)="newdates($event,'datechagned','revenueend')"
+                                      [disabled]="global.globalAgencyId==0">
+                                    </my-date-picker>
+                                  </div>
+
+                                </div>
+                                <div class="row mt-3" *ngFor="let val of ChargeFilterList;let i=index">
+                                  <div class="col-lg-5">
+
+
+                                  </div>
+                                  <div class="col-lg-7">
+
+                                    <input type="radio" value="{{val.Key}}" [(ngModel)]="ChargeFilter" name="'C'+i"
+                                      [disabled]="global.globalAgencyId==0">{{val.Value}}
+
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-lg-3"></div>
+                                  <div class="text-right col">
+                                    <button [disabled]="revenueStart==null||revenueStart==undefined||revenueStart==''||revenueEnd==null||revenueEnd==undefined||
+                                    this.revenueEnd=='' " (click)="getRevenueData()"
+                                      class="btn blue-btn btn-sm right">Download</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+                              <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view
+                                details</label>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="tab-pane fade  " id="nav-spenddown" role="tabpanel" aria-labelledby="nav-spenddown-tab"
+                  [ngClass]="{'active':selecctedTab=='SpenddownReport','show':selecctedTab=='SpenddownReport'}">
+
+
+                  <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                    <div class="alert alert-warning" *ngIf="onDOCFileChangedErr!= '' " closable
+                      (close)="onDOCFileChangedErr=''">
+                      {{onDOCFileChangedErr}}
+                    </div>
+                    <div class="row no-gutters">
+                      <div class="col-lg-1">
+                        Filter
+                      </div>
+                      <div class="col-lg-1"> <input type="radio" value="All" [(ngModel)]="spendownfilter" name="All"
+                          [disabled]="global.globalAgencyId==0" (change)="getspendowndata()">All </div>
+                      <div class="col-lg-1"> <input type="radio" value="True" [(ngModel)]="spendownfilter"
+                          name="Printed" [disabled]="global.globalAgencyId==0" (change)="getspendowndata()">Printed
+                      </div>
+                      <div class="col-lg-1"> <input type="radio" value="False" [(ngModel)]="spendownfilter"
+                          name="Not Printed" [disabled]="global.globalAgencyId==0" (change)="getspendowndata()">Not
+                        Printed </div>
+
+                    </div>
+
+                    <div class="row no-gutters ">
+                      <div class="offset-lg-10 col-lg-2 text-right">
+                        <button (click)="Refresh()" class="btn blue-btn ml-3" style="float: right;">
+                          Refresh
+                        </button>
+                        <button class="btn blue-btn" (click)="kendopdfdownloadListSpendDown()">
+                          <i class="fa fa-print"></i>
+                        </button>
+                      </div>
+
+                    </div>
+                    <!-- <div class="row no-gutters ">
+
+
+                </div>
+
+              </div>
+              <div class="tab-pane fade  " id="nav-ClaimChargevsPaid" role="tabpanel"
+                aria-labelledby="nav-ClaimChargevsPaid-tab"
+                [ngClass]="{'active':selecctedTab=='ClaimChargevsPaid','show':selecctedTab=='ClaimChargevsPaid'}">
+
+
+                <div class="card-body  widget-body pb-0 pt-2 mb-4">
+
+                  <div class="row mb-2">
+                    <div class="col pl-0">
+                      <div widget class="card border-0 box-shadow">
+                        <div class="card-header transparent  text-muted">
+
+                          <div class="row">
+                            <div class="col-lg-6">
+                              <h4 class="mb-0 font-header">Claim Charge vs Paid Report</h4>
+                            </div>
+
+
+
+                          </div>
+
+                        </div>
+
+                        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                          <div class="row">
+                            <div class="col-lg-4" style="border-right: solid 2px #004092;">
+                              <div class="row">
+                                <div class="col-lg-5">
+                                  Payor
+
+                                </div>
+                                <div class="col-lg-7">
+                                  <ng-select [searchable]="true" [clearable]="true" [items]="ClaimPayorList"
+                                    bindLabel="Value" class="tdropdown" bindValue="Key"
+                                    [(ngModel)]="selectedClaimPayor">
+
+                    </div> -->
+
+                    <ejs-grid #grid [dataSource]='data|async' [allowResizing]='true' [allowSorting]='true'
+                      [allowFiltering]='true' [pageSettings]='initialPage' *ngIf="global.globalAgencyId!=0"
+                      [allowPaging]='true' [filterSettings]='filterSettings' (dataStateChange)='dataStateChange($event)'
+                      (actionBegin)="onActionComplete($event)" (resizeStop)="onResize($event)"
+                      (checkBoxChange)="spendownselect($event)">
+                      <e-columns>
+                        <e-column type='checkbox' uid="checkbox" maxWidth=50>
+                        </e-column>
+                        <e-column minWidth=100 field="client" headerText="Client Name" type="number"></e-column>
+                        <e-column minWidth=100 field="prepareDate" headerText="Prepared Date" type='date'
+                          [format]='formatOptions'> </e-column>
+                        <e-column minWidth=100 field="invoiceDate" headerText="Invoice Date" type='date'
+                          [format]='formatOptions'></e-column>
+                        <e-column minWidth=100 field="amount" headerText="Amount" type="string"></e-column>
+                        <e-column minWidth=100 field="invoiceType" headerText="Invoice Type" type="string"></e-column>
+                        <e-column minWidth=100 field="invoiceNumber" headerText="Invoice Number" type="string">
+                        </e-column>
+
+
+
+
+                      </e-columns>
+                    </ejs-grid>
+
+                  </div>
+                </div>
+
+                <div class="tab-pane fade  " id="nav-Financial" role="tabpanel" aria-labelledby="nav-Financial-tab"
+                  [ngClass]="{'active':selecctedTab=='Financial','show':selecctedTab=='Financial'}">
+
+
+                  <div class="card-body  widget-body pb-0 pt-2 mb-4">
+
+                    <div class="row mb-2">
+                      <div class="col pl-0">
+                        <div widget class="card border-0 box-shadow">
+                          <div class="card-header transparent  text-muted">
+
+                            <div class="row">
+                              <div class="col-lg-6">
+                                <h4 class="mb-0 font-header">Financila Report</h4>
+                              </div>
+
+
+
+                            </div>
+
+                          </div>
+
+                          <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                            <div class="row">
+                              <div class="col-lg-4" style="border-right: solid 2px #004092;">
+
+                                <div class="row mt-3">
+                                  <div class="col-lg-5">
+                                    <label class="manualentry-label">Start Date<sup class="super-script">&nbsp;*</sup>
+                                    </label>
+                                  </div>
+                                  <div class="col-lg-7">
+                                    <my-date-picker [options]="Keystatusoption" [selDate]="FinancialStart"
+                                      placeholder="mm/dd/yyyy"
+                                      (inputFieldChanged)="newdates($event,'inputchage','financialStart')"
+                                      (dateChanged)="newdates($event,'datechagned','financialStart')"
+                                      [disabled]="global.globalAgencyId==0">
+                                    </my-date-picker>
+                                  </div>
+                                </div>
+                                <div class="row mt-3">
+                                  <div class="col-lg-5">
+                                    <label class="manualentry-label">End
+                                      Date <sup class="super-script">&nbsp;*</sup></label>
+                                  </div>
+                                  <div class="col-lg-7">
+
+                                    <my-date-picker [options]="Keystatusoption" [selDate]="FinancialEnd"
+                                      placeholder="mm/dd/yyyy"
+                                      (inputFieldChanged)="newdates($event,'inputchage','financialEnd')"
+                                      (dateChanged)="newdates($event,'datechagned','financialEnd')"
+                                      [disabled]="global.globalAgencyId==0">
+                                    </my-date-picker>
+                                  </div>
+
+                                </div>
+
+                                <div class="row">
+                                  <div class="col text-right">
+                                    <button [disabled]="FinancialStart==null||FinancialStart==undefined||FinancialStart==''||FinancialEnd==null||FinancialEnd==undefined||
+                                this.FinancialEnd=='' " (click)="getFinancialData()"
+                                      class="btn blue-btn btn-sm right">Download</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+                              <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view
+                                details</label>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+
+
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- </div> -->
+<!-- /////////////================================View 837 Report=================================//////////////// -->
+<!-- <span id="openModal3" data-target="#viewbatch" data-toggle="modal"></span>
+<div class="modal fade" id="viewbatch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h5 class="modal-title font-header">View 837</h5>
+        <div class="text-right">
+          <button class="btn blue-btn btn-sm mr-2" data-dismiss="modal">Close</button>
+          <button (click)="kendopdfdownloadList()" class="btn blue-btn btn-sm ">
+            Download
+          </button>
+        </div>
+
+      </div>
+      <div class="modal-body">
+
+
+        <div class="reportscroll"> -->
+
+
+<div style="position: absolute; left: -1000px; top: 500px;">
+  <kendo-pdf-export #pdflist>
+    <DIV id="page_1">
+      <ng-container *ngFor="let itembatch of batchData">
+
+        <TABLE cellpadding=0 cellspacing=0 class="t0">
+          <TR>
+            <TD colspan=3 rowspan=2 class="tr0 td0">
+              <P class="p0 ft0">Exported Claims Report</P>
+            </TD>
+            <TD class="tr1 td1">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr1 td2">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr1 td3">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr1 td4">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr1 td5">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr1 td6">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr1 td7">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD colspan=2 class="tr1 td8">
+              <P class="p2 ft2">{{date| date:'MM/dd/yyyy'}}</P>
+            </TD>
+          </TR>
+          <TR>
+            <TD class="tr2 td1">
+              <P class="p1 ft3">&nbsp;</P>
+            </TD>
+            <TD class="tr2 td2">
+              <P class="p1 ft3">&nbsp;</P>
+            </TD>
+            <TD class="tr2 td3">
+              <P class="p1 ft3">&nbsp;</P>
+            </TD>
+            <TD class="tr2 td4">
+              <P class="p1 ft3">&nbsp;</P>
+            </TD>
+            <TD class="tr2 td5">
+              <P class="p1 ft3">&nbsp;</P>
+            </TD>
+            <TD class="tr2 td6">
+              <P class="p1 ft3">&nbsp;</P>
+            </TD>
+            <TD class="tr2 td7">
+              <P class="p1 ft3">&nbsp;</P>
+            </TD>
+            <TD class="tr2 td9">
+              <P class="p1 ft3">&nbsp;</P>
+            </TD>
+            <TD class="tr2 td10">
+              <P class="p1 ft3">&nbsp;</P>
+            </TD>
+          </TR>
+          <TR>
+            <TD colspan=2 class="tr3 td8">
+              <P class="p0 ft4">File Name:</P>
+            </TD>
+            <TD colspan=5 class="tr3 td11">
+              <P class="p3 ft4">{{itembatch.invoice837P.file_Name}}</P>
+            </TD>
+            <TD class="tr3 td5">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr3 td6">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr3 td7">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr3 td9">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr3 td10">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+          </TR>
+          <TR>
+            <TD colspan=2 class="tr4 td8">
+              <P class="p0 ft4">File Creation Date:</P>
+            </TD>
+            <TD class="tr4 td12">
+              <P class="p3 ft4">{{itembatch.invoice837P.file_Creation_Date| date:'MM/dd/yyyy'}}</P>
+            </TD>
+            <TD class="tr4 td1">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td2">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td3">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td4">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td5">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td6">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td7">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td9">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td10">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+          </TR>
+          <TR>
+            <TD colspan=4 class="tr5 td13">
+              <P class="p0 ft4">Submission/Control Num: {{itembatch.invoice837P.submission_Control_Number}}
+              </P>
+            </TD>
+            <TD colspan=2 class="tr5 td14">
+              <P class="p4 ft2">&nbsp;</P>
+            </TD>
+            <TD class="tr5 td4">
+              <P class="p5 ft2">&nbsp;</P>
+            </TD>
+            <TD class="tr5 td5">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr5 td6">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr5 td7">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr5 td9">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr5 td10">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+          </TR>
+          <TR>
+            <TD colspan=2 class="tr4 td8">
+              <P class="p0 ft4">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td12">
+              <P class="p3 ft4">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td1">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td2">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td3">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td4">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td5">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td6">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td7">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td9">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr4 td10">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+          </TR>
+          <TR>
+            <TD colspan=12 class="tr6 td0">
+              <P class="p0 ft5">{{itembatch.invoice837P.compnay_Name}}</P>
+            </TD>
+            <TD class="tr6 td1">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr6 td2">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr6 td3">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr6 td4">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr6 td5">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr6 td6">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr6 td7">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr6 td9">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr6 td10">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+          </TR>
+          <TR>
+            <TD class="tr0 td15">
+              <P class="p3 ft6">Claim ID</P>
+            </TD>
+            <TD class="tr0 td16">
+              <P class="p6 ft6">From Date</P>
+            </TD>
+            <TD class="tr0 td12">
+              <P class="p7 ft6">To Date</P>
+            </TD>
+            <TD class="tr0 td1">
+              <P class="p1 ft6">POS</P>
+            </TD>
+            <TD colspan=3 class="tr0 td17">
+              <P class="p8 ft6">Procedure Modifier Rendering</P>
+            </TD>
+            <TD class="tr0 td5">
+              <P class="p1 ft6">Last Name</P>
+            </TD>
+            <TD class="tr0 td6">
+              <P class="p9 ft6 pl-0">Units</P>
+            </TD>
+            <TD class="tr0 td7">
+              <P class="p10 ft6">Charges</P>
+            </TD>
+            <TD class="tr0 td9">
+              <P class="p11 ft6">Net</P>
+            </TD>
+            <TD class="tr0 td10">
+              <P class="p12 ft6">Balance</P>
+            </TD>
+          </TR>
+
+          <TR>
+            <TD class="tr7 td18">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td19">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td20">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td21">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td22">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td23">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td24">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td25">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td26">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td27">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td28">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+            <TD class="tr7 td29">
+              <P class="p1 ft7">&nbsp;</P>
+            </TD>
+          </TR>
+          <TR>
+            <TD class="tr8 td15">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr8 td16">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr8 td12">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr8 td1">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr8 td2">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr8 td3">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr8 td4">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr8 td5">
+              <P class="p1 ft1">&nbsp;</P>
+            </TD>
+            <TD class="tr8 td6">
+              <P class="p13 ft8 pl-0">{{itembatch.invoice837P.totalUnits}}</P>
+            </TD>
+            <TD class="tr8 td7">
+              <P class="p11 ft9 pl-0">{{itembatch.invoice837P.totalCharges}}</P>
+            </TD>
+            <TD class="tr8 td9">
+              <P class="p0 ft10">{{itembatch.invoice837P.totalNetCharges}}</P>
+            </TD>
+            <TD class="tr8 td10">
+              <P class="p14 ft8">{{itembatch.invoice837P.totalBalance}}</P>
+            </TD>
+          </TR>
+          <ng-container *ngFor="let val of itembatch.invoice837P.claimDetail837PInvoice">
+            <TR>
+              <TD colspan=2 class="tr4 td8">
+                <P class="p15 ft8">{{val.payorInvoice837P.payor_Name}}</P>
+              </TD>
+              <TD class="tr4 td12">
+                <P class="p1 ft1">&nbsp;</P>
+              </TD>
+              <TD class="tr4 td1">
+                <P class="p1 ft1">&nbsp;</P>
+              </TD>
+              <TD class="tr4 td2">
+                <P class="p1 ft1">&nbsp;</P>
+              </TD>
+              <TD class="tr4 td3">
+                <P class="p1 ft10">{{val.payorInvoice837P.payor_Id}}</P>
+              </TD>
+              <TD class="tr4 td4">
+                <P class="p1 ft1">&nbsp;</P>
+              </TD>
+              <TD class="tr4 td5">
+                <P class="p1 ft1">&nbsp;</P>
+              </TD>
+              <TD class="tr4 td6">
+                <P class="p16 ft9 pl-0">{{val.totalUnits}}</P>
+              </TD>
+              <TD class="tr4 td7">
+                <P class="p11 ft9 pl-0">{{val.totalCharges}}</P>
+              </TD>
+              <TD class="tr4 td9">
+                <P class="p0 ft10">{{val.totalNetCharges}}</P>
+              </TD>
+              <TD class="tr4 td10">
+                <P class="p17 ft11">{{val.totalBalance}}</P>
+              </TD>
+            </TR>
+            <TR>
+              <TD colspan=3 class="tr0 td0">
+                <P class="p15 ft12">
+                  {{val.client_Last_Name}},&nbsp;{{val.client_First_Name}}&nbsp;
+                  {{ val.client_Middle_Name!=null?val.client_Middle_Name:''}}
+                </P>
+              </TD>
+              <TD class="tr0 td1">
+                <P class="p1 ft13">ID:</P>
+              </TD>
+              <TD colspan=2 class="tr0 td14">
+                <P class="p18 ft13">{{val.insurence_No}}</P>
+              </TD>
+              <TD class="tr0 td4">
+                <P class="p1 ft1">&nbsp;</P>
+              </TD>
+              <TD class="tr0 td5">
+                <P class="p1 ft1">&nbsp;</P>
+              </TD>
+              <TD class="tr0 td6">
+                <P class="p16 ft6 pl-0">{{val.totalUnits}}</P>
+              </TD>
+              <TD class="tr0 td7">
+                <P class="p11 ft6 pl-0">{{val.totalCharges}}</P>
+              </TD>
+              <TD class="tr0 td9">
+                <P class="p0 ft10">{{val.otalNetCharges}}</P>
+              </TD>
+              <TD class="tr0 td10">
+                <P class="p17 ft10">{{val.totalBalancaCharges}}</P>
+              </TD>
+            </TR>
+
+            <ng-container *ngFor="let val1 of val.serviceInvoice837P">
+              <TR>
+                <TD class="tr0 td15">
+                  <P class="p19 ft6">{{val.claim_No}}</P>
+                </TD>
+                <TD class="tr0 td16">
+                  <P class="p20 ft6">{{val1.serviceDate| date:'MM/dd/yyyy'}}</P>
+                </TD>
+                <TD class="tr0 td12">
+                  <P class="p21 ft6">{{val1.serviceDate| date:'MM/dd/yyyy'}}</P>
+                </TD>
+                <TD class="tr0 td1">
+                  <P class="p10 ft6">{{val1.service_Location}}</P>
+                </TD>
+                <TD class="tr0 td2">
+                  <P class="p22 ft6">{{val1.service_Code}}</P>
+                </TD>
+                <TD class="tr0 td3">
+                  <P class="p23 ft6">{{val.modifier1}}</P>
+                </TD>
+                <TD class="tr0 td4">
+                  <P class="p13 ft6">{{val1.rendering_Firstname}}</P>
+                </TD>
+                <TD class="tr0 td5">
+                  <P class="p18 ft6">{{val1.rendering_LastName}}</P>
+                </TD>
+                <TD class="tr0 td6">
+                  <P class="p16 ft6 pl-0">{{val1.totalUnits}}</P>
+                </TD>
+                <TD class="tr0 td7">
+                  <P class="p24 ft6 pl-0">{{val1.totalCharges}}</P>
+                </TD>
+                <TD class="tr0 td9">
+                  <P class="p25 ft10">{{val1.totalNetCharges}}</P>
+                </TD>
+                <TD class="tr0 td10">
+                  <P class="p26 ft10">{{val1.totalNetCharges}}</P>
+                </TD>
+              </TR>
+            </ng-container>
+          </ng-container>
+        </TABLE>
+        <div>
+          <hr style="
+margin-top: 1.5%;
+border-top: 1px solid rgb(19, 17, 17);
+width: 100%;
+box-shadow: 0px 1px 1px #0c0c0c;
+">
+        </div>
+        <TR>
+          <TABLE cellpadding=0 cellspacing=0 class="t1">
+            <TR>
+              <TD class="tr11 td30">
+                <P class="p1 ft6">Grand Totals:</P>
+              </TD>
+
+              <TD class="tr11 td7">
+                <P class="p27 ft6 pl-0">{{itembatch.invoice837P.totalUnits}}</P>
+              </TD>
+              <TD class="tr11 td8">
+                <P class="p27 ft6">{{itembatch.invoice837P.totalCharges}}</P>
+              </TD>
+              <TD class="tr11 td9">
+                <P class="p27 ft6">{{itembatch.invoice837P.totalNetCharges}}</P>
+              </TD>
+              <TD class="tr11 td10">
+                <P class="p27 ft6">{{itembatch.invoice837P.totalBalance}}</P>
+              </TD>
+            </TR>
+          </TABLE>
+
+          <hr style="
+                margin-top: 1.5%;
+                border-top: 1px solid rgb(19, 17, 17);
+                width: 100%;margin-bottom: 2px;
+                box-shadow: 0px 1px 1px #0c0c0c;
+                ">
+
+          <hr style="
+margin-top: 1.5%;
+border-top: 1px solid rgb(19, 17, 17);
+margin-bottom: 6px;
+width: 100%;
+box-shadow: 0px 1px 1px #0c0c0c;
+">
+          <!-- <span class="page-break" ></span> -->
+          <!-- *ngIf="i!=payrollReport.length-1" -->
+      </ng-container>
+    </DIV>
+  </kendo-pdf-export>
+</div>
+
+<!-- </div>
+    </div>
+  </div>
+</div> -->
+
+
+
+
+<!-- /////////=======================Exception report=======================================/// -->
+
+<!-- <span id="openModal1" data-target="#viewmodal" data-toggle="modal"></span>
+<div class="modal fade"  id="viewmodal"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog  modal-lg" role="document">
+
+    <div class="modal-content">
+
+      <div class="modal-header modal-header1 border-0">
+
+        <h5 class="modal-title text-left font-header col-lg-8">View Exception</h5>
+        <button class="right btn blue-btn btn-sm col-lg-2" (click)="kendopdfdownloadListException()">
+          Download
+        </button>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body modal-body1">
+        <div class="row">
+          <div class="col-lg-12"> -->
+<div style="position: absolute; left: -1000px; top: 500px;">
+  <kendo-pdf-export #pdflistexcep [keepTogether]="keepTogether" paperSize="A4">
+    <div style="width: 700px;">
+      <!-- <DIV id="page_1"> -->
+        <div>Exception Report</div>
+      <ng-container *ngFor="let itembatch of batchDataExceptiondata">
+        <!-- <div class="row border border-dark rounded p-1 m-1 col-lg-11">
+          <div class="mx-auto ">Exception Report</div> -->
+          <!-- <div class="mx-auto ">{{date| date:'MM/dd/yyyy'}}</div> -->
+        <!-- </div> -->
+
+        <!-- <br> -->
+
+
+        <!-- <table class="table table-striped table-sm table-responsive" *ngIf="viewFiles">
+          <tbody>
+            <tr>
+              <td colspan="12" class="text-sm-left">{{itembatch.payorDetail.payorName}}</td>
+            </tr>
+            <tr>
+              <td colspan="12">{{itembatch.payorDetail.payorStreet}}</td>
+            </tr>
+            <tr>
+              <td colspan="12">{{itembatch.payorDetail.payorCity}}, &nbsp;{{itembatch.payorDetail.payorState}},
+                &nbsp;{{itembatch.payorDetail.payorZiPCode}}</td>
+            </tr>
+            <tr>
+              <td colspan="12" class="font-weight-bold">PayerID:{{itembatch.payorDetail.payorId}}</td>
+            </tr>
+            <tr class="table-bordered">
+              <td>{{itembatch.paymentDetail.companyName}}</td>
+              <td class="font-weight-bold">Payment Method:</td>
+              <td colspan="2">{{itembatch.paymentDetail.payment_Method}}</td>
+              <td class="font-weight-bold">Provider</td>
+              <td colspan="3">{{itembatch.paymentDetail.provider}}</td>
+
+            </tr>
+
+            <tr class="table-bordered">
+              <td>{{itembatch.companyAddress}}</td>
+              <td class="font-weight-bold">Chk/EFT date:</td>
+              <td colspan="2">{{itembatch.paymentDetail.chk_EFT_date | date:'MM/dd/yyyy'}}</td>
+              <td class="font-weight-bold">Date:</td>
+              <td colspan="3">{{itembatch.paymentDetail.date | date:'MM/dd/yyyy'}}</td>
+
+            </tr>
+            <tr class="table-bordered">
+              <td>{{itembatch.companyCity}}</td>
+              <td class="font-weight-bold">Remittance Amount:</td>
+              <td colspan="2">{{itembatch.paymentDetail.remittance_Amount}}</td>
+              <td class="font-weight-bold">CheckEFTNBR:</td>
+              <td colspan="3">{{itembatch.paymentDetail.check_EFT_NBR}}</td>
+
+            </tr>
+
+            <tr *ngFor="let val of itembatch.patient_ClaimDetail">
+
+              <td class="font-weight-bold">Patient:</td>
+              <td colspan="3">{{val.patient}}</td>
+              <td class="font-weight-bold">HIC:</td>
+              <td colspan="3">{{val.hic}}</td>
+
+            </tr>
+            <tr *ngFor="let val of itembatch.patient_ClaimDetail">
+
+              <td class="font-weight-bold" width="10%">PatCtrl:</td>
+              <td width="10%">40639-P</td>
+              <td class="font-weight-bold" width="10%">Payor Claim Number:</td>
+              <td width="20%">{{val.payor_Claim_Number}}</td>
+              <td class="font-weight-bold" width="10%">From Date:</td>
+              <td width="10%">{{itembatch.fromdate}}</td>
+              <td class="font-weight-bold" width="10%">To Date:</td>
+              <td width="10%">{{itembatch.todate}}</td>
+
+
+            </tr>
+            <tr class="mt-2">
+
+              <td class="font-weight-bold"></td>
+              <td class="font-weight-bold"></td>
+              <td class="font-weight-bold"></td>
+              <td class="font-weight-bold"></td>
+              <td class="font-weight-bold"></td>
+              <td class="font-weight-bold"></td>
+              <td class="font-weight-bold"></td>
+              <td class="font-weight-bold"></td>
+
+
+            </tr>
+
+
+            <tr class="table-bordered">
+
+              <td class="font-weight-bold">ServiceDate</td>
+              <td class="font-weight-bold">Unit</td>
+              <td class="font-weight-bold">Servicecode</td>
+              <td class="font-weight-bold">MOD</td>
+              <td class="font-weight-bold">BilledAmt</td>
+              <td class="font-weight-bold">Denied Detail</td>
+              <td class="font-weight-bold" colspan="2">Claimed Amt</td>
+
+
+
+            </tr>
+
+
+            <ng-container *ngFor="let valpatient of itembatch.patient_ClaimDetail">
+              <tr class="table-bordered" *ngFor="let val1 of valpatient.serviceLineDetail">
+                <td class="font-weight-bold" width="10%">{{val1.serviceDate| date:'MM/dd/yyyy'}}</td>
+                <td class="font-weight-bold" width="10%">{{val1.unit}}</td>
+                <td class="font-weight-bold" width="10%">{{val1.servicecode}}</td>
+                <td class="font-weight-bold" width="10%">{{val1.mod}}</td>
+                <td class="font-weight-bold" width="10%">{{val1.billedAmt}}</td>
+                <td class="font-weight-bold" width="20%">{{val1.denied_Detail}}</td>
+                <td class="font-weight-bold" width="20%" colspan="2">{{val1.claimed_Amt}}</td>
+              </tr>
+            </ng-container>
+            <tr *ngFor="let val of itembatch.patient_ClaimDetail">
+              <td class="font-weight-bold">TotalUnit</td>
+              <td class="font-weight-bold">{{val.totalUnit}}</td>
+              <td class="font-weight-bold">TotalBilledAmt</td>
+              <td class="font-weight-bold">{{val.totalBilledAmt}}</td>
+              <td class="font-weight-bold">TotalClaimAmt</td>
+              <td class="font-weight-bold">{{val.totalClaimAmt}}</td>
+              <td class="font-weight-bold" colspan="2"></td>
+            </tr>
+
+
+
+            <tr>
+
+              <td></td>
+              <td colspan="2" class="font-weight-bold">Not Posted Total</td>
+              <td colspan="2" class="font-weight-bold">Posted Total</td>
+              <td colspan="3" class="font-weight-bold">Overall Remittance Amount</td>
+
+            </tr>
+            <tr>
+
+              <td></td>
+              <td colspan="3">0.00</td>
+              <td colspan="3">00.00</td>
+              <td colspan="3">{{itembatch.paymentDetail.remittance_Amount}}</td>
+
+            </tr>
+
+          </tbody>
+        </table>
+        <hr style="
+margin-top: 1.5%;
+border-top: 1px solid rgb(19, 17, 17);
+margin-bottom: 6px;
+width: 100%;
+box-shadow: 0px 1px 1px #0c0c0c;
+">
+        <hr style="
+margin-top: 1.5%;
+border-top: 2px solid rgb(19, 17, 17);
+margin-bottom: 20px;
+width: 100%;
+box-shadow: 0px 1px 1px #0c0c0c;
+"> -->
+      
+<div *ngIf="viewFiles">
+  <div  class="font-weight-bold">Exception Report</div>
+
+  <div class="mt-2">{{itembatch.payorDetail.payorName}}</div>
+ 
+  <div>{{itembatch.payorDetail.payorStreet}}</div>
+ 
+    <div>{{itembatch.payorDetail.payorCity}} ,&nbsp;{{itembatch.payorDetail.payorState}} &nbsp;{{itembatch.payorDetail.payorZiPCode}}</div>
+    <div    class="font-weight-bold">PayerID:{{itembatch.payorDetail.payorId}}</div>
+    <hr style="
+    margin-top: 1.5%;
+    border-top: 1px solid rgb(19, 17, 17);
+    width: 100%;
+    box-shadow: 0px 1px 1px #0c0c0c;
+    " />
+      <div class="row w-100">
+        <div class="col-lg-4">
+          <div class="font-weight-bold">{{itembatch.companydetails.companyName}}</div>
+          <div class="font-weight-bold">{{itembatch.companydetails.companyAddress}}</div>
+          <div class="font-weight-bold">{{itembatch.companydetails.companyCity}}</div>
+        </div>
+        <div class="col-lg-4">
+          <div class="font-weight-bold">Payment Method:&nbsp;&nbsp;{{itembatch?.paymentDetail.payment_Method}}</div>
+          <div class="font-weight-bold">Chk/EFT date:&nbsp;&nbsp;&nbsp;&nbsp;{{itembatch?.paymentDetail.chk_EFT_date|date:'MM/dd/yyyy'}}</div>
+          <div class="font-weight-bold">Remittance Amount:&nbsp;{{itembatch?.paymentDetail.remittance_Amount}}</div>
+        </div>
+        <div class="col-lg-4">
+          <div class="font-weight-bold">Provider#:&nbsp;&nbsp;{{itembatch?.paymentDetail.provider}}</div>
+          <div class="font-weight-bold">Date:&nbsp;&nbsp;&nbsp;&nbsp;{{itembatch?.paymentDetail.date|date:'MM/dd/yyyy'}}</div>
+          <div class="font-weight-bold">Check EFT NBR:&nbsp;{{itembatch?.paymentDetail.check_EFT_NBR}}</div>
+        </div>
+      </div>
+      <hr style="
+      margin-top: 1.5%;
+      border-top: 1px solid rgb(19, 17, 17);
+      width: 100%;
+      box-shadow: 0px 1px 1px #0c0c0c;
+      " />
+      <span class="mt-1"></span>
+      <ng-container *ngFor="let val of itembatch.patient_ClaimDetail">
+        <hr style="
+        margin-top: 1.5%;
+        border-top: 1px solid rgb(19, 17, 17);
+        width: 100%;
+        box-shadow: 0px 1px 1px #0c0c0c;
+        " />
+        <div class="row w-100">
+         
+          <div class="col-lg-2">
+            Service Date
+          </div>
+          <div class="col-lg-1">
+            POS
+          </div>
+          <div class="col-lg-1">
+            NOS
+          </div>
+          <div class="col-lg-1">
+            Proc
+          </div>
+          <div class="col-lg-1">
+           MOD
+          </div>
+          <div class="col-lg-1">
+            Billed
+          </div>
+          <div class="col-lg-2">
+            Allowed
+          </div>
+          <div class="col-lg-1">
+            Remark
+          </div>
+         
+          <div class="col-lg-2">
+            Payment
+          </div>
+        
+         
+
+        </div>
+        <hr style="
+        margin-top: 1.5%;
+        border-top: 1px solid rgb(19, 17, 17);
+        width: 100%;
+        box-shadow: 0px 1px 1px #0c0c0c;
+        " />
+        <div class="row w-100">
+          <div class="col-lg-4">
+          Patient:{{val?.patient}}
+          </div>
+          <div class="col-lg-2">
+          HIC:{{val?.hic}}
+          </div>
+        </div>
+        
+        <div class="row w-100 mt-1 ">
+          <div class="col-lg-2">
+          Pat Ctrl #:{{val?.patCtrl}}
+          </div>
+          <div class="col-lg-5 pr-0">
+            Payor Claim Number:{{val?.payor_Claim_Number}}
+          </div>
+          <div class="col-lg-3 ">
+            From Date:{{val?.serviceLineDetail[0]?.serviceDate|date:'MM/dd/yyyy'}}
+          </div>
+          <div class="col-lg-2 pr-0">
+            To Date:{{val?.serviceLineDetail[val.serviceLineDetail.length-1]?.serviceDate|date:'MM/dd/yyyy'}}
+          </div>
+         
+        </div>
+      <ng-container *ngFor="let val1 of val.serviceLineDetail">
+        <div class="row w-100">
+         
+          <div class="col-lg-2">
+          {{val1?.serviceDate|date:'MM/dd/yyyy'}}
+          </div>
+          <div class="col-lg-1">
+            
+          </div>
+          <div class="col-lg-1">
+           {{val?.unit}}
+          </div>
+          <div class="col-lg-1">
+           {{val1.servicecode}}
+          </div>
+          <div class="col-lg-1">
+         {{val1?.mod}}
+          </div>
+          <div class="col-lg-1">
+            {{val1?.billedAmt}}
+          </div>
+          <div class="col-lg-2 pr-0">
+            {{val1?.notes}}
+          </div>
+          <div class="col-lg-1">
+            {{val1?.denied_Detail}}
+          </div>
+         
+          <div class="col-lg-2" style="
+          text-align: right;
+      ">
+            {{val1?.claimed_Amt}}
+          </div>
+        
+         
+
+        </div>
+      </ng-container>
+      <div class="row w-100">
+         
+        <div class="col-lg-3">
+        
+     <div class="mt-1">     {{val.patient}}</div>
+        </div>
+       
+        <div class="col-lg-1">
+          
+          <div  class="mt-1"> PtResp:</div> 
+        </div>
+        <div class="col-lg-1">
+          <div></div>
+          <div  class="mt-1"> 0.00 </div>
+        </div>
+        <div class="col-lg-1">
+       
+        </div>
+        <div class="col-lg-1">
+          <hr style="
+          margin-top: 1.5%;
+          border-top: 1px solid rgb(19, 17, 17);
+          width: 100%;
+          box-shadow: 0px 1px 1px #0c0c0c;
+          " />
+          {{val.totalBilledAmt}}
+        </div>
+        <div class="col-lg-3">
+        
+        </div>
+       
+        <div class="col-lg-2" style="
+        text-align: right;
+    ">
+          <hr style="
+          margin-top: 1.5%;
+          border-top: 1px solid rgb(19, 17, 17);
+          width: 100%;
+          box-shadow: 0px 1px 1px #0c0c0c;
+          " />
+          {{val.totalClaimAmt}}
+        </div>
+      
+       
+
+      </div>
+    </ng-container>
+    <div class="row">
+      <div class="col-lg-4">
+
+      </div>
+      <div class="col-lg-1">
+
+      </div>
+    </div>
+</div>
+
+
+</ng-container>
+      <!-- </DIV> -->
+    </div>
+    <ng-template kendoPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+      <div class="kendofooter">
+        <hr style="
+        margin-top: 1.5%;
+        border-top: 1px solid rgb(19, 17, 17);
+        width: 100%;
+        box-shadow: 0px 1px 1px #0c0c0c;
+        " />
+        <div>  Exception notes: Note 1: The full payment was not made on this service line.</div> 
+        <div>   Note 2: Something has already been paid on this.</div> 
+        <div>   Note 3: The payment amount is less than zero.</div> 
+        <div>    Note 4.This is an old format submit claim id, cannot auto-post</div> 
+      </div>
+    </ng-template>
+  </kendo-pdf-export>
+</div>
+<!-- </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!--=================================InActive Client Report======================================================-->
+<div style="position: absolute; left: -1000px; top: 500px;">
+  <kendo-pdf-export #pdfinactive paperSize="A4" margin="0.8cm">
+    <div style="width: 730px;">
+      <div class="row ">
+        <div class="col-lg-10 text-center">
+          <h5>Inactive Report</h5>
+        </div>
+        <div class="col-lg-2 pl-0 pr-0">
+          {{today| date:'MM/dd/yyyy'}}
+        </div>
+      </div><br>
+      <div class="row">
+        <div class="col-lg-3">
+          name
+        </div>
+        <div class="col-lg-2">
+          DOB
+        </div>
+        <div class="col-lg-2">
+          email
+        </div>
+        <div class="col-lg-2">
+          Phone Number
+        </div>
+        <div class="col-lg-2">
+          Intake Date
+        </div>
+
+      </div>
+
+
+      <hr style="
+    margin-top: 1.5%;
+    border-top: 1px solid rgb(19, 17, 17);
+    margin-bottom: 6px;
+    width: 100%;
+    box-shadow: 0px 1px 1px #0c0c0c;
+    ">
+      <ng-container *ngFor="let item of InactiveClientReport">
+
+
+
+        <div class="row">
+          <div class="col-lg-3">
+            {{item.name}}
+          </div>
+          <div class="col-lg-2">
+            {{item.dob| date:'MM/dd/yyyy'}}
+          </div>
+          <div class="col-lg-2">
+            {{item.email}}
+          </div>
+          <div class="col-lg-2">
+            {{item.phoneNumber}}
+          </div>
+          <div class="col-lg-2">
+            {{item.intakeDate| date:'MM/dd/yyyy'}}
+          </div>
+
+        </div>
+
+      </ng-container>
+    </div>
+  </kendo-pdf-export>
+</div>
+
+<!--================================= spend Down pdf=============================================================================-->
+<div style="position: absolute; left: -1000px; top: 500px;">
+  <kendo-pdf-export #pdfspendown paperSize="A4" forcePageBreak=".page-break" margin="0.8cm">
+    <div style="width: 730px;" id="spendownreport">
+      <ng-container *ngFor="let item of Spenddown;let i=index">
+        <div class="row w-100">
+          <div class="col-lg-8 pr-0">
+            <span> {{item.payer}}</span><br />
+            <span> {{item.payerAddress}}</span><br />
+            <!-- <span *ngIf="Spenddown.payerAddress1!=''||Spenddown.payerAddress1!=null"> {{Spenddown.payerAddress1}}<br/></span> -->
+            {{item.payerCity+", "+ item.payerState+" "+item.payerZip}}
+          </div>
+          <div class="col-lg-4 pl-0">
+            <h5 class="font-weight-bold">Invoice</h5>
+            <table class="table table-bordered w-75">
+              <th style="background-color:white;color:black ;">Date</th>
+              <th style="background-color:white;color:black ;">#Invoice</th>
+              <tbody>
+                <tr>
+                  <td>{{"C000"+item.invoiceNumber}} </td>
+                  <td> {{item.invoiceDate| date:'MM/dd/yyyy'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-lg-6">
+            <table class="table table-bordered">
+              <th style="background-color:white;color:black ;">Bill To</th>
+
+              <tbody>
+                <td> <span>{{item.client}}</span><br />
+                  <span>{{item.clientAddress}}</span> <br />
+                  <!-- <span *ngIf="Spenddown.clientAddress1!=''||Spenddown.clientAddress1!=null"> {{Spenddown.clientAddress1}}<br/></span> -->
+                  {{item.clientCity+", "+ item.clientState+" "+item.clientZip}}
+                </td>
+
+              </tbody>
+            </table>
+          </div>
+
+
+        </div>
+        <div class="row">
+          <div class="col-lg-6"></div>
+          <div class="col-lg-6">
+            <table class="table table-bordered" style="width: 75%;">
+              <th style="background-color:white;color:black ;">P.O. N.o</th>
+              <th style="background-color:white;color:black ;">Terms</th>
+              <th style="background-color:white;color:black ;">Project</th>
+              <tbody>
+                <tr>
+                  <td> </td>
+                  <td> </td>
+                  <td> </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+
+        </div>
+
+        <table style="width: 90%;" class="table table-bordered">
+          <th style="width:10% ;background-color:white;color:black ;">Quantity</th>
+          <th style=" width:60% ;background-color:white;color:black ;">Description</th>
+          <th style=" width:15% ;background-color:white;color:black ;">Rate</th>
+          <th style=" width:15% ;background-color:white;color:black ;">Amount</th>
+          <tbody>
+            <tr style="height: 70%;">
+              <td></td>
+              <td>Medical Assistance Spend Down Amount Client Personal Responsibility <br />
+                Service Provided may be discontinued if not paid in full. Invoice Date<br />
+                represents the Medical Assistance payment date when spendown amounts<br />
+                where withheld by the State of Minnesota. <br />
+
+                <span class="font-weight-bold">Details:</span>
+                <span>{{item.service_Date| date:'MM/dd/yyyy'}} - {{item.service_Date| date:'MM/dd/yyyy'}} -
+                  item.service {{" "+"$"+item.service_Amount}}</span>
+                <br>
+                  <span>{{item.service_Date| date:'MM/dd/yyyy'}} - {{item.service_Date| date:'MM/dd/yyyy'}} -
+                    item.service {{" "+"$"+item.adjust_amount}}</span>
+              </td>
+              <td> {{item.amount}}</td>
+              <td> {{item.amount}}</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Total</td>
+              <td>{{item.amount}}</td>
+            </tr>
+
+          </tbody>
+        </table>
+        <span class="page-break" *ngIf="i!=Spenddown.length-1"></span>
+      </ng-container>
+    </div>
+  </kendo-pdf-export>
+</div>
+
+
+<!--========================================Revenue Report======================================================================-->
+<div style="position: absolute; left: -1000px; top: 500px;">
+  <kendo-pdf-export #pdfrevenue paperSize="A4" margin="0.8cm">
+    <div style="width: 730px;">
+      <div class="row w-100">
+        <div class="col-lg-8">
+          <h5>Filterized on {{filterChargevalue}} From {{revenueStart}} To {{revenueEnd}} </h5>
+        </div>
+        <div class="col-lg-4 ">
+          <span> {{today|date:'EEEE, MMMM d, y'}}</span><br />
+          <span> {{today |date:'h:mm:ss a'}}</span>
+        </div>
+      </div><br>
+
+      <div class="row">
+        <div class="col-lg-4">
+          Payor Name
+        </div>
+        <div class="col-lg-4">
+          Charges
+        </div>
+
+
+      </div>
+
+      <div class="row">
+        <div class="col-lg-8">
+          <hr style="
+  margin-top: 1.5%;
+  border-top: 1px solid rgb(19, 17, 17);
+  margin-bottom: 6px;
+  width: 100%;
+  box-shadow: 0px 1px 1px #0c0c0c;
+  ">
+        </div>
+      </div>
+
+      <ng-container *ngFor="let item of RevenueList">
+
+
+
+        <div class="row">
+          <div class="col-lg-4">
+            {{item.payorName}}
+          </div>
+          <div class="col-lg-4">
+            <span *ngIf="filterChargevalue=='Net'">{{item.netCharges}}</span>
+            <span *ngIf="filterChargevalue=='Gross'">{{item.grossCharges}}</span>
+          </div>
+
+
+        </div>
+
+      </ng-container>
+      <div class="row">
+        <div class="col-lg-4">
+
+        </div>
+        <div class="col-lg-4">
+          <hr style="
+          margin-top: 1.5%;
+          border-top: 1px solid rgb(19, 17, 17);
+          margin-bottom: 6px;
+          width: 100%;
+          box-shadow: 0px 1px 1px #0c0c0c;
+          ">
+          <br />
+          <span>{{revenuetotal}}</span>
+        </div>
+
+      </div>
+
+
+    </div>
+  </kendo-pdf-export>
+</div>
+<!--====================================Claim vs Paid==============================================================-->
+<div style="position: absolute; left: -1000px; top: 500px;">
+  <kendo-pdf-export #pdfClaimvsPaid paperSize="A4" margin="0.8cm">
+    <div style="width: 730px;">
+      <div class="row w-100">
+        <div class="col-lg-10">
+          <h5>Claim versus Paid From {{ClaimStart}} To {{ClaimEnd}} OnlyUnpaid </h5>
+        </div>
+        <div class="col-lg-2">
+          <span> {{today|date:'MM/dd/yyyy'}}</span>
+        </div>
+      </div><br>
+
+
+      <div class="row">
+        <div class="col-lg-8">
+          <hr style="
+  margin-top: 1.5%;
+  border-top: 1px solid rgb(19, 17, 17);
+  margin-bottom: 6px;
+  width: 100%;
+  box-shadow: 0px 1px 1px #0c0c0c;
+  ">
+        </div>
+      </div>
+
+      <!-- <ng-container *ngFor="let item of ClaimvspaidList"> -->
+      <ng-container *ngFor="let data1 of ClaimvspaidList.lClaimChargesVsPaid">
+        <div class="row">
+          <div class="col-lg-2"></div>
+          <div class="col-lg-6">
+            <div style="border-bottom: 2px dashed ;"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-2"></div>
+          <div class="col-lg-2">
+            {{data1.payorName}}
+          </div>
+          <div class="col-lg-2">
+            <span>{{data1.totalAmount}}</span>
+
+          </div>
+          <div class="col-lg-2">
+            <span>{{data1.paidAmount}}</span>
+
+          </div>
+
+
+        </div>
+      </ng-container>
+      <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-6">
+          <hr style="
+          margin-top: 1.5%;
+          border-top: 1px solid rgb(19, 17, 17);
+          margin-bottom: 6px;
+          width: 100%;
+          box-shadow: 0px 1px 1px #0c0c0c;
+          ">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-2">
+          Total
+        </div>
+        <div class="col-lg-2">
+          <span>{{ClaimvspaidList.totalChargeAmount}}</span>
+
+        </div>
+        <div class="col-lg-2">
+          <span>{{ClaimvspaidList.totalPaidAmount}}</span>
+
+        </div>
+
+
+      </div>
+
+      <!-- </ng-container> -->
+
+
+
+    </div>
+  </kendo-pdf-export>
+</div>
+<!--====================================Finance Report==============================================================-->
+<div style="position: absolute; left: -1000px; top: 500px;">
+  <kendo-pdf-export #Financepdf paperSize="A4" margin="0.8cm">
+    <div style="width: 730px;">
+      <div class="row w-100">
+        <div class="col-lg-9">
+          <h5>Track Payment <span style="font-style:11px">Paid From {{FinancialStart}} To {{FinancialEnd}} </span></h5>
+        </div>
+        <div class="col-lg-3">
+          <span> {{today|date:'MM/dd/yyyy'}}</span>
+        </div>
+      </div><br>
+
+
+      <div class="row">
+        <div class="col-lg-2">
+          Ck/EFT Date
+        </div>
+        <div class="col-lg-2">
+          Deposite Date
+        </div>
+        <div class="col-lg-2">
+          Payment Date
+        </div>
+        <div class="col-lg-3">
+          Trace No
+        </div>
+        <div class="col-lg-3">
+          Remitte Amount
+        </div>
+      </div>
+      <hr style="
+      margin-top: 1.5%;
+      border-top: 1px solid rgb(19, 17, 17);
+      margin-bottom: 6px;
+      width: 100%;
+      box-shadow: 0px 1px 1px #0c0c0c;
+      ">
+      <!-- <ng-container *ngFor="let item of ClaimvspaidList"> -->
+      <ng-container *ngFor="let item of FinancialList">
+        <span class="font-weight-bold">Payer: {{item.payor_Name}}</span>
+        <ng-container *ngFor="let item1 of item.lPayerTrackPayments">
+          <div class="row">
+            <div class="col-lg-2">
+              {{item1.checkorFFTdate|date:'MM/dd/yyyy'}}
+            </div>
+            <div class="col-lg-2">
+              {{item1.depositDate|date:'MM/dd/yyyy'}}
+            </div>
+            <div class="col-lg-2">
+              {{item1.paymentMethod}}
+            </div>
+            <div class="col-lg-3">
+              {{ item1.traceno}}
+            </div>
+            <div class="col-lg-3">
+              {{item1.remittanceAmt}}
+            </div>
+          </div>
+        </ng-container>
+        <div class="row">
+          <div class="col-lg-3"></div>
+          <div class="col-lg-9">
+            <hr style="
+          margin-top: 1.5%;
+          border-top: 1px solid rgb(19, 17, 17);
+          margin-bottom: 6px;
+          width: 100%;
+          box-shadow: 0px 1px 1px #0c0c0c;
+ ">
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="col-lg-4">
+
+          </div>
+          <div class="col-lg-5">
+            <span>{{item.payor_Name}}</span>
+
+          </div>
+          <div class="col-lg-3">
+            <span>{{item.totalAmount}}</span>
+
+          </div>
+
+
+        </div>
+      </ng-container>
+
+
+
+
+    </div>
+  </kendo-pdf-export>
+</div>
+<!--====================================Exception Report ERA============================================================-->
+<div style="position: absolute; left: -1000px; top: 500px;">
+  <kendo-pdf-export #pdflistsample [keepTogether]="keepTogether" paperSize="A4">
+    <div style="width: 700px;" *ngIf="viewFiles835">
+      <!-- <ng-container *ngFor="let item of exception835list"> -->
+        
+        <!-- <div class="page-template">
+          <div class="header">
+            <div style="float: right">Page#: 1 of 4</div>
+          </div>
+          <div class="footer">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-lg-3" style="float: left;font-size: 9px;">
+                    <p>Exception notes:</p>
+                  </div>
+                  <div class="col" style="font-size: 9px;">
+                    <p>Note 1: The full payment was not made on this service line.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+          </div>
+        </div> -->
+         <ng-template kendoPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+   <!--       <div class="kendoheader">
+            <div class="row">
+            <div class="col-lg-10"></div>
+            <div class="col-lg-2" style="float: right; padding-left:600px;padding-right: 0px;" >Page#: {{pageNum}} of {{totalPages}}</div>
+            </div>
+            
+            
+          </div> -->
+          <div class="kendofooter">
+            <div>  Exception notes: Note 1: The full payment was not made on this service line.</div> 
+            <div style="margin-left: 78px;"> Note 2: Something has already been paid on this.</div> 
+            <div style="margin-left: 78px;">Note 3: The payment amount is less than zero.</div> 
+            <div style="margin-left: 78px;">Note 4.This is an old format submit claim id, cannot auto-post</div> 
+          </div>
+        </ng-template>
+        <!-- <TABLE cellpadding=0 cellspacing=0 class="t0">
+        <TR>
+          <TD colspan=3 rowspan=2 class="tr0 td0">
+            <P class="p0 ft0">Exception Report</P>
+          </TD>
+          <TD class="tr1 td1">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr1 td2">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr1 td3">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr1 td4">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr1 td5">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr1 td6">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr1 td7">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD colspan=2 class="tr1 td8">
+            <P class="p2 ft2">{{date| date:'MM/dd/yyyy'}}</P>
+          </TD>
+        </TR>
+        <TR>
+          <TD class="tr2 td1">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td2">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td3">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td4">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td5">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td6">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td7">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td9">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td10">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+        </TR>
+        <TR>
+          <TD colspan="12" class="tr3 td8">
+            <P style="font-size: 11px; " class="p0 ft4">{{exception835list.payorDetail.payorName}}</P>
+          </TD>
+        </TR>
+        <TR>
+          <TD colspan="12" class="tr4 td8">
+            <P class="p0 ft4">{{exception835list.payorDetail.payorStreet}}</P>
+          </TD>
+        </TR>
+        <TR>
+          <TD colspan="12" class="tr5 td13">
+            <P class="p0 ft4">{{exception835list.payorDetail.payorCity}}, {{exception835list.payorDetail.payorState}}
+              {{exception835list.payorDetail.payorZiPCode}}
+            </P>
+          </TD>
+        </TR>
+        <TR>
+          <TD class="tr2 td1">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td2">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td3">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td4">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td5">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td6">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td7">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td9">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td10">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+        </TR>
+        <TR>
+          <TD colspan="6" class="tr8 td13">
+            <P style="font-size: 11px" class="p0 ft4">PayerID: {{exception835list.payorDetail.payorId}}</P>
+          </TD>
+          <TD colspan="6" class="tr8 td13">
+            <P style="font-size: 11px" class="p0 ft4">Processor:</P>
+          </TD>
+        </TR>
+        <TR>
+          <TD class="tr2 td1">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td2">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td3">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td4">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td5">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td6">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td7">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td9">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td10">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+        </TR>
+        <TR>
+          <TD class="tr2 td1">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td2">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td3">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td4">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td5">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td6">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td7">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td9">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td10">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+        </TR>
+
+        <div>
+          <hr style="
+          margin-top: 1.5%; margin-left: 3px;
+          border-top: 2px solid rgb(19, 17, 17);
+          width: 1000%;margin-bottom: 2px;
+          box-shadow: 0px 1px 1px #0c0c0c;
+          ">
+
+
+        </div>
+        <TR>
+          <TD colspan="4" class="tr3 td8">
+            <P style="font-size: 11px; font-weight: bold;" class="p0 ft4">{{exception835list.companyName}}</P>
+          </TD>
+          <TD colspan="2" class="tr3 td8 ">
+            <P style="font-size: 11px; font-weight: bold;" class="p3 ft4">Payment Method:</P>
+          </TD>
+          <TD class="tr3 td8">
+            <P style="font-size: 11px; font-weight: bold;" class="p3 ft4">
+              {{exception835list.paymentDetail.payment_Method}}</P>
+          </TD>
+          <TD colspan="2" class="tr3 td11">
+            <P style="font-size: 11px; font-weight: bold;" class="p0 ft4 ">Provider #:</P>
+          </TD>
+          <TD colspan="3" class="tr3 td11">
+            <P style="font-size: 11px; font-weight: bold;" class="p8 ft4">{{exception835list.paymentDetail.provider}}
+            </P>
+          </TD>
+
+        </TR>
+
+        <TR>
+          <TD colspan="4" class="tr3 td16">
+            <P style="font-size: 11px; font-weight: bold;" class="p0 ft4">{{exception835list.companyAddress}}</P>
+          </TD>
+          <TD colspan="2" class="tr3 td11 ">
+            <P style="font-size: 11px; font-weight: bold;" class="p3 ft4">Chk/EFT date:</P>
+          </TD>
+          <TD class="tr3 td5">
+            <P style="font-size: 11px; font-weight: bold;" class="p3 ft4">
+              {{exception835list.paymentDetail.chk_EFT_date | date:'MM/dd/yyyy'}}</P>
+          </TD>
+          <TD colspan="2" class="tr3 td6 ">
+            <P style="font-size: 11px; font-weight: bold;" class="p0 ft4">Date:</P>
+          </TD>
+          <TD colspan="3" class="tr3 td7">
+            <P style="font-size: 11px; font-weight: bold;" class="p8 ft4">
+              {{exception835list.paymentDetail.date | date:'MM/dd/yyyy'}}</P>
+          </TD>
+
+        </TR>
+
+        <TR>
+          <TD colspan="4" class="tr3 td8">
+            <P style="font-size: 11px; font-weight: bold;" class="p0 ft4">{{exception835list.companyCity}}</P>
+          </TD>
+          <TD colspan="2" class="tr3 td11">
+            <P style="font-size: 11px; font-weight: bold;" class="p3 ft4">Remittance Amt:</P>
+          </TD>
+          <TD class="tr3 td5">
+            <P style="font-size: 11px; font-weight: bold;" class="p3 ft4">
+              {{exception835list.paymentDetail.remittance_Amount}}</P>
+          </TD>
+          <TD colspan="2" class="tr3 td6">
+            <P style="font-size: 11px; font-weight: bold;" class="p0 ft4">CheckEFTNBR:</P>
+          </TD>
+          <TD colspan="3" class="tr3 td7">
+            <P style="font-size: 11px; font-weight: bold;" class="p8 ft4">
+              {{exception835list.paymentDetail.check_EFT_NBR}}</P>
+          </TD>
+
+        </TR>
+        <TR>
+          <TD class="tr2 td1">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td2">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td3">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td4">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td5">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td6">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td7">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td9">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td10">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+        </TR>
+        <hr style="
+          margin-top: 1.5%; margin-left: 3px;
+          border-top: 2px solid rgb(19, 17, 17);
+          width: 1000%;margin-bottom: 2px;
+          box-shadow: 0px 1px 1px #0c0c0c;
+          ">
+
+        <TR>
+          <TD class="tr2 td1">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td2">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td3">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td4">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td5">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td6">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td7">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td9">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td10">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+        </TR>
+        <TR>
+          <TD class="tr2 td1">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td2">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td3">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td4">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td5">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td6">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td7">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td9">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+          <TD class="tr2 td10">
+            <P class="p1 ft3">&nbsp;</P>
+          </TD>
+        </TR>
+
+      </TABLE> -->
+      <!-- <ng-container *ngFor="let val of exception835list.patient_ClaimDetail">
+        <table style=" margin-right: 3px;">
+          <hr style="
+          margin-top: 1.5%; margin-left: 3px;
+          border-top: 1px solid rgb(204, 200, 200);
+          width: 1500%;margin-bottom: 2px;
+          box-shadow: 0px 1px 1px #0c0c0c;
+          ">
+          <tr style="margin-bottom: 0px; padding: 0px;margin-top: 0px;">
+            <td>
+              <p style="font-size: 10px; margin-left: 3px;">Rend Prov</p>
+            </td>
+            <td colspan="2">
+              <p style="font-size: 10px; margin-left: 4px;">Service Date</p>
+            </td>
+            <td>
+              <p style="font-size: 10px; margin-left: 3px;">POS</p>
+            </td>
+            <td>
+              <p style="font-size: 10px; margin-left: 2px;">NOS</p>
+            </td>
+            <td style="font-size: 10px; margin-left: -10px;">
+              <p style="font-size: 10px; margin-left: 2px;">Proc</p>
+            </td>
+            <td>
+              <p style="font-size: 10px; margin-left: -2px;">MOD</p>
+            </td>
+            <td>
+              <p style="font-size: 10px; margin-left: -20px;"> Billed</p>
+            </td>
+            <td style="font-size: 10px; margin-left: 0px;">
+              <p style="font-size: 10px; margin-left: -20px;"> Allowed</p>
+            </td>
+            <td style="font-size: 10px; margin-left: 0px;">
+              <p style="font-size:10px; margin-left: -20px;">Deduct</p>
+            </td>
+           
+            <td>
+              <p style="font-size: 10px; margin-left: 0px;">Payment</p>
+            </td>
+            <td style="font-size: 10px; margin-left:0px;margin-right:0px;">
+              <p style="font-size: 10px; margin-left:0px;margin-right:0px;">Remarks</p>
+            </td>
+
+          </tr>
+          <tr>
+            <hr style="
+            margin-left: 3px;
+            border-top: 1px solid rgb(19, 17, 17);
+            width: 1500%
+            ">
+          </tr>
+          <tr>
+
+            <td>
+              <p style="font-size: 10px; margin-left: 3px;"></p>
+            </td>
+
+            <td>
+              <p style="font-size: 10px;font-weight: bold; margin-left: 3px;">Patient:</p>
+            </td>
+            <td colspan="2">
+              <p style="font-size: 10px;font-weight: bold; margin-left: 4px;">{{val.patient}}</p>
+            </td>
+            <td>
+              <p style="font-size: 10px; font-weight: bold;margin-left: 3px;"></p>
+            </td>
+            <td>
+              <p style="font-size: 10px; font-weight: bold;margin-left: 3px;"></p>
+            </td>
+
+            <td>
+
+              <p style="font-size: 10px;font-weight: bold; margin-left: 3px;">HIC:</p>
+            </td>
+            <td>
+              <p style="font-size: 10px;font-weight: bold; margin-left: 3px;">{{val.hic}}</p>
+            </td>
+            <td>
+              <p style="font-size: 10px;font-weight: bold; margin-left: 3px;"></p>
+            </td>
+
+
+
+
+          </tr>
+          <tr>
+
+            <td colspan="2" width="100%">
+              <p style="font-size: 10px; margin-left: 3px;">Pat Ctrl #:</p>
+            </td>
+
+            <td style="font-size: 10px;font-weight: bold; margin-left: 3px;">
+              <p>22495-P</p>
+            </td>
+            <td colspan="2">
+              <p style="font-size: 10px;font-weight: bold; margin-left: 4px;">Payor Claim Number: </p>
+            </td>
+            <td>
+              <p style="font-size: 10px; font-weight: bold;margin-left: 3px;">{{val.payor_Claim_Number}}</p>
+            </td>
+            <td>
+              <p style="font-size: 10px; font-weight: bold;margin-left: 3px;"></p>
+            </td>
+
+            <td width="100%" style="margin-left: 0px;">
+
+              <p style="font-size: 10px;font-weight: bold; margin-left: 0px;">From Date:</p>
+            </td>
+            <td>
+              <p style="font-size: 10px;font-weight: bold; margin-left: 3px;">{{val.serviceLineDetail[0].serviceDate|date:'MM/dd/yyyy'}}</p>
+            </td>
+            <td>
+              <p style="font-size: 10px;font-weight: bold; margin-left: 3px;">To Date: </p>
+            </td>
+            <td>
+              <p style="font-size: 10px;font-weight: bold; margin-left: 3px;">{{val.serviceLineDetail[val.serviceLineDetail.length-1].serviceDate|date:'MM/dd/yyyy'}} </p>
+            </td>
+            <td style="margin-left: -20px">
+              <p style="font-size: 10px;font-weight: bold; margin-left: 3px;">Posted</p>
+            </td>
+
+
+
+
+          </tr>
+
+          <ng-container *ngFor="let valpatient of exception835list.patient_ClaimDetail">
+            <tr *ngFor="let val1 of valpatient.serviceLineDetail">
+              <td>
+                <p style="font-size: 10px; margin-left: 3px;"></p>
+              </td>
+              <td colspan="2">
+                <p style="font-size: 10px; margin-left: 4px;">{{val1.serviceDate| date:'MM/dd/yyyy'}}</p>
+              </td>
+              <td>
+                <p style="font-size: 10px; margin-left: 3px;"></p>
+              </td>
+              <td>
+                <p style="font-size: 10px; margin-left: 2px;">{{val1.unit}}</p>
+              </td>
+              <td>
+                <p style="font-size: 10px; margin-left: 2px;">{{val1.servicecode}}</p>
+              </td>
+              <td>
+                <p style="font-size: 10px; margin-left: -2px;">{{val1.mod}}</p>
+              </td>
+              <td>
+                <p style="font-size: 10px; margin-left: -20px;"> {{val1.billedAmt}}</p>
+              </td>
+
+              <td>
+                <p style="font-size: 10px; margin-left: -20px;"> </p>
+              </td>
+              <td>
+                <p style="font-size:10px; margin-left: -20px;"></p>
+              </td>
+              <td style="font-size: 10px; margin-left: -20px;">
+                <p style="font-size: 10px; margin-left: -10px;"></p>
+              </td>
+            
+              <td style="font-size: 10px; margin-left:0px;margin-right:0px;">
+                <p style="font-size: 10px; margin-left:0px;margin-right:0px;">{{val1.claimed_Amt}}</p>
+              </td>
+              <td style="font-size: 10px; margin-left: -20px;">
+                <p style="font-size: 10px; margin-left: -10px;"></p>
+              </td>
+
+            </tr>
+
+
+
+          </ng-container>
+          <tr class="mt-0">
+            <td>
+              <p style="font-size: 10px; margin-left: 3px;"></p>
+            </td>
+            <td colspan="2">
+              <p style="font-size: 10px; margin-left: 4px;"></p>
+            </td>
+           
+            <td colspan="2">
+              <p style="font-size: 10px; margin-left: 2px;"></p>
+            </td>
+            <td>
+              <p style="font-size: 10px; margin-left: 2px;"></p>
+            </td>
+            <td>
+
+            </td>
+            <td  colspan="2" style="margin-left: -20px;">
+              <hr width="70%" style=" border-top: 1px solid rgb(19, 17, 17);">
+           
+            </td>
+
+         
+            <td>
+              <p style="font-size:10px; margin-left: -20px;"></p>
+            </td>
+
+            <td>
+              <p style="font-size: 10px; margin-left: 0px;"></p>
+            </td>
+            <td colspan="3" style="font-size: 10px; margin-left: -20px;">
+              <hr style=" border-top: 1px solid rgb(19, 17, 17);">
+            </td>
+            <td style="font-size: 10px; margin-left:0px;margin-right:0px;">
+              <p style="font-size: 10px; margin-left:0px;margin-right:0px;"></p>
+            </td>
+
+          </tr>
+          <tr>
+            <td>
+              <p style="font-size: 10px; margin-left: 3px;">{{val.patient}}</p>
+            </td>
+            <td colspan="2">
+              <p style="font-size: 10px; margin-left: 4px;"></p>
+            </td>
+          
+            <td colspan="2">
+              <p style="font-size: 10px; margin-left: 2px;">PtResp:</p>
+            </td>
+            <td>
+              <p style="font-size: 10px; margin-left: 2px;"></p>
+            </td>
+            <td>
+              <p style="font-size: 10px; margin-left: -2px;">0.00</p>
+            </td>
+            <td>
+              <p style="font-size: 10px; margin-left: -20px;">{{val.totalBilledAmt}}</p>
+            </td>
+
+            <td>
+              <p style="font-size: 10px; margin-left: -20px;"> </p>
+            </td>
+            <td>
+              <p style="font-size:10px; margin-left: -20px;"></p>
+            </td>
+            <td style="font-size: 10px; margin-left: -20px;">
+              <p style="font-size: 10px; margin-left: -10px;"></p>
+            </td>
+            <td colspan="3">
+              <p style="font-size: 10px; margin-left: 0px;">{{val.totalClaimAmt}}</p>
+            </td>
+            <td style="font-size: 10px; margin-left:0px;margin-right:0px;">
+              <p style="font-size: 10px; margin-left:0px;margin-right:0px;"></p>
+            </td>
+
+          </tr>
+
+          <hr style="
+          margin-left: 3px;
+          border-top: 1px solid rgb(170, 164, 164);
+          width: 1500%
+          ">
+
+          <hr style="
+margin-left: 3px;
+border-top: 1px solid rgb(170, 164, 164);
+width: 1500%
+">
+        </table>
+
+
+    
+      </ng-container> -->
+      <div  class="font-weight-bold">Exception Report</div>
+      <div *ngIf="viewFiles835">
+        <div class="mt-2">{{exception835list.payorDetail.payorName}}</div>
+       
+        <div>{{exception835list.payorDetail.payorStreet}}</div>
+       
+          <div>{{exception835list.payorDetail.payorCity}} ,&nbsp;{{exception835list.payorDetail.payorState}} &nbsp;{{exception835list.payorDetail.payorZiPCode}}</div>
+          <div    class="font-weight-bold">PayerID:{{exception835list.payorDetail.payorId}}</div>
+          <hr style="
+          margin-top: 1.5%;
+          border-top: 1px solid rgb(19, 17, 17);
+          width: 100%;
+          box-shadow: 0px 1px 1px #0c0c0c;
+          " />
+            <div class="row w-100">
+              <div class="col-lg-4">
+                <div class="font-weight-bold">{{exception835list.companydetails.companyName}}</div>
+                <div class="font-weight-bold">{{exception835list.companydetails.companyAddress}}</div>
+                <div class="font-weight-bold">{{exception835list.companydetails.companyCity}}</div>
+              </div>
+              <div class="col-lg-4">
+                <div class="font-weight-bold">Payment Method:&nbsp;&nbsp;{{exception835list.paymentDetail.payment_Method}}</div>
+                <div class="font-weight-bold">Chk/EFT date:&nbsp;&nbsp;&nbsp;&nbsp;{{exception835list.paymentDetail.chk_EFT_date|date:'MM/dd/yyyy'}}</div>
+                <div class="font-weight-bold">Remittance Amount:&nbsp;{{exception835list.paymentDetail.remittance_Amount}}</div>
+              </div>
+              <div class="col-lg-4">
+                <div class="font-weight-bold">Provider#:&nbsp;&nbsp;{{exception835list.paymentDetail.provider}}</div>
+                <div class="font-weight-bold">Date:&nbsp;&nbsp;&nbsp;&nbsp;{{exception835list.paymentDetail.date|date:'MM/dd/yyyy'}}</div>
+                <div class="font-weight-bold">Check EFT NBR:&nbsp;{{exception835list.paymentDetail.check_EFT_NBR}}</div>
+              </div>
+            </div>
+            <hr style="
+            margin-top: 1.5%;
+            border-top: 1px solid rgb(19, 17, 17);
+            width: 100%;
+            box-shadow: 0px 1px 1px #0c0c0c;
+            " />
+            <span class="mt-1"></span>
+            <ng-container *ngFor="let val of exception835list?.patient_ClaimDetail">
+              <hr style="
+              margin-top: 1.5%;
+              border-top: 1px solid rgb(19, 17, 17);
+              width: 100%;
+              box-shadow: 0px 1px 1px #0c0c0c;
+              " />
+              <div class="row w-100">
+               
+                <div class="col-lg-2">
+                  Service Date
+                </div>
+                <div class="col-lg-1">
+                  POS
+                </div>
+                <div class="col-lg-1">
+                  NOS
+                </div>
+                <div class="col-lg-1">
+                  Proc
+                </div>
+                <div class="col-lg-1">
+                 MOD
+                </div>
+                <div class="col-lg-1">
+                  Billed
+                </div>
+                <div class="col-lg-2">
+                  Allowed
+                </div>
+                <div class="col-lg-2">
+                  Remark
+                </div>
+               
+                <div class="col-lg-1">
+                  Payment
+                </div>
+              
+               
+
+              </div>
+              <hr style="
+              margin-top: 1.5%;
+              border-top: 1px solid rgb(19, 17, 17);
+              width: 100%;
+              box-shadow: 0px 1px 1px #0c0c0c;
+              " />
+              <div class="row w-100">
+                <div class="col-lg-4">
+                Patient:{{val.patient}}
+                </div>
+                <div class="col-lg-2">
+                HIC:{{val.hic}}
+                </div>
+              </div>
+              
+              <div class="row w-100 mt-1">
+                <div class="col-lg-2">
+                Pat Ctrl #:{{val.patCtrl}}
+                </div>
+                <div class="col-lg-5 pr-0 ">
+                  Payor Claim Number:{{val.payor_Claim_Number}}
+                </div>
+                <div class="col-lg-3">
+                  From Date:{{val.serviceLineDetail[0].serviceDate|date:'MM/dd/yyyy'}}
+                </div>
+                <div class="col-lg-2 pr-0">
+                  To Date:{{val.serviceLineDetail[val.serviceLineDetail.length-1].serviceDate|date:'MM/dd/yyyy'}}
+                </div>
+               
+              </div>
+            <ng-container *ngFor="let val1 of val?.serviceLineDetail">
+              <div class="row w-100">
+               
+                <div class="col-lg-2">
+                {{val1?.serviceDate|date:'MM/dd/yyyy'}}
+                </div>
+                <div class="col-lg-1">
+                  
+                </div>
+                <div class="col-lg-1">
+                 {{val?.unit}}
+                </div>
+                <div class="col-lg-1">
+                 {{val1?.servicecode}}
+                </div>
+                <div class="col-lg-1">
+               {{val1?.mod}}
+                </div>
+                <div class="col-lg-1">
+                  {{val1?.billedAmt}}
+                </div>
+                <div class="col-lg-2 pr-0">
+                  {{val1?.notes}}
+                </div>
+                <div class="col-lg-2">
+                  {{val1?.denied_Detail}}
+                </div>
+               
+                <div class="col-lg-1" style="
+                text-align: right;
+            ">
+                  {{val1?.claimed_Amt}}
+                </div>
+              
+               
+
+              </div>
+            </ng-container>
+            <div class="row w-100">
+               
+              <div class="col-lg-3">
+              
+           <div class="mt-1">     {{val.patient}}</div>
+              </div>
+             
+              <div class="col-lg-1">
+                
+                <div  class="mt-1"> PtResp:</div> 
+              </div>
+              <div class="col-lg-1">
+                <div></div>
+                <div  class="mt-1"> 0.00 </div>
+              </div>
+              <div class="col-lg-1">
+             
+              </div>
+              <div class="col-lg-1">
+                <hr style="
+                margin-top: 1.5%;
+                border-top: 1px solid rgb(19, 17, 17);
+                width: 100%;
+                box-shadow: 0px 1px 1px #0c0c0c;
+                " />
+                {{val.totalBilledAmt}}
+              </div>
+              <div class="col-lg-3">
+              
+              </div>
+             
+              <div class="col-lg-2" style="
+              text-align: right;
+          ">
+                <hr style="
+                margin-top: 1.5%;
+                border-top: 1px solid rgb(19, 17, 17);
+                width: 100%;
+                box-shadow: 0px 1px 1px #0c0c0c;
+                " />
+                {{val.totalClaimAmt}}
+              </div>
+            
+             
+
+            </div>
+          </ng-container>
+          <div class="row">
+            <div class="col-lg-4">
+
+            </div>
+            <div class="col-lg-1">
+
+            </div>
+          </div>
+      </div>
+    
+
+    
+     
+      <!-- <div class="row mt-4">
+        <div class="col-lg-12">
+          <div class="row">
+            <p style="font-size: 11px; margin-left: 4px;" class="p0 ft4">Rend Prov</p>
+            <P style="font-size: 11px; margin-left: 3px;" class="p1 ft4">Service Date</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">POS</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">NOS</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">Proc</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">MOD</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">Billed</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">Allowed</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">Deduct</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">CoIns</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">GRP/RC Amt</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">Payment</P>
+            <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">Remarks</P>
+          </div>
+
+        </div>
+      </div> -->
+      <!-- <TABLE>
+        <TR></TR>
+
+      </TABLE> -->
+      <!-- </ng-container> -->
+      <!-- <br> -->
+      <!-- <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="row">
+                <div class="col-lg-3">
+                  <p style="font-weight: bold; margin-left:2px;">Patient:</p>
+                </div>
+                <div class="col-lg-8">
+                  <p style="font-weight: bold;">BYERS, MARY J</p>
+                </div>
+              </div>
+            </div>
+           
+            <div class="col-lg-4">
+              <div class="row">
+                <div class="col-lg-2">
+                  <p style="font-weight: bold;"> HIC:</p>
+                </div>
+                <div class="col-lg-9">
+                  <p style="font-weight: bold;"> 0018965578852</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="row">
+                    <p style="font-size: 11px; margin-left: 11px;" class="p0 ft4">Pat Ctrl #: </p>
+                    <p style="font-size: 11px; margin-left: 4px;">22495-P</p>
+                  </div>
+
+                </div>
+
+                <div class="col-lg-8">
+                  <div class="row">
+                    <p style="font-size: 11px;  margin-left: 0px;">Payor Claim Number: </p>
+                    <p style="font-size: 11px;   margin-left: 5px;">200924H14204</p>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="row">
+                <div class="col-lg-5">
+                  <div class="row">
+                    <p style="font-size: 11px;">From Date: </p>
+                    <p style="font-size: 11px; margin-left: 4px;">200924</p>
+                  </div>
+
+                </div>
+                <div class="col-lg-4">
+                  <div class="row">
+                    <p style="font-size: 11px;">To Date: </p>
+                    <p style="font-size: 11px; margin-left: 4px;">200924H14204</p>
+                  </div>
+
+                </div>
+                <div class="col-lg-3">
+                  <p style="font-size: 11px; font-weight: bold;">Posted</p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+
+      <!-- <TR >
+  <TD  class="tr3 td8 font-weight-bold">
+    <P style="font-size: 11px; margin-left: 1px;" class="p1 ft4">Rend Prov</P>
+  </TD>
+  <TD   class="tr3 td11  font-weight-bold">
+    <P style="font-size: 11px; margin-left: 1px;" class="p1 ft4">Service Date</P>
+  </TD>
+  <TD   class="tr3 td5 font-weight-bold">
+    <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">POS</P>
+  </TD>
+  <TD  class="tr3 td6  font-weight-bold">
+    <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">NOS</P>
+  </TD>
+  <TD  class="tr3 td7 font-weight-bold">
+    <P style="font-size: 11px; margin-left: 1px;" class="p2 ft4"> Proc</P>
+  </TD>
+  <TD class="tr3 td8  font-weight-bold">
+    <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">MOD</P>
+  </TD>
+ 
+  <TD  style="margin-left: -20px;" class="tr3 td8 font-weight-bold"> 
+    <P style="font-size: 11px; margin-left: 1px;"class="p0 ft4">Billed</P>
+  </TD>
+  <TD style="margin-left: -20px;" class="tr3 td3 font-weight-bold"> 
+    <P style="font-size: 11px; margin-left: 1px;" class=" p1 ft4">Allowed</P>
+  </TD>
+  <TD style="margin-left: -20px;" class="tr3 td3 font-weight-bold" > 
+    <P style="font-size: 11px; margin-left: 1px;" class="p1 ft4">Deduct</P>
+  </TD>
+
+  <TD  class="tr3 td8 font-weight-bold" > 
+    <P style="font-size: 11px; margin-left: 1px;" class="p1 ft4">CoIns</P>
+  </TD>
+  <TD  class="tr3 td8 font-weight-bold" > 
+    <P style="font-size: 11px; margin-left: 1px;" class="p1 ft4">GRP/RC Amt</P>
+  </TD>
+  <TD  class="tr3 td6 font-weight-bold" > 
+    <P style="font-size: 11px; margin-left: 1px;" class="p0 ft4">Payment</P>
+  </TD>
+  <TD  class="tr3 td6 font-weight-bold" > 
+    <P style="font-size: 11px; margin-left: 1px;" class="p1 ft4">Remarks</P>
+  </TD>
+
+</TR> -->
+
+      <!-- <TR *ngFor="let val of itembatch.patient_ClaimDetail">
+            <TD colspan="2" class="tr3 td8">
+              <P class="p0 ft4">Patient:</P>
+            </TD>
+            <TD colspan="3" class="tr3 td8 ">
+              <P class="p1 ft4">{{val.patient}}</P>
+            </TD>
+            <TD  colspan="2" class="tr3 td8">
+              <P class="p1 ft4">HIC:</P>
+            </TD>
+            <TD  colspan="3" class="tr3 td8 ">
+              <P class="p3 ft4">{{val.hic}}</P>
+            </TD>
+            <TD class="tr2 td10">
+              <P class="p1 ft3">&nbsp;</P>
+            </TD>
+          
+          </TR>
+
+          <TR *ngFor="let val of itembatch.patient_ClaimDetail">
+            <TD  class="tr3 td8 ">
+              <P class="p0 ft4">PatCtrl:</P>
+            </TD>
+            <TD class="tr3 td11 ">
+              <P class="p3 ft4">40639-P</P>
+            </TD>
+            <TD   class="tr3  td6 ">
+              <P class="p1 ft4">Payor Claim Number:</P>
+            </TD>
+            <TD  colspan="2" class="tr3 td6 ">
+              <P class="p9 ft4">{{val.payor_Claim_Number}}</P>
+            </TD>
+            <TD  colspan="2" class="tr3 td7 ">
+              <P class="p10 ft4">From Date:</P>
+            </TD>
+            <TD colspan="2" class="tr3 td6 ">
+              <P class="p11 ft4">{{itembatch.fromdate}}</P>
+            </TD>
+            <TD   class="tr3 td7 ">
+              <P class="p12 ft4">To Date:</P>
+            </TD>
+            <TD  colspan="2" class="tr3 td6 ">
+              <P class="p13 ft4">{{itembatch.todate}}</P>
+            </TD>
+          
+          </TR>
+        <TR>
+          <TD colspan=2 class="tr4 td8">
+            <P class="p0 ft4">&nbsp;</P>
+          </TD>
+          <TD class="tr4 td12">
+            <P class="p3 ft4">&nbsp;</P>
+          </TD>
+          <TD class="tr4 td1">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr4 td2">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr4 td3">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr4 td4">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr4 td5">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr4 td6">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr4 td7">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr4 td9">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+          <TD class="tr4 td10">
+            <P class="p1 ft1">&nbsp;</P>
+          </TD>
+        </TR>
+        
+        <TR >
+          <TD  class="tr3 td8 font-weight-bold">
+            <P class="p3 ft4">ServiceDate</P>
+          </TD>
+          <TD   class="tr3 td11  font-weight-bold">
+            <P class="p6 ft4">Unit</P>
+          </TD>
+          <TD   class="tr3 td5 font-weight-bold">
+            <P class="p7 ft4">Servicecode</P>
+          </TD>
+          <TD  colspan="2" class="tr3 td6  font-weight-bold">
+            <P class="p2 ft4">MOD</P>
+          </TD>
+          <TD  class="tr3 td7 font-weight-bold">
+            <P class="p6 ft4">BilledAmt</P>
+          </TD>
+          <TD colspan="2" class="tr3 td8  font-weight-bold">
+            <P class="p13 ft4">Denied Detail</P>
+          </TD>
+         
+          <TD  class="tr3 td10 font-weight-bold" colspan="2"> 
+            <P class="p6 ft4">Claimed Amt</P>
+          </TD>
+        
+        </TR>
+        <ng-container *ngFor="let valpatient of itembatch.patient_ClaimDetail">
+
+          <TR *ngFor="let val1 of valpatient.serviceLineDetail">
+            <TD  class="tr3 td8 font-weight-bold">
+              <P class="p3 ft4">{{val1.serviceDate| date:'MM/dd/yyyy'}}</P>
+            </TD>
+            <TD class="tr3 td11  font-weight-bold">
+              <P class="p6 ft4">{{val1.unit}}</P>
+            </TD>
+            <TD   class="tr3 td5 font-weight-bold">
+              <P class="p7 ft4">{{val1.servicecode}}</P>
+            </TD>
+            <TD   colspan="2" class="tr3 td6  font-weight-bold">
+              <P class="p2 ft4">{{val1.mod}}</P>
+            </TD>
+            <TD  class="tr3 td7 font-weight-bold">
+              <P class="p6 ft4">{{val1.billedAmt}}</P>
+            </TD>
+            <TD colspan="2" class="tr3 td6  font-weight-bold">
+              <P class="p13 ft4">{{val1.denied_Detail}}</P>
+            </TD>
+            <TD class="tr3 td6  font-weight-bold" colspan="2"> 
+              <P class="p6 ft4">{{val1.claimed_Amt}}</P>
+            </TD>
+          
+          </TR>
+         
+        </ng-container>
+    
+        <TR *ngFor="let val of itembatch.patient_ClaimDetail">
+          <TD class="tr7 td18">
+            <P class="p1 ft7">TotalUnit</P>
+          </TD>
+          <TD class="tr7 td19">
+            <P class="p1 ft7">{{val.totalUnit}}</P>
+          </TD>
+          <TD class="tr7 td20">
+            <P class="p1 ft7">TotalBilledAmt</P>
+          </TD>
+          <TD class="tr7 td21">
+            <P class="p1 ft7">{{val.totalBilledAmt}}</P>
+          </TD>
+          <TD class="tr7 td22">
+            <P class="p1 ft7">TotalClaimAmt</P>
+          </TD>
+          <TD class="tr7 td23">
+            <P class="p1 ft7">{{val.totalClaimAmt}}</P>
+          </TD>
+          <TD colspan="2" class="tr7 td24">
+            <P class="p1 ft7">&nbsp;</P>
+          </TD>
+        
+        </TR>
+
+        <TR >
+          <TD  colspan="2" class="tr7 td18">
+            <P class="p1 ft7">Not Posted Total</P>
+          </TD>
+          <TD   colspan="2" class="tr7 td19">
+            <P class="p1 ft7">Posted Total</P>
+          </TD>
+          <TD   colspan="3" class="tr7 td20">
+            <P class="p1 ft7">Overall Remittance Amount</P>
+          </TD>
+        
+        
+        </TR>
+       <TR >
+        <TD  colspan="3" class="tr7 td18">
+          <P class="p1 ft7">0.00</P>
+        </TD>
+        <TD   colspan="3" class="tr7 td19">
+          <P class="p1 ft7">00.00</P>
+        </TD>
+        <TD   colspan="3" class="tr7 td20">
+          <P class="p1 ft7">{{itembatch.paymentDetail.remittance_Amount}}</P>
+        </TD>
+      
+      
+      </TR> -->
+
+
+
+    </div>
+
+  </kendo-pdf-export>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

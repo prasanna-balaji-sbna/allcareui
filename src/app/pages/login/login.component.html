@@ -1,0 +1,189 @@
+   <div class="d-flex justify-content-center align-items-center w-100 h-100">
+    <div class="pl-0 col-xl-4 col-md-6 col-10">
+        <div class="card border-0 box-shadow rounded-0 width-size">
+            <div class="card-header d-flex justify-content-center align-items-center border border-white bg-white mt-1">
+               <!-- <img src="\assets\img\logo.jpg" class="img-fluid rounded mx-auto d-block" width="130px"> -->
+               <img src = "/assets/img/cover.png" style="height: 100px;width: 250px;">
+            </div>
+            <div class="card-body text-center" style="margin-top: -5.5%;">
+                <h1 id="title" class="title" style="color:#0D47A1;margin-bottom: 10px">Login</h1>
+                <p class="sub-title" style="color:#689F38;margin-bottom: 10px">Hello! Please Log in</p>
+                <!-- <a routerLink="/register" class="transition text-warning">Don't have an account? Sign up now!</a> -->
+                <div class="alert alert-warning" *ngIf="statusERR!= '' "  closable (close)="statusERR=''">        
+                    {{statusERR}}  
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                    (click)="statusERR=''">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <form [formGroup]="LoginForm">
+                    <div class="form-group" style="margin-bottom: 4px">
+                    <label>User Name/Email/Phone <sup style="color:red; font-size: 1.35em;
+                        top: 0em;">&nbsp;*</sup></label>
+                    <input class="form-control" style="border-color:#ced4da;" placeholder="User Name/Email/Phone" type="text" autocomplete="off" formControlName="Email" [(ngModel)]="Email"
+                        name="Email">
+                    </div>
+                    <div *ngIf="LoginForm.controls.Email.errors && submitted">
+                    <div style="color:red;text-align: left;" *ngIf="LoginForm.controls.Email.errors.required">User Name/Email/Phone is
+                        required</div>
+                    </div>
+                    <br>
+                    <div class="form-group" style="margin-bottom: 4px"> 
+                    <label>Password <sup style="color:red; font-size: 1.35em;
+                        top: 0em;">&nbsp;*</sup></label>
+                    <input class="form-control" style="border-color:#ced4da;" placeholder="Password" autocomplete="false" type="password" formControlName="WebPassword"
+                        [(ngModel)]="WebPassword" name="WebPassword">
+                    </div>
+                    <div *ngIf="LoginForm.controls.WebPassword.errors && submitted">
+                    <div style="color:red;text-align: left;" *ngIf="LoginForm.controls.WebPassword.errors.required">Password
+                        is required</div>
+                    </div>
+                    <br>
+                    <div class="form-group" style="margin-bottom: 4px">
+                    <label>Agency Code <sup style="color:red; font-size: 1.35em;
+                        top: 0em;">&nbsp;*</sup></label>
+                    <input class="form-control" style="border-color:#ced4da;" placeholder="Agency Code" autocomplete="false" type="text" formControlName="agencycode"
+                        [(ngModel)]="agencycode" name="agencycode">
+                    </div>
+                    <div *ngIf="LoginForm.controls.agencycode.errors && submitted">
+                    <div style="color:red;text-align: left;" *ngIf="LoginForm.controls.agencycode.errors.required">Agency Code is
+                        required</div>
+                    </div>
+                    <br>   
+                    <div class="row">
+                    
+                    </div>        
+                
+                    <button type="submit" class="btn" style="color: #fff;height: 26px;width:100%;background-color: rgba(0,66,144,1.00);padding: 0 !important"
+                    [disabled]="!LoginForm.valid" data-target="#myModal" (click)="logindata()">Login</button>
+                </form>
+
+                <div class="mt-4">
+                    <button class="btn-btnclass"  style="background: white;color:rgba(0,66,144,1.00);border:0px" (click)="forgotpassword()"><h5 style="background: white;color:rgba(0,66,144,1.00);border:0px">Forgot Password?</h5>
+                    </button>
+                </div>
+            <div class="text-center border border-white bg-transparent">
+             <!-- <p>Or</p>   -->
+              <!-- <ul class="list-inline mb-0">
+                    <li class="list-inline-item ">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-square-o fa-stack-2x " ></i>
+                            <i class="fa fa-facebook fa-stack-1x"></i>
+                        </span>
+                    </li>
+                    <li class="list-inline-item">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-square-o fa-stack-2x"></i>
+                            <i class="fa fa-twitter fa-stack-1x"></i>
+                        </span>
+                    </li>
+                    <li class="list-inline-item">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-square-o fa-stack-2x"></i>
+                            <i class="fa fa-google fa-stack-1x"></i>
+                        </span>
+                    </li>
+                </ul>  -->
+
+            </div>
+        </div>
+    </div>
+</div> 
+</div>
+
+<div id="myModal" class="modal">
+
+ 
+  <div class="modal-content" style="width:25%">
+  
+    <div class="row" style="margin-left: 2%;" ><label style=" 
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 4px;" >
+   Please select Role</label> 
+     
+    <select [(ngModel)]="userSelectedRole"  style="
+    width:40%;
+    margin-left: 10px;
+" class="form-control">
+
+
+      <option *ngFor="let val of RoleList" [value]="val.Key">{{val.Value}}</option>
+    </select></div>
+    <div class="row" style="margin-top: 30px;margin-left: 25%;">
+    <button type="submit" class="btn" style="width:25%;background-color: rgba(0,66,144,1.00);"
+      (click)="rolelogin()" [disabled]="userSelectedRole==''" class="col-md-6">Login</button>
+      <!-- <button type="submit" class="btn" style="width:25%;background-color: rgba(0,66,144,1.00); margin-left: 30px;"
+      (click)="closebtn();LoginForm.reset();" class="col-md-6">Close</button> -->
+  </div>
+  </div>
+
+</div>
+
+ <!-- <div class="d-flex justify-content-center align-items-center w-100 h-100">
+    <div class="pl-0 col-xl-12 col-md-12 col-12">
+        <div class="jumbotron vertical-center col-lg-6">
+            <div class="card">
+                <div class="row d-flex">
+                  <div class="col-lg-6 align-self-center"> <img src="\assets\img\logo.jpg"  class="img-fluid rounded mx-auto d-block" width="300px"> </div>
+                <div class="col-lg-6">
+                        <div class="card border-0 px-4 py-5">
+                            <div class="row mb-4 px-3">
+                                <h6 class="mb-0 mr-4 mt-2">Sign in with</h6>
+                                <div class="facebook text-center mr-3">
+                                    <div class="fa fa-facebook"></div>
+                                </div>
+                                <div class="twitter text-center mr-3">
+                                    <div class="fa fa-twitter"></div>
+                                </div>
+                                <div class="linkedin text-center mr-3">
+                                    <div class="fa fa-linkedin"></div>
+                                </div>
+                            </div>
+                            <div class="row px-3 mb-4">
+                                <div class="line"></div> <small class="or text-center">Or</small>
+                                <div class="line"></div>
+                            </div>
+                            <div class="row px-3"> <label class="mb-1">
+                                    <h6 class="mb-0 text-sm">Email Address</h6>
+                                </label> <input class="mb-4" type="text" name="email" placeholder="Enter a valid email address"> </div>
+                            <div class="row px-3"> <label class="mb-1">
+                                    <h6 class="mb-0 text-sm">Password</h6>
+                                </label> <input type="password" name="password" placeholder="Enter password"> </div>
+                            <div class="row px-3 mb-4">
+                                <div class="custom-control custom-checkbox custom-control-inline"> <input id="chk1" type="checkbox" name="chk" class="custom-control-input"> <label for="chk1" class="custom-control-label text-sm">Remember me</label> </div> <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+                            </div>
+                            <div class="row mb-3 px-3"> <button type="submit" class="btn btn-primary text-center" (click)="onlogin()">Login</button> </div>
+                            <div class="row mb-4 px-3">Don't have an account? <a class="text-danger ">Register</a> </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div> 
+   </div> -->
+<span id="openmultilogin" data-target="#multilogin" data-toggle="modal"></span>
+   <div class="modal fade" id="multilogin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Role Login</h5>
+            </div>
+            <div class="modal-body">
+                <div class="d-inline-flex col-lg-12">
+             <label class="w-50" >Select Role</label>
+             <select [(ngModel)]="userSelectedRole" class="form-control w-50">
+                 <option *ngFor=" let val of RoleList" [value]="val.Key">{{val.Value}}</option>
+             </select></div>
+            </div>
+            <div class="modal-footer">
+
+                <button class="btn blue-btn btn-sm butstyle "  (click)="rolelogin()">Login
+                </button>
+                <button class="btn blue-btn btn-sm butstyle " data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

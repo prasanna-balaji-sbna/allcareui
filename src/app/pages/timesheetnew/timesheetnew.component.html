@@ -1,0 +1,963 @@
+<div *ngIf="!isManualEntry">
+
+  <div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted row">
+          <h4 class="mb-0 font-header col-lg-8">Payroll Details </h4>
+
+          <div class="text_right col-lg-4">
+            <button type="button" class="btn blue-btn btn-sm text_right ml-1" (click)="downloadexcel()"
+              data-toggle="modal" data-target="#Print"><i class="fa fa-print" aria-hidden="true"></i></button>
+            <button type="button" class="btn blue-btn btn-sm text_right ml-1" (click)="downloadexcel()"
+              data-toggle="modal" data-target="#download1"><i class="fa fa-download" aria-hidden="true"></i></button>
+            <button (click)="editPaydate($event,'checkbox')"
+              [disabled]="global.globalAgencyId==0||selectedpayrollid.length==0"
+              class="btn blue-btn btn-sm text_right ml-1" data-toggle="modal" data-target="#uploadTimeseet">
+              Paydate</button>
+            <button class="btn blue-btn btn-sm text_right ml-1" data-toggle="modal" data-target="#openReport">
+              Payroll Report</button>
+
+
+          </div>
+        </div>
+        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+          <div class="row" style="padding:5px;">
+            <!-- <nb-alert status="danger" closable (close)="err=''" *ngIf="warning" style="width: 100%;">{{err}} </nb-alert> -->
+          </div>
+          <div class="row ml-3">
+            <div class=" col-lg-12">
+              <div class="row">
+                <div class="row">
+                  <div class="row d-lg-none">
+                    <div class="col">
+                      <span>Start date</span>
+                      <my-date-picker [options]="myDatePickerOptions2" [selDate]="filterStartDate"
+                        placeholder="mm/dd/yyyy" (inputFieldChanged)="Certificationstartdatechange2($event)"
+                        (dateChanged)="onDateChangedCertificationStart2($event)" [disabled]="global.globalAgencyId==0">
+                      </my-date-picker>
+                    </div>
+                    <div class="col text_right">
+                      <span>End date</span>
+                      <div>
+                        <my-date-picker [options]="myDatePickerOptions2" [selDate]="filterEndDate"
+                          placeholder="mm/dd/yyyy" (inputFieldChanged)="Certificationstartdatechange3($event)"
+                          (dateChanged)="onDateChangedCertificationStart3($event)"
+                          [disabled]="global.globalAgencyId==0">
+                        </my-date-picker>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 d-none d-lg-block">
+
+                  <div class="row">
+                    <div class="col-lg-5 buttonpanddinglr">
+                      <span>Start date</span>
+                    </div>
+
+                    <div class="col-lg-7 buttonpanddinglr">
+                      <my-date-picker [options]="myDatePickerOptions2" [selDate]="filterStartDate"
+                        placeholder="mm/dd/yyyy" (inputFieldChanged)="Certificationstartdatechange2($event)"
+                        (dateChanged)="onDateChangedCertificationStart2($event)" [disabled]="global.globalAgencyId==0">
+                      </my-date-picker>
+                    </div>
+                  </div>
+
+
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 d-none d-lg-block">
+
+                  <div class="row">
+                    <div class="col-lg-5 buttonpanddinglr">
+                      <span>End date</span>
+                    </div>
+
+                    <div class="col-lg-7 buttonpanddinglr">
+                      <my-date-picker [options]="myDatePickerOptions2" [selDate]="filterEndDate"
+                        placeholder="mm/dd/yyyy" (inputFieldChanged)="Certificationstartdatechange3($event)"
+                        (dateChanged)="onDateChangedCertificationStart3($event)" [disabled]="global.globalAgencyId==0">
+                      </my-date-picker>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-8">
+                  <div class=row>
+                    <div class="col-lg-11 ">
+                      <div class=row>
+                        <div class="col-lg-4  buttonpanddingr">
+
+                          <div class="row">
+                            <div class="col-lg-5 buttonpanddingr">
+                              <span>Employee</span>
+                            </div>
+
+                            <div class="col-lg-7 buttonpanddinglr">
+                              <!-- <ng-select   [disabled]="global.globalAgencyId==0"
+                            [clearable]="true" [items]="employeelists" bindLabel="Value"
+                            bindValue="Key" [(ngModel)]="employee" >   </ng-select> -->
+                              <select class="form-control" [(ngModel)]="employee" [disabled]="global.globalAgencyId==0">
+                                <option></option>
+                                <option [value]=st.Key *ngFor="let st of employeelists">{{st.Value}}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4  buttonpanddingr">
+
+                          <div class="row">
+                            <div class="col-lg-4 buttonpanddingr">
+                              <span>Client</span>
+                            </div>
+                            <div class="col-lg-8 buttonpanddinglr">
+                              <!-- <ng-select
+                                [disabled]="global.globalAgencyId==0 || employee==null||employee==''||employee==undefined "
+                                [searchable]="true" [clearable]="true" [items]="clientlist" bindLabel="Value"
+                                bindValue="Key" nbTooltip="Select employee to enable client" nbTooltipPlacement="top"
+                                nbTooltipStatus="info" status="info"
+                                show="employee==null||employee==''||employee==undefined" [(ngModel)]="client">
+                              </ng-select> -->
+                              <select class="form-control" [(ngModel)]="client"
+                                [disabled]="global.globalAgencyId==0 || employee==null||employee==''||employee==undefined "
+                                nbTooltipPlacement="top" nbTooltipStatus="info" nbTooltip="Select employee to enable client" status="info"
+                                show="employee==null||employee==''||employee==undefined">
+
+                                <option title="Select"></option>
+                                <option [value]=st.value *ngFor="let st of clientlist">{{st.label}}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-4 buttonpanddingr">
+
+                          <div class="row">
+                            <div class="col-lg-6 buttonpanddingr">
+                              <span>Update Pay Date</span>
+                            </div>
+                            <div class="col-lg-6 buttonpanddinglr">
+
+
+                              <!-- <ng-select [(ngModel)]="payer" [searchable]="true" [clearable]="true" [items]="statusList"
+                                bindLabel="Value" bindValue="Key" [disabled]="global.globalAgencyId==0"
+                                (ngModelChange)="showdata()">
+                              </ng-select> -->
+                              <select class="form-control" [(ngModel)]="payer" [disabled]="global.globalAgencyId==0"
+                                (ngModelChange)="showdata()">
+
+                                <option></option>
+                                <option [value]=st.Key *ngFor="let st of statusList">{{st.Value}}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+
+                      </div>
+                    </div>
+                    <div class="col-lg-1 ">
+                      <div>
+                        <button type="button" class="btn blue-btn btn-sm" style="width:60px;height: 30px;"
+                          (click)="filter()" [disabled]="global.globalAgencyId==0||
+          (filterStartDate==null||filterStartDate==''||filterStartDate==undefined)&&(client==null||client==''||client==undefined)&&
+          (employee==null||employee==''||employee==undefined)&&(filterEndDate==null||filterEndDate==''||filterEndDate==undefined)&&
+          (payer==null||payer==''||payer==undefined)
+          ">Apply</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <ngx-ui-loader></ngx-ui-loader>
+
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()"
+              [disabled]="global.globalAgencyId==0"><i class="fa fa-repeat mr-1"></i>Refresh</button>
+          </div>
+          <!-- <button class="btn btnclass" style="float:right" ><i class="fa fa-refresh"></i>Refresh</button>  -->
+          <div class="textclorstyle"> <label class="textred">Note*:Pay Date is only editable for employee with pay
+              rate</label></div>
+
+        </div>
+        <!-- <div *ngIf="isEnable&& global.globalAgencyId!=0" style="text-align: center;">
+    <label style="color:#004290;">No Data Available!</label>
+  </div> -->
+        <div *ngIf="global.globalAgencyId==0" style="text-align: center;">
+          <label class="textred"><i class="fa fa-info-circle fa-lg"></i>Select agency to view client details</label>
+        </div>
+        <div *ngIf=" global.globalAgencyId!=0">
+
+          <div class="control-section">
+            <ejs-grid #grid id='grid' [allowResizing]='true' (checkBoxChange)="show1($event)" [editSettings]='editSettings' [toolbar]='toolbar'
+              (toolbarclick)="getdata($event)" (queryCellInfo)='validatebutton($event)'
+              (dataStateChange)='dataStateChange($event)' [allowSorting]='true' allowPaging='true'
+              [allowFiltering]='true' [pageSettings]='initialPage' [filterSettings]='filterSettings'
+              [showColumnChooser]='true' (rowDataBound)='rowDataBound($event)' (actionComplete)='actionComplete($event)'
+              [dataSource]='data |async' [childGrid]='childGrid' 
+             [selectionSettings]='selectionOptions' (resizeStop)="onResize($event)">
+              <!-- (cellEdit)="cellEdit($event)"   (dataSourceChanged)='dataSourceChanged($event)'-->
+              <e-columns>
+                <!-- <e-column  width='5%'></e-column> -->
+                <e-column type='checkbox' minWidth= 50 textAlign='left' uid="checkbox" [allowEditing]='true' editType="booleanedit"
+                  [edit]='checkparams' [showInColumnChooser]='false'></e-column>
+
+                  <e-column field='clientName' headerText='Client' minWidth= 100 textAlign='left' [allowEditing]='false'
+                  type="string">
+                  <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+                </e-column>
+                <e-column field='employeeName' headerText='Employee' minWidth= 100 textAlign='left' [allowEditing]='false'
+                  type="string">
+                  <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+                </e-column>
+                <e-column field='payDate' minWidth= 100 headerText='Paid On' textAlign='left' [allowEditing]='false' type="date" [format]='formatOptions'
+                [allowFiltering]="false">
+                </e-column>
+                <e-column field='totalAmount' minWidth= 100 headerText='Total Amt.' textAlign='left' [allowEditing]='false'
+                  type="string">
+                  <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+                </e-column>
+                <e-column field='totalWorkedHrs' minWidth= 100 headerText='Total hrs.' textAlign='left' [allowEditing]='false'
+                  type="string">
+                  <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+                </e-column>
+                <e-column field='lockStatus' minWidth= 100 headerText='Lock status' [allowFiltering]='false' textAlign='left' [allowEditing]='false'
+                  type="string">
+                  <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+                  </e-column>
+                <e-column field='Actions' minWidth= 100 headerText="Actions" uid="action" textAlign='center' [allowEditing]='false'
+                  [allowFiltering]="false" [showInColumnChooser]='false'>
+                  <ng-template #template let-data>
+                    <div>
+                      <button class="btn blue-btn btn-sm ml-1" (click)="editPaydate($event,'button')"
+                        data-toggle="modal" data-target="#uploadTimeseet" [disabled]="selectedpayrollid.length > 1"><i
+                          class="fa fa-edit"></i></button>
+
+                      <button class="btn blue-btn btn-sm ml-1" [style.background]="004290" (click)="lockPayroll($event)"
+                        data-toggle="modal" data-target="#LockPayrollDialog">
+                        <i class="fa fa-lock"></i></button>
+
+
+                    </div>
+                  </ng-template>
+                </e-column>
+                <!--------------------------------table header icon---------------->
+                <e-column width="50" [showInColumnChooser]='false'>
+                  <ng-template #headerTemplate let-data>
+                    <div>
+                      <span id='show' (click)='show()'><i class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                    </div>
+                  </ng-template>
+                </e-column>
+              </e-columns>
+            </ejs-grid>
+            <ng-template #childtemplate let-data>
+              <div><button class="btn blue-btn btn-sm" (click)="viewpopup($event)" [disabled]="data.paydate!=null"><i
+                    class="fa fa-edit"></i></button></div>
+              <span id="viewpop" data-toggle="modal" data-target="#viewManualEntrypopup"></span>
+            </ng-template>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ////////////////////////Alert Download excel/////////////////////////// -->
+<span id="OpenModal1" data-target="#download1" data-toggle="modal"></span>
+<div class="modal fade " id="download1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Download Report</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="padding:15px">
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <div class="col-lg-4">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;">From Date
+                  </label>
+                  <!-- <sup style="color:red; font-size: 1.35em;
+                           top: 0em;">&nbsp;*</sup> -->
+                </div>
+                <div class="col-lg-5">
+                  <my-date-picker [options]="myDatePickerOptions" placeholder="mm/dd/yyyy"
+                    [selDate]="employeelist1.fromdate"
+                    (inputFieldChanged)="newdates($event,'inputchage','employeelist1.fromdate')"
+                    (dateChanged)="newdates($event,'datechagned','employeelist1.fromdate')">
+                  </my-date-picker>
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-4">
+                  <label class="label">To Date
+                  </label>
+                  <!-- <sup style="color:red; font-size: 1.35em;
+                            top: 0em;">&nbsp;*</sup> -->
+                </div>
+                <div class="col-lg-5">
+                  <my-date-picker [options]="myDatePickerOptions" placeholder="mm/dd/yyyy"
+                    [selDate]="employeelist1.todate"
+                    (inputFieldChanged)="newdates($event,'inputchage','employeelist1.todate')"
+                    (dateChanged)="newdates($event,'datechagned','employeelist1.todate')">
+                  </my-date-picker>
+                  <!-- <input [nbDatepicker]="datepicker10" class="form-control" placeholder="mm/dd/yyyy"
+                            style="width:200px;display:initial;float:right" [(ngModel)]="newclient.callDate"  formControlName="CallDate" name="CallDate">
+                          <nb-datepicker #datepicker10 format="MM/dd/yyyy"></nb-datepicker> -->
+
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <span class="label">Employee
+              </span></div>
+            <!-- [hidden]="isSelect" -->
+            <div class="col-lg-5">
+              <select class="form-control" [(ngModel)]="employeelist1.employeeId" [disabled]="global.globalAgencyId==0">
+                <option></option>
+                <option [value]=st.Key *ngFor="let st of employeelists">{{st.Value}}</option>
+              </select>
+              <!-- <ng-select [clearable]="true" [items]="employeelists" bindLabel="Value" bindValue="Key"
+                [(ngModel)]="employeelist1.employeeId">
+              </ng-select> -->
+            </div>
+            <!-- [hidden]="isSelect" -->
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+
+        <button class="btn blue-btn" type="button" (click)="excelformatfunction()">Yes</button>
+        <button class="btn blue-btn" type="button" data-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ////////////////////////Alert Print/////////////////////////// -->
+<span id="OpenModal2" data-target="#Print" data-toggle="modal"></span>
+<div class="modal fade " id="Print" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Print Payroll</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- <nb-card-body> -->
+        <div>
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <div class="col-lg-4">
+                  <label class="label">From Date&nbsp;
+                  </label>
+                  <!-- <sup style="color:red; font-size: 1.35em;
+               top: 0em;">&nbsp;*</sup> -->
+                </div>
+                <div class="col-lg-5">
+                  <my-date-picker [options]="myDatePickerOptions" placeholder="mm/dd/yyyy"
+                    [selDate]="employeelist1.fromdate"
+                    (inputFieldChanged)="newdates($event,'inputchage','employeelist1.fromdate')"
+                    (dateChanged)="newdates($event,'datechagned','employeelist1.fromdate')">
+                  </my-date-picker>
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-4">
+                  <label class="label">To Date
+                  </label>
+                  <!-- <sup style="color:red; font-size: 1.35em;
+                top: 0em;">&nbsp;*</sup> -->
+                </div>
+                <div class="col-lg-5">
+                  <my-date-picker [options]="myDatePickerOptions" placeholder="mm/dd/yyyy"
+                    [selDate]="employeelist1.todate"
+                    (inputFieldChanged)="newdates($event,'inputchage','employeelist1.todate')"
+                    (dateChanged)="newdates($event,'datechagned','employeelist1.todate')">
+                  </my-date-picker>
+                  <!-- <input [nbDatepicker]="datepicker10" class="form-control" placeholder="mm/dd/yyyy"
+                style="width:200px;display:initial;float:right" [(ngModel)]="newclient.callDate"  formControlName="CallDate" name="CallDate">
+              <nb-datepicker #datepicker10 format="MM/dd/yyyy"></nb-datepicker> -->
+
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <span class="label">Employee
+              </span></div>
+            <!-- [hidden]="isSelect" -->
+            <div class="col-lg-5">
+              <ng-select [clearable]="true" [items]="employeelists" bindLabel="Value" bindValue="Key"
+                [(ngModel)]="employeelist1.employeeId">
+              </ng-select>
+            </div>
+            <!-- [hidden]="isSelect"    -->
+          </div>
+
+
+        </div>
+        <!-- </nb-card-body> -->
+        <div class="modal-footer">
+          <button class="btn blue-btn btn-sm " (click)="print()">Print
+          </button>
+          <button class="btn blue-btn btn-sm " (click)="downloadreport()">Download
+          </button>
+          <button class="btn blue-btn btn-sm" type="button" style="margin-left:7px;width:60px;"
+            data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-------------------------------------------------------Edit timesheet------------------------------>
+<span id="OpenModal3" data-target="#uploadTimeseet" data-toggle="modal"></span>
+<div class="modal fade " id="uploadTimeseet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Edit Paydate</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr!=''" role="alert">
+          <p>{{saveErr}}</p>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="saveErr=''">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div>
+          <div class="row">
+            <div class="col-lg-4">
+              <label>Pay Date</label>
+            </div>
+            <div class="col-lg-8">
+              <my-date-picker [options]="myDatePickerOptions" [selDate]="payrollPayDate" placeholder="mm/dd/yyyy"
+                (inputFieldChanged)="editPayrollPaydate($event)" (dateChanged)="editPayrollPaydatechage($event)"
+                [disabled]="PayrateRequired">
+              </my-date-picker>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="text_right">
+          <button class="btn blue-btn btn-sm mr-1" type="button" (click)="UpdatePaydate()"
+            [disabled]="payrollPayDate==null||payrollPayDate==''||payrollPayDate==undefined">Update</button>
+          <button class="btn blue-btn btn-sm mr-1" type="button" data-dismiss="modal"
+            (click)="updatevalchange=false">Close</button>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!---------------------------------------------Lock payroll------------------------------>
+<span id="OpenModal4" data-target="#LockPayrollDialog" data-toggle="modal"></span>
+<div class="modal fade " id="LockPayrollDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="ispayrolllocked">UnLock Payroll</h5>
+        <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="!ispayrolllocked">Lock Payroll</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+      </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <label class="label" *ngIf="ispayrolllocked">
+              Do you want to unlock this record ?</label>
+            <label class="label" *ngIf="!ispayrolllocked">
+              Do you want to lock this record ?</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn blue-btn btn-sm float:right" (click)="confirmLockStatus()" *ngIf="!ispayrolllocked">Yes
+        </button>
+        <button class="btn blue-btn btn-sm float:right" (click)="UnLockStatus()" *ngIf="ispayrolllocked">Yes
+        </button>
+        <button class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-----------------------------------Update Manual Entry-------------------------------------->
+<span id="OpenModal5" data-target="#viewManualEntrypopup" data-toggle="modal"></span>
+<div class="modal fade " id="viewManualEntrypopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel" >Update Payroll Line</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-6">
+
+            <div class="col-lg-12">
+              <label>Client Name</label>
+            </div>
+            <div class="col-lg-12">
+              <input type="text" class="form-control" [(ngModel)]="editClient" [disabled]="true">
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="col-lg-12">
+              <label>TimeSheet Date</label>
+            </div>
+            <div class="col-lg-12">
+              <my-date-picker [options]="myDatePickerOptions" [selDate]="editDate" placeholder="mm/dd/yyyy"
+                (inputFieldChanged)="editdate($event)" (dateChanged)="editdatechage($event)">
+              </my-date-picker>
+            </div>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="col-lg-12">
+              <label>Service</label>
+            </div>
+            <div class="col-lg-12">
+              <input type="text" class="form-control" [(ngModel)]="editservice" [disabled]="true">
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="col-lg-12">
+              <label>Hrs. Worked</label>
+            </div>
+            <div class="col-lg-12">
+              <input type="text" class="form-control" [(ngModel)]="edittime" (change)="updatevaluechange()"
+                (keypress)="numberonly($event,'update')">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="col-lg-12">
+              <label>Notes</label>
+            </div>
+            <div class="col-lg-12">
+              <input type="text" class="form-control" [(ngModel)]="editNotes" (change)="updatevaluechange()">
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col-lg-7">
+            <p class="p">Date,Hrs. Worked & Notes fields are only editable</p>
+          </div>
+          <div class="col-lg-5">
+            <button class="btn blue-btn btn-sm mr-1" (click)="updatetimesheet()">
+              Update&Close
+            </button>
+            <button class="btn blue-btn btn-sm" data-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="openReport" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Payroll Report</h5>
+      </div>
+      <div class="alert alert-warning alert-dismissible fade show" *ngIf="excelErr!=''" role="alert">
+        <p>{{excelErr}}</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="excelErr=''">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="padding:15px">
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <div class="col-lg-4">
+                  <label style="padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;">From Date
+                  </label>
+
+                </div>
+                <div class="col-lg-5">
+                  <my-date-picker [options]="myDatePickerOptions" placeholder="mm/dd/yyyy"
+                    [selDate]="employeelist1.fromdate"
+                    (inputFieldChanged)="newdates($event,'inputchage','employeelist1.fromdate')"
+                    (dateChanged)="newdates($event,'datechagned','employeelist1.fromdate')">
+                  </my-date-picker>
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-4">
+                  <label class="label">To Date
+                  </label>
+
+                </div>
+                <div class="col-lg-5">
+                  <my-date-picker [options]="myDatePickerOptions" placeholder="mm/dd/yyyy"
+                    [selDate]="employeelist1.todate"
+                    (inputFieldChanged)="newdates($event,'inputchage','employeelist1.todate')"
+                    (dateChanged)="newdates($event,'datechagned','employeelist1.todate')">
+                  </my-date-picker>
+
+
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <span class="label">Employee
+              </span></div>
+
+            <div class="col-lg-5">
+              <select class="form-control" [(ngModel)]="employeelist1.employeeId" [disabled]="global.globalAgencyId==0">
+                <option></option>
+                <option [value]=st.Key *ngFor="let st of employeelists">{{st.Value}}</option>
+              </select>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+
+          <button class="btn blue-btn btn-sm" type="button" (click)="getpayrollReport()">
+            Download
+          </button>
+          <button class="btn blue-btn btn-sm" type="button" data-dismiss="modal" (click)="closeReport()">
+            Close
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<span id="openpdfdata" data-toggle="modal" data-target="#openpdfReport">
+
+</span>
+<!-- <div class="modal fade" id="openpdfReport" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog " role="document" style="max-width: 900px !important;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="row">
+          <div class="col-lg-10">
+            <h5 class="modal-title font-header" id="exampleModalLabel">PayRoll Report</h5>
+          </div>
+          <div class="col-lg-2"> <button class="btn blue-btn btn-sm" (click)="exportpdf()" >
+              Download
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-body" style="
+      height: 400px;
+      overflow-y: scroll;
+  ">
+        <div> -->
+          <div style="position: absolute; left: -1000px; top: 500px;">
+          <kendo-pdf-export #pdflist [keepTogether]="keepTogether" forcePageBreak=".page-break" paperSize="A4"
+            margin="0.5cm">
+            <div style="width: 730px;">
+            <div class="row">
+              <div class="col-lg-10">
+                <h4 class="mt-2  font-weight-bold"> Payroll Report</h4>
+              </div>
+              <div class="col-lg-1 font-weight-bold">
+                {{today| date:'MM/dd/yyyy'}}
+              </div>
+            </div>
+            <div *ngFor="let val of payrollReport;let i=index">
+              <div class="row">
+                <div class="col pr-0" style=" max-width: 15%;-webkit-box-flex: 0;
+                flex: 0 0 15%">Employee Name :</div>
+                <div class="col pl-0">{{val.employeeName}}</div>
+              </div>
+              <div class="row">
+               
+                    <div class="col pr-0" style="max-width: 18%;-webkit-box-flex: 0;
+                    flex: 0 0 18%">Employee PayRoll ID :</div>
+                    <div class="col pl-0">{{val.employeeParollId}}</div>
+                  
+                </div>
+
+              
+
+              <h5 class="mt-2  font-weight-bold">Hours Details </h5>
+              <div class="row" style=" border-bottom: 1px solid #000;">
+                <div class="col-lg-3 font-weight-bold">
+                  Week
+                </div>
+                <div class="col-lg-3 font-weight-bold">
+                 Total  Hours
+                </div>
+                <div class="col-lg-3 font-weight-bold">
+                  Exceeded Hours
+                </div>
+                <div class="col-lg-3 font-weight-bold">
+                  Amount
+                </div>
+              </div>
+              <ng-container *ngFor="let hour of val.weeklyHours">
+                <div class="row" >
+                  <div class="col-lg-3">
+                    {{hour.name}}
+                  </div>
+                  <div class="col-lg-3 ">
+                    {{hour.hours}}
+                  </div>
+                  <div class="col-lg-3 ">
+                    {{hour.exceeded_hour}}
+                  </div>
+                  <div class="col-lg-3 ">
+                    {{hour.grosstotal}}
+                  </div>
+                </div>
+              </ng-container>
+              <div class="row" style=" border-top: 1px solid #000;">
+                <div class="col-lg-3">
+                
+                </div>
+                <div class="col-lg-3 ">
+                  {{val.totalHours}}
+                </div>
+                <div class="col-lg-3 ">
+                  {{val.exceed_hours}}
+                </div>
+                <div class="col-lg-3 ">
+                  {{val.grosstotal}}
+                </div>
+              </div>
+              <h5 class="mt-2  font-weight-bold">Service Details</h5>
+              <div class="row" style=" border-bottom: 1px solid #000;">
+                <div class="col-lg-3 font-weight-bold">
+                  service
+                </div>
+                <div class="col-lg-3 font-weight-bold">
+                 Total  Hours
+                </div>
+                <div class="col-lg-3 font-weight-bold">
+                Pay Rate
+                </div>
+                <div class="col-lg-3 font-weight-bold">
+                  Amount
+                </div>
+              </div>
+              <ng-container *ngFor="let service of val.serviceHours">
+                <div class="row " >
+                  <div class="col-lg-3 ">
+                    {{service.name}}
+                  </div>
+                  <div class="col-lg-3 ">
+                    {{service.hours}}
+                  </div>
+                  <div class="col-lg-3 ">
+                    {{service.grosspayrate}}
+                  </div>
+                  <div class="col-lg-3 ">
+                    {{service.payAmount}}
+                  </div>
+                </div>
+              </ng-container>
+              <div class="row" style=" border-top: 1px solid #000;">
+                <div class="col-lg-3">
+                
+                </div>
+                <div class="col-lg-3 ">
+                  {{val.totalHours}}
+                </div>
+                <div class="col-lg-3">
+               
+                </div>
+                <div class="col-lg-3 ">
+                  {{val.grosstotal}}
+                </div>
+              </div>
+              <ng-container *ngFor="let record of val.recordslst">
+                <h5 class="mt-2  font-weight-bold">  {{record.name}} </h5>
+
+                
+
+                <h5 class="mt-3  font-weight-bold">   Service Details </h5>
+                <div class="row " style=" border-bottom: 1px solid;">
+                 
+                  <div class="col-lg-3 font-weight-bold">Service</div>
+                  <div class="col-lg-3 font-weight-bold">Hours</div>
+                  <div class="col-lg-3 font-weight-bold">Charge</div>
+                  <div class="col-lg-3 font-weight-bold">Amount</div>
+                </div>
+                 <div class="row" *ngFor="let val2 of record.serviceHours">
+                  <div class="col-lg-3">{{val2.name}}</div>
+                  <div class="col-lg-3 ">{{val2.hours}}</div>
+                  <div class="col-lg-3">{{val2.grosspayrate}}</div>
+                  <div class="col-lg-3 ">{{val2.payAmount}} </div>
+                </div>
+
+                <div class="row " style=" border-top: 1px solid  #000;">
+                  <div class="col-lg-3 "></div>
+                  <div class="col-lg-3 ">{{record.hours}}</div>
+                  <div class="col-lg-3 "></div>
+                  <div class="col-lg-3 ">{{record.totalAmount}}</div>
+                </div>
+                <h5 class="mt-2  font-weight-bold">   Overall Details </h5>
+              <div class="row" style=" border-bottom: 1px solid;">
+                <div class="col-lg-2 font-weight-bold">Client</div>
+                <div class="col-lg-2 font-weight-bold">service Date</div>
+                <div class="col-lg-2 font-weight-bold">Service</div>
+                <div class="col-lg-2 font-weight-bold">Hours</div>
+                <div class="col-lg-2 font-weight-bold">Charge</div>
+                <div class="col-lg-2 font-weight-bold">Amount</div>
+              </div>
+             
+              <div class="row" *ngFor="let val1 of record.records">
+                <div class="col-lg-2">{{val1.clientName}}</div>
+                <div class="col-lg-2 ">{{val1.timesheetDate| date:'MM/dd/yyyy'}}</div>
+                <div class="col-lg-2">{{val1.serviceCode}}</div>
+                <div class="col-lg-2  ">{{val1.totalhrs}}</div>
+                <div class="col-lg-2 ">{{val1.grosspayrate}}</div>
+                <div class="col-lg-2 ">{{val1.totalAmount}} </div>
+              </div>
+              <div class="row " style=" border-top: 1px solid  #000;">
+                <div class="col-lg-2 "></div>
+                <div class="col-lg-2 "></div>
+                <div class="col-lg-2 "></div>
+                <div class="col-lg-2 ">{{record.hours}}</div>
+                <div class="col-lg-2 "></div>
+                <div class="col-lg-2 ">{{record.totalAmount}}</div>
+              </div>
+              </ng-container>
+            
+              <span class="page-break" *ngIf="i!=payrollReport.length-1"></span>
+            </div>
+            </div>
+          </kendo-pdf-export>
+        </div>
+        <!-- </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn blue-btn btn-sm" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+
+<div style="position: absolute; left: -1000px; top: 500px;">
+  <kendo-pdf-export #pdflist1 [keepTogether]="keepTogether" forcePageBreak=".page-break" paperSize="A4"
+    margin="0.5cm">
+    <div style="width: 730px;">
+    <div class="row">
+      <div class="col-lg-10">
+        <h4 class="mt-2  font-weight-bold"> Payroll Report</h4>
+      </div>
+      <div class="col-lg-1 font-weight-bold">
+        {{today| date:'MM/dd/yyyy'}}
+      </div>
+    </div>
+    <table>
+    <tbody>
+      <ng-container *ngFor="let element of Printdata">
+        <tr style="border:solid #000 !important; border-width:1px 0 0 1px !important;">
+        <ng-container *if="element?.id != null">
+          <td style="text-align: right;font-weight: 600;border:solid #000 !important;border-width:0 1px 1px 0 !important;">{{element?.id }}</td>
+        </ng-container>
+        
+       <td style="text-align: left;font-weight: 600;border:solid #000 !important;border-width:0 1px 1px 0 !important;"> {{element?.employeeName}} </td>
+      <td style="text-align: left;font-weight: 600;border:solid #000 !important;border-width:0 1px 1px 0 !important;"> {{element?.payDate}} </td>
+      <td style="text-align: left;font-weight: 600;border:solid #000 !important;border-width:0 1px 1px 0 !important;"> {{element?.totalWorkedHrs}} </td>
+      <td style="text-align: left;font-weight: 600;border:solid #000 !important;border-width:0 1px 1px 0 !important;">{{element?.totalAmount}} </td>
+      </tr>
+    </ng-container>
+
+       </tbody>  </table>
+    </div>
+  </kendo-pdf-export>
+</div>

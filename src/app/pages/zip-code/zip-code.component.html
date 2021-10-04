@@ -1,0 +1,248 @@
+<!-- ////////////////////////////////////////////////////////////////////////////// -->
+
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+        <h4 class="mb-0 font-header">Zip Code</h4>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <!-- <div class="row alert ml-3 mt-2 mr-3 alert-danger text-dark" *ngIf="deleteAlert==true">
+          <strong>{{deleteError}}</strong>
+        </div> -->
+          <div class="row d-lg-none">
+              <div class="col">
+                <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal"  (click)="ZipCreate('new')">Add
+                  Zip Code</button>
+              </div>
+              <div class="col text-right">
+              <button type="button" class="btn blue-btn btn-sm " (click)="Refresh()" >
+                  <i class="fa fa-repeat"> Refresh </i>
+                </button>
+              </div>
+          </div>
+        <div class="row no-gutters ">
+          
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-5 d-none d-lg-block  mt-1">
+                <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal" (click)="ZipCreate('new')">Add
+                  Zip Code</button>&nbsp;&nbsp;
+              </div>
+            
+              <div class="col-lg-4 col-md-6 col-sm-6 ol-xs-12 mt-2 aligned_form" no-padding>
+                <label>FilterBy </label>&nbsp;
+                <select [(ngModel)]="SearchColumn" class="form-control col-lg-6 col-md-6 col-sm-8 ol-xs-4" (ngModelChange)="setDefaultValue()">
+                  <option *ngFor="let item of filterItems | keyvalue" [ngValue]="item"> {{item.value}}</option>
+               
+                            
+                </select>
+              </div>
+              <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6 mt-2 aligned_form padding-0" *ngIf="SearchColumn.key!=''">
+                <label>{{SearchColumn.value}}</label>&nbsp;
+                <input (keydown)="onKeydown($event)" type="text" class="form-control col-lg-4 col-md-6 col-sm-8 ol-xs-6 "
+                  [(ngModel)]="SearchText" />&nbsp;&nbsp;
+                <button type="button" class="btn blue-btn btn-sm" (click)="Search()">
+                  Apply
+                </button>
+              
+              </div>
+              <div class="d-none d-lg-block col-lg-1 mt-1">
+               
+                <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()">
+                  <i class="fa fa-repeat"> </i>Refresh
+                </button>&nbsp;&nbsp;
+               
+               
+            </div>
+         
+            
+            </div>
+       
+   
+
+
+
+       
+      </div>
+    
+    </div>
+  </div>
+</div>
+<!-- ////////////////////////////////////////////////////////////////////////////// -->
+
+<div class="row mb-2">
+    <div class="col pl-0">
+        <div widget class="card border-0 box-shadow">
+            <div class="card-body  widget-body pt-2">
+
+                  <!-- Zip code table -->
+                  <ejs-grid #grid [dataSource]='data | async' [allowSorting]='true' [allowResizing]='true'
+                   allowPaging='true' [allowFiltering]='true' (dataStateChange)= 'dataStateChange($event)' [pageSettings]='initialPage' 
+                   [filterSettings]='filterOptions' (actionBegin)="onActionComplete($event)"   [showColumnChooser]= 'true'  (resizeStop)="onResize($event)">
+                    <e-columns>
+                      <e-column minWidth= 100 field="zipcode" headerText="Zipcode" type="number"></e-column>
+                      <e-column minWidth= 100 field="city" headerText="City" type="string">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 field="state" headerText="State" type="string">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 field="county" headerText="County" type="string">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 headerText="Actions" textAlign="center" [showInColumnChooser]='false'>
+                        <ng-template #template let-data>
+                          <button  class="btn btn-edit-table" (click)="ZipCreate('edit');selectZipdetails(data)" data-toggle="modal" data-target="#modal"><i class="fa fa-edit"></i></button> &nbsp;
+                          <button class="btn btn-delete-table" data-toggle="modal" data-target="#deletemodal" (click)="selectZipdetails(data)"><i class="fa fa-trash"></i></button>
+                        </ng-template>
+                      </e-column>
+                      <!--------------------------------table header icon---------------->
+                      <e-column width="50" [showInColumnChooser]='false'>
+                        <ng-template #headerTemplate let-data>
+                          <div>
+                          <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                          </div>
+                        </ng-template>
+                      </e-column>
+                    </e-columns>
+                  </ejs-grid>
+                    
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- create/update modal -->
+<span id="OpenModal1" data-target="#modal" data-toggle="modal"></span>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-header" id="exampleModalLabel" ><span
+            *ngIf="ModelType =='new'"> Create ZipCode</span> <span *ngIf="ModelType =='edit'">
+              Update ZipCode</span> </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="ZipcodeForm">
+            <div class="row">
+                <div class="col-lg-5">
+                  <label >ZipCode
+                    <sup class="super-script">&nbsp;*</sup></label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" (keypress)="numberOnly($event)" minlength="5" maxlength="10" class="form-control" formControlName="Zipcode" [(ngModel)]="zipcode.zipcode" name="Zip" (ngModelChange)="checkpopup('Zipcode')"/>
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+              *ngIf="!ZipcodeForm.get('Zipcode').valid && ZipcodeForm.get('Zipcode').touched">
+              <p>Please Enter Zipcode ...</p>
+            </span>
+              <div class="row">
+                <div class="col-lg-5">
+                  <label>City
+                    <sup class="super-script">&nbsp;*</sup>
+                  </label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" class="form-control" formControlName="City" [(ngModel)]="zipcode.city" name="City" (ngModelChange)="checkpopup('City')"/>
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+              *ngIf="!ZipcodeForm.get('City').valid && ZipcodeForm.get('City').touched ">
+              <p >Please Enter City ...</p>
+            </span>
+              <div class="row">
+                <div class="col-lg-5">
+                  <label >State</label>
+                  <sup class="super-script">&nbsp;*</sup>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" class="form-control"  maxlength ="2" formControlName="State" [(ngModel)]="zipcode.state" name="State" (ngModelChange)="checkpopup('State')"/>
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+              *ngIf="!ZipcodeForm.get('State').valid && ZipcodeForm.get('State').touched ">
+              <p>Please Enter State ...</p>
+            </span>
+            
+              <div class="row">
+                <div class="col-lg-5">
+                  <label >County
+                    <sup class="super-script">&nbsp;*</sup></label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" class="form-control" formControlName="County" [(ngModel)]="zipcode.county" name="county" (ngModelChange)="checkpopup('County')"/>
+                </div>
+              </div>
+              <span class="help-block text-danger text-center" 
+              *ngIf="!ZipcodeForm.get('County').valid && ZipcodeForm.get('County').touched ">
+              <p>Please Enter County ...</p>
+            </span>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn blue-btn btn-sm" (click)="SaveOrUpdateZip()"
+          [disabled]="!ZipcodeForm.valid"><span *ngIf="ModelType =='new'"> Save &
+            Close</span> <span *ngIf="ModelType =='edit'">Update & Close</span> </button>
+          <button  class="btn blue-btn btn-sm" (click)="openDialog()">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- DeleteModal -->
+<span id="OpenModal2" data-target="#deletemodal" data-toggle="modal"></span>
+<div class="modal fade" id="deletemodal" data-backdrop="static">
+  <div class="modal-dialog delete-zip" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <label>Do you want to delete this record ?</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn btn-sm" (click)="deleteZip()">Delete</button>
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================Cancel alert================================= -->
+<span id="cancelmodal" data-toggle="modal" data-target="#CloseModal"></span>
+<div class="modal fade primarymodal" id="CloseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" >Close</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+              You want to close without save?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn blue-btn btn-sm" (click)="closeAddUpdateModal()">Yes</button>
+            <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

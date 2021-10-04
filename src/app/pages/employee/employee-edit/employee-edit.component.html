@@ -1,0 +1,1599 @@
+<!--------------------------------------------------Employee Add and Update------------------------------------------>
+
+<form [formGroup]="EmployeeDataForm">
+
+    <div class="row mb-2">
+        <div class="col pl-0">
+            <div widget class="card border-0 box-shadow">
+                <div class="card-header transparent  text-muted">
+
+                    <div class="row" *ngIf="Employee.id==0">
+                        <div class="col-lg-6">
+                            <h4 class="mb-0 font-header">New Employee</h4>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="notealert">Note: * fields are mandatory</label>
+                        </div>
+
+                    </div>
+                    <div class="row" *ngIf="Employee.id!=0">
+                        <div class="col-lg-6">
+                            <h4 class="mb-0 font-header">Update Employee</h4>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="notealert"> Note: * fields are mandatory</label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-3 col-xs-4">
+                            <div class="row mt-1">
+                                <div class="col-lg-5 col-md-5 col-xs-5 buttonpaddinglr">
+                                    <label class="font-weight-bold">Status
+                                        <sup class="super-script">&nbsp;*</sup>
+                                    </label>
+                                </div>
+                                <div class="col-lg-7 col-md-7 col-xs-7 buttonpaddinglr">
+                                    <select class="form-control" [(ngModel)]="Employee.statusLid"
+                                        formControlName="StatusLid" (change)="EmployeeChange()">
+                                        <option [value]="i.Key" *ngFor="let i of EmployeestatusList">{{i.Value}}
+                                        </option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2  col-md-3 col-xs-4">
+                            <div class="row mt-1">
+                                <div class="col-lg-4  col-md-4 col-xs-4 buttonpaddinglr">
+
+                                    <label class="font-weight-bold">Location</label>
+                                </div>
+                                <div class="col-lg-7  col-md-7 col-xs-7 buttonpaddinglr">
+                                    <select class="form-control" [(ngModel)]="Employee.locationStatusLid"
+                                        formControlName="locationStatus" name="locationStatus"
+                                        (change)="EmployeeChange()">
+                                        <option [ngValue]=""></option>
+                                        <option [value]=loc.Key *ngFor="let loc of LocationList">{{loc.Value}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2  col-md-2" *ngIf="Employee.id==0">
+                            <div class="row mt-1 mr-1">
+
+                                <div class="col-lg-4"><button class="btn blue-btn btn-sm" type="button"
+                                        *ngIf="Employee.id==0" [disabled]="EmployeeDataForm.invalid
+                                        || (Employee.requiredEVV&& (Employee.username==null||Employee.username==undefined||
+                                        Employee.username==''||Employee.password==undefined||Employee.password==null||
+                                        Employee.password=='' ||passerror) )"
+                                        (click)="saveEmployee(Employee)" tabindex="27">Save</button></div>
+                                <div class="col-lg-4"> <button type="button" class="btn blue-btn btn-sm"
+                                        (click)="backfuction()" tabindex="28">Close</button>
+                                </div>
+                                <div class="col-4 col-md-4"> <button [disabled]="Employee.id==0" class="btn btnclass" class="btn blue-btn btn-sm"
+                                    (click)="Service()" data-toggle="modal" data-target="#serviceModal" type="button">Service</button></div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-3  col-md-4" *ngIf="Employee.id!=0">
+                            <div class="row mt-1">
+                                <div class="col-lg-6 col-md-6 col-md-8 col-xs-6 col-6  buttonpaddinglr">
+                                    <button class="btn blue-btn btn-sm butstyle" type="button" *ngIf="Employee.id!=0"
+                                        [disabled]="EmployeeDataForm.invalid||(Employee.loginUserId!=null && (Employee.requiredEVV&& (Employee.username==null||Employee.username==undefined||
+                                        Employee.username=='')))||  (Employee.loginUserId==null&& (Employee.requiredEVV&& (Employee.username==null||Employee.username==undefined||
+                                        Employee.username==''||Employee.password==undefined||Employee.password==null||
+                                        Employee.password=='' ||passerror) ))"
+                                        (click)="saveEmployee(Employee)" tabindex="27" >Update &
+                                        Close</button>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-xs-3 col-3 "> <button type="button"
+                                        class="btn blue-btn btn-sm" (click)="backfuction()" tabindex="28">Close</button></div>
+                                <div class="col-3 col-md-3 col-xs-3 col-3"> <button class="btn btn-sm blue-btn"
+                                    (click)="Service()" data-toggle="modal" [disabled]="Employee.id==0" data-target="#serviceModal" type="button">Service</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-lg-5 ">
+                            <div class="row mt-1">
+
+                                <div class="col-lg-5 col-md-5 col-xs-5 col-5 " *ngIf="fp.EOB_OnboardCheckList">
+                                    <button class="btn blue-btn btn-sm butstyle" type="button" data-toggle="modal"
+                                        data-target="#onBoard" (click)="getOnboarddata()"
+                                        [disabled]="Employee.id==0" >Onboard
+                                        Checklist</button>
+                                        <!-- *ngIf="fp.EOB_OnboardCheckList &&(fp.onboardtype1 || fp.onboardtype2)" -->
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-xs-3 col-3 butstyle"> <button
+                                        class="btn blue-btn btn-sm" data-target="#clientEmployeeRelationship"
+                                        data-toggle="modal" type="button" (click)="getrelation();enablerelation=true"
+                                        [disabled]="Employee.id==0">Relationships</button></div>
+
+
+
+                                <div class="col-lg-4 col-md-4 col-xs-4 col-4 pr-0"> <button
+                                        class="btn blue-btn btn-sm" type="button" data-toggle="modal"
+                                        data-target="#keystatysmodal" [disabled]="Employee.id==0">Key
+                                        Status/Dates</button></div>
+
+                            </div>
+
+
+
+                        </div>
+
+
+        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--------------------------------------------------Employee Add & Update--------------------------------------------------------------->
+
+    <div class="row mb-2">
+        <div class="col pl-0">
+
+            <div widget class="card border-0 box-shadow">
+                <div class="card-body  widget-body pt-2">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h6 class="info-header">General Info</h6>
+                            <hr style="margin-top: 0rem" />
+                            
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                                      <label class="label padding0 col-lg-5">First Name <sup class="super-script">&nbsp;*</sup></label>
+                                      <input class=" form-control" type="text" [(ngModel)]="Employee.firstName"
+                                      formControlName="FirstName" (change)="EmployeeChange()" tabindex="2" id="fname">
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                    <label class="label col-lg-5 padding0">Middle Name</label>
+                                    <input class=" form-control" type="text" [(ngModel)]="Employee.middleName"
+                                    formControlName="MiddleName" (change)="EmployeeChange()"  tabindex="2">
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label  col-lg-2 padding0">Street</label>
+                                      <input class=" form-control" type="text" [(ngModel)]="Employee.street"
+                                        formControlName="Street" (change)="EmployeeChange()"  tabindex="14">
+                                    </div>
+                                    <!-- <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label  col-lg-4  padding0">DOB<sup class="super-script">&nbsp;*</sup></label>
+                                      <my-date-picker  class="col-lg-8 col-md-6 col-sm-12  col-xs-12" [options]="myDatePickerOptionsDOB" [selDate]="intakeList.dOB"   formControlName="dOB"
+                                      placeholder="mm/dd/yyyy" 
+                                      (inputFieldChanged)="newdates($event,'inputchage','DOB');"
+                                        (dateChanged)="newdates($event,'datechagned','DOB');valuechangefunction('DOB')"  [disabled]="isRej || isApproved"  (focusout)="calculateAge(intakeList)"  >
+                                    </my-date-picker>
+                                    </div> -->
+                                </div>
+                                  <div class="row mt-1">
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                                      <label class="label padding0 col-lg-5">Last Name <sup class="super-script">&nbsp;*</sup></label>
+                                      <input class=" form-control" type="text" [(ngModel)]="Employee.lastName"
+                                      formControlName="LastName" (change)="EmployeeChange()"  tabindex="3">
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                    <label class="label col-lg-5 padding0">DOB<sup class="super-script">&nbsp;*</sup></label>
+                                    <my-date-picker [options]="myDatePickerOptions" style="width: 300%;" formControlName="EDob"
+                                    [selDate]="Employee.dob" placeholder="mm/dd/yyyy" id="dob"
+                                    (inputFieldChanged)="newdates($event,'inputchage','dob')"
+                                    (dateChanged)="newdates($event,'datechagned','dob')"  tabindex="4"  (keyup.Tab)="onKey($event,'lastname')" (keydown.Tab)="onKey($event,'gender')">
+                                </my-date-picker>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label  col-lg-4 padding0">APT</label>
+                                      <input class=" form-control" type="text" [(ngModel)]="Employee.apt"
+                                      formControlName="Apt" (change)="EmployeeChange()"  tabindex="15">
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label  col-lg-4  padding0">Email</label>
+                                      <input class=" form-control" type="text" [(ngModel)]="Employee.email"
+                                      formControlName="Email" (change)="EmployeeChange()"  tabindex="16">
+                                    </div>
+                                  </div>
+                                  <div class="row mt-1">
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                                      <label class="label padding0 col-lg-5">Gender<sup class="super-script">&nbsp;*</sup></label>
+                                      <select class=" form-control" [(ngModel)]="Employee.genderLid"
+                                      formControlName="GenderLid" (change)="EmployeeChange()"  tabindex="6">
+                                      <option></option>
+                                      <option *ngFor="let val of GenderList" [value]="val.Key">
+                                          {{val.Value}}
+                                      </option>
+                                  </select>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                    <label class="label col-lg-5 padding0">Age</label>
+                                    <input class=" form-control" type="text" [(ngModel)]="Employee.age"
+                                    formControlName="Age" (change)="EmployeeChange()"  tabindex="7">
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label  col-lg-4 padding0">Phone1</label>
+                                      <input class=" form-control" type="text" [(ngModel)]="Employee.phone1"
+                                      formControlName="Phone1" (change)="EmployeeChange()" (keypress)="keyPress($event)"
+                                      (ngModelChange)="DemographicPhoneFormat1()" minlength="14"
+                                      maxlength="14"  tabindex="17">
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label  col-lg-4  padding0">Phone2</label>
+                                      <input class=" form-control" type="text" [(ngModel)]="Employee.phone2"
+                                      formControlName="Phone2" (change)="EmployeeChange()" (keypress)="keyPress($event)"
+                                      (ngModelChange)="DemographicPhoneFormat2()" minlength="14"
+                                      maxlength="14"  tabindex="18">
+                                    </div>
+                                  </div>
+                                  <div class="row mt-1">
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                                      <label class="label padding0 col-lg-5">Type<sup class="super-script">&nbsp;*</sup></label>
+                                      <select class="form-control" [(ngModel)]="Employee.employeeTypeLid"
+                                      formControlName="EmployeeTypeLid" (change)="EmployeeChange()"  tabindex="8">
+                                      <option> </option>
+                                      <option *ngFor="let val of  EmployeeTypeList" [value]="val.Key">
+                                          {{val.Value}}</option>
+                                  </select>
+                                 
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                    <label class="label col-lg-5 padding0">AKA</label>
+                                    <input class="form-control" type="text" [(ngModel)]="Employee.aka"
+                                    formControlName="Aka" (change)="EmployeeChange()"  tabindex="9">
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label  col-lg-4 padding0">City</label>
+                                      <input class=" form-control" type="text" [(ngModel)]="Employee.city"
+                                                formControlName="City" (change)="EmployeeChange()"  tabindex="19">
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label  col-lg-4  padding0">State</label>
+                                      <!-- <input class=" form-control" type="text" [(ngModel)]="Employee.steet"
+                                      formControlName="Steet" (change)="EmployeeChange()"  tabindex="20"> -->
+                                      <ng-select [items]="stateList" class="w-100"  formControlName="Steet" [searchable]="true" [clearable]="true" bindLabel="name"
+                                      bindValue="abbreviation"   tabindex="20" [(ngModel)]="Employee.steet">
+                                    </ng-select>
+                                    </div>
+                                  </div>
+                                  <div class="row mt-1">
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                                      <label class="label padding0 col-lg-5">RN NPI</label>
+                                      <input class="form-control" type="text" [(ngModel)]="Employee.rnnpi"
+                                      formControlName="Rnnpi" (change)="EmployeeChange()" minlength=10 maxlength=10 tabindex="10">
+                                      <span class="help-block text-danger text-center"
+                                      *ngIf="!EmployeeDataForm.get('Rnnpi').valid && EmployeeDataForm.get('Rnnpi').touched"  >
+                                      <p>Enter Valid  RN NPI Number</p>
+                                    </span>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                    <label class="label col-lg-6 padding0">Marital Status</label>
+                                    <ng-container *ngFor=" let val of WithHoldingList">
+                                        <input type="radio" [value]="val.Key" class="mt-1"
+                                            [(ngModel)]="Employee.maritalStatusLid"
+                                            formControlName="Maritalstatus"
+                                            (change)="EmployeeChange()"  tabindex="11"/>{{val.Value}}
+                                    </ng-container>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label  col-lg-4 padding0">County</label>
+                                      <input class=" form-control" type="text" [(ngModel)]="Employee.county"
+                                      formControlName="County" (change)="EmployeeChange()"  tabindex="21">
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                      <label class="label  col-lg-4  padding0">Zip code</label>
+                                     
+                                        <input class=" form-control  col-lg-5" type="text" minlength="5" maxlength="10"
+                                            [(ngModel)]="Employee.zipcode" formControlName="Zipcode"
+                                            (change)="EmployeeChange()"  tabindex="22">
+                                  
+                                  
+                                        <button type="button" class=" form-control col-lg-3" [disabled]="Employee.street==null||
+                                        Employee.street==undefined|| Employee.street==''||Employee.city==null||Employee.city==undefined
+                                        ||Employee.city==''||Employee.steet==null||Employee.steet==undefined||Employee.steet==''"
+                                            class="btn blue-btn btn-sm" (click)="getZip()"  tabindex="23">Get
+                                            Zip</button>
+                                  
+                                    </div>
+                                  </div>
+                                  <div class="row mt-1">
+                                    
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form"> 
+                                      <label class="label padding0 col-lg-5">UMPI</label>
+                                      <input class="form-control" type="text" [(ngModel)]="Employee.umpi"
+                                      formControlName="Umpi" (change)="EmployeeChange()" minlength=10 maxlength=10  tabindex="12">
+                                      
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 aligned_form">                       
+                                        <button type="button" class="btn blue-btn btn-sm" data-toggle="modal"
+                                        data-target="#SSNModel"  tabindex="13">SSN</button>
+                                    </div>
+                                   
+                                    
+                                  </div>
+                                  <div class="row">
+                                    <span class="help-block text-danger text-center ml-5"
+                                    *ngIf="!EmployeeDataForm.get('Umpi').valid && EmployeeDataForm.get('Umpi').touched" >
+                                    <p>Enter Valid UMPI Number</p>
+                                  </span></div>
+                                <!-- <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-5">
+                                            <label class="label-bold padding0"> First Name <sup
+                                                    class="super-script">&nbsp;*</sup></label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.firstName"
+                                                formControlName="FirstName" (change)="EmployeeChange()">
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!-- <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold padding0"> Middle Name</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.middleName"
+                                                formControlName="MiddleName" (change)="EmployeeChange()">
+                                        </div>
+
+                                    </div>
+                                </div> -->
+                            </div>
+
+                            <!-- <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold padding0"> Last Name <sup
+                                                    class="super-script">&nbsp;*</sup></label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.lastName"
+                                                formControlName="LastName" (change)="EmployeeChange()">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold padding0"> DOB<sup
+                                                    class="super-script">&nbsp;*</sup></label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <my-date-picker [options]="myDatePickerOptions" formControlName="EDob"
+                                                [selDate]="Employee.dob" placeholder="mm/dd/yyyy"
+                                                (inputFieldChanged)="newdates($event,'inputchage','dob')"
+                                                (dateChanged)="newdates($event,'datechagned','dob')">
+                                            </my-date-picker>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold padding0"> Gender<sup
+                                                    class="super-script">&nbsp;*</sup></label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select class=" form-control" [(ngModel)]="Employee.genderLid"
+                                                formControlName="GenderLid" (change)="EmployeeChange()">
+                                                <option></option>
+                                                <option *ngFor="let val of GenderList" [value]="val.Key">
+                                                    {{val.Value}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold padding0">Age</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.age"
+                                                formControlName="Age" (change)="EmployeeChange()">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold padding0"> Type<sup
+                                                    class="super-script">&nbsp;*</sup></label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <select class="form-control" [(ngModel)]="Employee.employeeTypeLid"
+                                                formControlName="EmployeeTypeLid" (change)="EmployeeChange()">
+                                                <option> </option>
+                                                <option *ngFor="let val of  EmployeeTypeList" [value]="val.Key">
+                                                    {{val.Value}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold padding0">AKA</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" type="text" [(ngModel)]="Employee.aka"
+                                                formControlName="Aka" (change)="EmployeeChange()">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold padding0">RN NPI</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" type="text" [(ngModel)]="Employee.rnnpi"
+                                                formControlName="Rnnpi" (change)="EmployeeChange()" minlength=10 maxlength=10>
+                                                <span class="help-block text-danger text-center"
+                                                *ngIf="!EmployeeDataForm.get('Rnnpi').valid && EmployeeDataForm.get('Rnnpi').touched">
+                                                <p>Enter Valid  RN NPI Number</p>
+                                              </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-6">
+                                            <label class="label-bold padding0">Marital status</label>
+
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <ng-container *ngFor=" let val of WithHoldingList">
+                                                <input type="radio" [value]="val.Key"
+                                                    [(ngModel)]="Employee.maritalStatusLid"
+                                                    formControlName="Maritalstatus"
+                                                    (change)="EmployeeChange()" />{{val.Value}}
+                                            </ng-container>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold padding0 ">UMPI</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" type="text" [(ngModel)]="Employee.umpi"
+                                                formControlName="Umpi" (change)="EmployeeChange()" minlength=10 maxlength=10>
+                                                <span class="help-block text-danger text-center"
+                                                *ngIf="!EmployeeDataForm.get('Umpi').valid && EmployeeDataForm.get('Umpi').touched">
+                                                <p>Enter Valid UMPI Number</p>
+                                              </span>
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <button type="button" class="btn blue-btn btn-sm" data-toggle="modal"
+                                        data-target="#SSNModel">SSN</button>
+                                </div>
+                            </div> -->
+                        </div>
+                        <!-- <div class="col-lg-6">
+                            <h6 class="info-header">Contact Info</h6>
+                            <hr style="margin-top: 0rem" />
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <label class="label-bold"> Street</label>
+
+                                </div>
+                                <div class="col-lg-10">
+                                    <input class=" form-control" type="text" [(ngModel)]="Employee.street"
+                                        formControlName="Street" (change)="EmployeeChange()">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold"> APT</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.apt"
+                                                formControlName="Apt" (change)="EmployeeChange()">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold"> Email<sup
+                                                class="super-script">&nbsp;*</sup></label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.email"
+                                                formControlName="Email" (change)="EmployeeChange()">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold"> Phone1</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.phone1"
+                                                formControlName="Phone1" (change)="EmployeeChange()" (keypress)="keyPress($event)"
+                                                (ngModelChange)="DemographicPhoneFormat1()" minlength="14"
+                                                maxlength="14">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold"> Phone2</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.phone2"
+                                                formControlName="Phone2" (change)="EmployeeChange()" (keypress)="keyPress($event)"
+                                                (ngModelChange)="DemographicPhoneFormat2()" minlength="14"
+                                                maxlength="14">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold"> City</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.city"
+                                                formControlName="City" (change)="EmployeeChange()">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold"> State</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.steet"
+                                                formControlName="Steet" (change)="EmployeeChange()">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold"> County</label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <input class=" form-control" type="text" [(ngModel)]="Employee.county"
+                                                formControlName="County" (change)="EmployeeChange()">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="label-bold"> Zip Code </label>
+
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <input class=" form-control" type="text" minlength="5" maxlength="10"
+                                                        [(ngModel)]="Employee.zipcode" formControlName="Zipcode"
+                                                        (change)="EmployeeChange()">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <button type="button" class=" form-control" [disabled]="Employee.street==null||
+                                                    Employee.street==undefined|| Employee.street==''||Employee.city==null||Employee.city==undefined
+                                                    ||Employee.city==''||Employee.steet==null||Employee.steet==undefined||Employee.steet==''"
+                                                        class="btn blue-btn btn-sm" (click)="getZip()">Get
+                                                        Zip</button>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                           
+                        </div> -->
+                 
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h6 class="info-header">Login Info</h6>
+
+                            <hr style="margin-top: 0rem" />
+                        </div>
+                    </div>
+                    <div class="row">
+                      
+                            
+                                <div class="col-lg-3">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <label
+                                            class="font-weight-bold  mr-3">User
+                                                Name
+                                                <sup class="super-script" *ngIf="Employee.requiredEVV">&nbsp;*</sup></label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input type="text" class="form-control" [(ngModel)]="Employee.username" name="username"
+                                                formControlName="username" [disabled]="!Employee.requiredEVV" tabindex="24">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3" *ngIf="Employee.loginUserId==null">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <label
+                                            class="font-weight-bold ">Password
+                                                <sup class="super-script" *ngIf="Employee.requiredEVV">&nbsp;*</sup></label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input type="password" class="form-control"
+                                                [(ngModel)]="Employee.password" name="Password" formControlName="Password"
+                                                (keyup)="passvalid($event)" [disabled]="!Employee.requiredEVV" tabindex="25">
+                                        </div>
+                                    </div>
+                                </div>
+                               
+
+
+                            
+                       
+                       
+                                  
+                                        <div class="col-lg-2" *ngIf="Employee.loginUserId!=null&&Employee.id!=0"> 
+                                            <button class="btn blue-btn btn-sm" type="button" 
+                                                data-target="#Reset_Confirmation" data-toggle="modal" [disabled]="!Employee.requiredEVV">
+                                                Reset Password</button>
+                                        </div>
+                                        <div class="custom-control custom-switch col-lg-2">
+                                            <input type="checkbox" class="custom-control-input" id="customSwitch1" [(ngModel)]="Employee.requiredEVV"
+                                            (change)="switchchange()" [ngModelOptions]="{standalone: true}"  tabindex="26" >
+                                            <label class="custom-control-label" for="customSwitch1">Evv</label>
+                                          </div>
+                                  
+
+                       
+                    </div>
+                    <div class="row">
+                        <label class="ml-1 notealert"><i>Note:&nbsp;Password should contain atleast 8 characters/
+                        digits includes 1 special character, 1 lower and uppercase characters
+                        </i></label>
+                      </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+  
+</form>
+
+<!-- ---------------------------------------Service---------------------------------------------------------- -->
+<div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header col-lg-7" id="exampleModalLabel" >Service</h5>
+                <button type="button"  class="btn blue-btn btn-sm col-lg-4" data-toggle="modal" data-target="#configureService" (click)="CreateupdateServiceActivity('new');">
+                    Configure Service
+                </button>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table table-sm table-hover table-bordered">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                <th class="pointer">S.No</th>
+                                <th>Service</th>
+                                <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="row1" *ngFor="let s of serviceData;let i=index">
+                                    <td style="text-align:right">
+                                        {{i+1}}
+                                    </td>
+                                    <td >
+                                        {{s.masterServiceName}}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-edit-table"  data-toggle="modal" data-target="#configureService"  (click)="CreateupdateServiceActivity('edit');selectdetailsservAct(s)"><i class="fa fa-edit fa-lg"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div *ngIf="servieenable" class="text-primary text-center">
+                            No Data Available!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm blue-btn"  data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<span data-target="#configureService" data-toggle="modal" id="configservice"></span>
+<div class="modal fade" id="configureService" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-sa" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" ><span
+                    *ngIf="ModalType =='new'"> Create ServiceActivity</span> <span *ngIf="ModalType =='edit'">Update ServiceActivity</span> </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Service Type</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <select [(ngModel)]="ServiceActivityArray1.masterServiceId" class="form-control" (ngModelChange)="getActivityTypeSatus(ServiceActivityArray1.masterServiceId)">
+                            <option></option>
+                            <option *ngFor="let service of masterServiceList" [value]="service.Key">{{service.Value}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="example-container">
+                            <label>Available Activities</label>
+                            <div cdkDropList #doneList="cdkDropList" class="example-list" [cdkDropListData]="availableActivities"
+                            (cdkDropListDropped)="drop($event);checkpopServiceActivity()" [cdkDropListConnectedTo]="[todoList]">
+                                <div *ngIf="availableActivities.length == 0 && ModalType == 'new'">
+                                    <p>Select service to view activities</p>
+                                </div> 
+                                <div *ngIf="availableActivities.length == 0 && ModalType == 'edit'">
+                                    <p>No data available!</p>
+                                </div> 
+                                <div *ngIf="availableActivities.length != 0">
+                                    <div class="example-box" *ngFor="let item of availableActivities" cdkDrag>
+                                    {{ item.Value }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="example-container">
+                            <label>Selected Activities</label>
+                            <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="selectedActivities"
+                                [cdkDropListConnectedTo]="[doneList]" class="example-list" (cdkDropListDropped)="drop($event);checkpopServiceActivity()">
+                                <div *ngIf="selectedActivities.length == 0">
+                                    <p>No data available!</p>
+                                </div>
+                                <div *ngIf="selectedActivities.length != 0">
+                                    <div class="example-box" *ngFor="let item of selectedActivities" cdkDrag>
+                                    {{ item.Value }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn blue-btn btn-sm"[disabled]="(ServiceActivityArray1.masterServiceId ==null || ServiceActivityArray1.masterServiceId== undefined)|| selectedActivities.length==0" (click)="SaveOrUpdateServiceActivity(ServiceActivityArray1)"><span *ngIf="ModalType =='new'"> Save &
+                    Close</span> <span *ngIf="ModalType =='edit'">Update & Close</span> </button>
+                <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--------------------------------------------------Keys status and Dates--------------------------------------------->
+<div class="modal fade " id="keystatysmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Key Status/Dates</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label class="label-bold"> Hire Date</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <my-date-picker [options]="Keystatusoption" [selDate]="Employee.hiredate"
+                            placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','hiredate')"
+                            (dateChanged)="newdates($event,'datechagned','hiredate')">
+                        </my-date-picker>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label class="label-bold"> Inactive Date</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <my-date-picker [options]="Keystatusoption" [selDate]="Employee.inactivedate"
+                            placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','inactivedate')"
+                            (dateChanged)="newdates($event,'datechagned','inactivedate')"
+                            [disabled]="Employee.hiredate==''">
+                        </my-date-picker>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label class="label-bold"> Term Date</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <my-date-picker [options]="Keystatusoption" [selDate]="Employee.terminationdate"
+                            placeholder="mm/dd/yyyy"
+                            (inputFieldChanged)="newdates($event,'inputchage','terminationdate')"
+                            (dateChanged)="newdates($event,'datechagned','terminationdate')"
+                            [disabled]="Employee.hiredate==''">
+                        </my-date-picker>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn" data-dismiss="modal">close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!----------------------------------------------------SSN Model-------------------------------------------------------->
+<div class="modal fade " id="SSNModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Social Security Number</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label class="label-bold">SSN&nbsp;:</label>
+                    </div>
+                    <div class="col-lg-10">
+                        <input type=" text" [(ngModel)]="Employee.ssn" class="form-control"
+                            (keypress)="keyPress($event)" minlength=9 maxlength=9 (change)="EmployeeChange()">
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn" data-dismiss="modal">close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--------------------------------------------------- Employee Tab----------------------------------------------------->
+<div class="row mb-2">
+    <div class="col pl-0">
+
+        <div widget class="card border-0 box-shadow">
+            <div class="card-body  widget-body pt-2 pl-1">
+                <section id="tabs" class="project-tab">
+                    <div >
+                        <div class="row">
+                            <div class="col-md-12">
+                                <nav>
+                                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                        <a class="nav-item nav-link " id="nav-payorRequiredIds-tab"
+                                            data-toggle="tab" href="#nav-payorRequiredIds" role="tab"
+                                            aria-controls="nav-payorRequiredIds" aria-selected="true"
+                                            (click)="tabchange('payor')"
+                                            [ngClass]="{'disabled':Employee.id===0,'mytab-inactive':activeTab!='payor','active':activeTab=='payor'}">Payor
+                                            Required
+                                            IDs</a>
+                                        <a class="nav-item nav-link" id="nav-payRate-tab" data-toggle="tab"
+                                            href="#nav-payRate" role="tab" (click)="enablePayRate()"
+                                            aria-controls="nav-profile" aria-selected="false"
+                                            (click)="tabchange('payrate')"
+                                            [ngClass]="{'disabled':Employee.id===0,'mytab-inactive':activeTab!='payrate','active':activeTab=='payrate'}">Pay
+                                            Rates</a>
+                                        <a class="nav-item nav-link" id="nav-payRollInformation-tab" data-toggle="tab"
+                                            href="#nav-payRollInformation" role="tab"
+                                            aria-controls="nav-payRollInformation" (click)="GetPayRollDetail()"
+                                            (click)="tabchange('payroll')" aria-selected="false"
+                                            [ngClass]="{'disabled':Employee.id===0,'mytab-inactive':activeTab!='payroll','active':activeTab=='payroll'}">Payroll
+                                            Information</a>
+                                        <a class="nav-item nav-link " id="nav-workHistory-tab" data-toggle="tab"
+                                            href="#nav-workHistory" role="tab" aria-controls="nav-workHistory"
+                                            (click)="tabchange('work')" aria-selected="false" (click)="getworkhistry()"
+                                            [ngClass]="{'disabled':Employee.id===0,'mytab-inactive':activeTab!='work','active':activeTab=='work'}">Work
+                                            History</a>
+                                        <a class="nav-item nav-link" id="nav-postEmployment-tab" data-toggle="tab"
+                                            href="#nav-postEmployment" role="tab" aria-controls="nav-postEmployment"
+                                            (click)="tabchange('post')" aria-selected="false"
+                                            [ngClass]="{'disabled':Employee.id===0,'mytab-inactive':activeTab!='post','active':activeTab=='post'}">Post
+                                            Employment
+                                            Info</a>
+
+                                    </div>
+                                </nav>
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane   " id="nav-payorRequiredIds" role="tabpanel"
+                                        aria-labelledby="nav-payorRequiredIds-tab"  [ngClass]="{'active':activeTab=='payor','show':activeTab=='payor'}">
+                                        <app-payor-required-ids-list *ngIf="isPayorRequiredEdit==false&&Employee.id!=0"
+                                            (IsViewEditpayorequired)="dataEmitfromChild($event)"
+                                            [employeeId]="Employee.id"></app-payor-required-ids-list>
+
+
+
+                                    </div>
+                                    <div class="tab-pane " id="nav-payRate" role="tabpanel"
+                                        aria-labelledby="nav-payRate-tab" [ngClass]="{'active':activeTab=='payrate','show':activeTab=='payrate'}">
+
+                                        <app-pay-rates-list *ngIf="isPayRateEdit==false&&Employee.id!=0"
+                                            (IsViewEditpayrate)="dataEmitfromPayrate($event)"
+                                            [payratevalueChange]="Employee.id"></app-pay-rates-list>
+
+                                    </div>
+                                    <!--------------------------------------------------pay Roll Information view------------------------------------------------------------>
+                                    <div class="tab-pane " id="nav-payRollInformation" role="tabpanel"
+                                        aria-labelledby="nav-payRollInformation-tab" [ngClass]="{'active':activeTab=='payroll','show':activeTab=='payroll'}">
+                                        <div class="row">
+
+                                            <div class="col-lg-3">
+                                                <div class="row">
+                                                    <label
+                                                        style="padding-top:8px;font-weight: 600;margin-left:25px;font-weight: bolder">Withholding
+                                                    </label>
+                                                </div>
+                                                <div style="margin-left: 15px;display:flex;" class="row"
+                                                    *ngFor="let with of WithHoldingList">
+                                                    <input type="radio" name="radio1"
+                                                        [(ngModel)]="payrollList.withHoldingLid"
+                                                        style="margin-left:5px;margin-top: 2px;" [value]="with.Key" />
+                                                    {{with.Value}}
+                                                </div>
+
+                                                <div class="row">
+                                                    <label
+                                                        style="padding-top:8px;font-weight: 600;margin-left:25px;font-weight: bolder">Exemptions
+                                                    </label>
+                                                    <input type="text"
+                                                        style="width:150px;margin-top:3px;margin-left:25px;"
+                                                        [(ngModel)]="payrollList.exemptions" class="form-control" />
+                                                </div>
+
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="row">
+
+                                                    <label
+                                                        style="padding-top:8px;font-weight: 600;margin-left:5px;font-weight: bolder">Paycheck
+                                                        Type </label>
+                                                </div>
+                                                <div style="margin-left: 15px" class="row"
+                                                    *ngFor="let i of PayCHeckType">
+                                                    <input type="radio" name="radio2"
+                                                        style="margin-left:5px;margin-top: 2px;"
+                                                        [(ngModel)]="payrollList.paycheckTypeLid"
+                                                        [(ngModel)]="payrollList.paycheckTypeLid" [value]="i.Key" />
+                                                    {{i.Value}}
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="row">
+                                                            <label
+                                                                style="padding-top:8px;font-weight: 600;;font-weight: bolder">Bank
+                                                                Rounting</label>
+
+                                                            <input type="text" style="width:260px;padding-top:8px;"
+                                                                [(ngModel)]="payrollList.bankRounting"
+                                                                class="form-control" />
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="row">
+                                                            <label
+                                                                style="padding-top:8px;font-weight: 600;margin-left:5px;font-weight: bolder">Account
+                                                                Number <sup style="color:red; font-size: 1.35em;
+                                                      top: 0em;">&nbsp;*</sup></label>
+
+                                                            <input type="text"
+                                                                style="width:260px;padding-top:8px;margin-left:5px;"
+                                                                class="form-control" (keypress)="keyPress($event)"
+                                                                [(ngModel)]="payrollList.accNumber" maxlength=16 />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="row" style="margin-top: 5px;
+                                                    margin-left: 5px">
+                                                    <label
+                                                        style="padding-top:8px;font-weight: 600;margin-left:5px;font-weight: bolder">Other
+                                                        Payroll
+                                                        Info</label>
+
+                                                    <input type="text"
+                                                        style="width:405px;padding-top:8px;;margin-left:5px;"
+                                                        class="form-control"
+                                                        [(ngModel)]="payrollList.otherPayrollInfo" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="row">
+                                                    <div class="col-lg-10">
+                                                        <div class="row">
+                                                            <label
+                                                                style="padding-top:8px;font-weight: 600;;font-weight: bolder">All
+                                                                Company Payroll ID # <sup style="color:red; font-size: 1.35em;
+                                                      top: 0em;">&nbsp;* &nbsp;</sup> </label>
+
+                                                            <input type="text" style="width:220px;padding-top:8px;"
+                                                                [(ngModel)]="payrollList.allCompanyPayrollID"
+                                                                (keypress)="keyPress($event)" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="row">
+                                                            <button [disabled]="payrollList.accNumber ==null||
+                                                    payrollList.accNumber =='undefined'||
+                                                    payrollList.accNumber =='' || payrollList.allCompanyPayrollID == null|| payrollList.allCompanyPayrollID== 'undefined'
+                                                    || payrollList.allCompanyPayrollID == ''"
+                                                                class="btn blue-btn btn-sm" style="margin:5px;"
+                                                                (click)="SavePayrolldata()">Save</button>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div *ngIf="workhistryEnable" class="tab-pane " id="nav-workHistory" role="tabpanel"
+                                        aria-labelledby="nav-workHistory-tab" [ngClass]="{'active':activeTab=='work','show':activeTab=='work'}">
+                                        <h6  class="tabheader"> Hiring / Termination History</h6>
+                                        <ejs-grid #keygrid  [allowResizing]='true'  [dataSource]='workHistryTable' [allowSorting]='true'
+                                            [allowFiltering]='true' [pageSettings]='initialPage'
+                                            [filterSettings]='filterOptions'>
+                                            <e-columns>
+                                                <e-column minWidth= 100 field="hiredate" headerText="Hiring Date" type="date" [format]='formatOptions'>
+                                                </e-column>
+                                                <e-column minWidth= 100 field="terminatedate" headerText="Termination Date" type="date" [format]='formatOptions'>
+                                                </e-column>
+
+                                            </e-columns>
+                                        </ejs-grid>
+                                    </div>
+                                    <div class="tab-pane " id="nav-postEmployment" role="tabpanel"
+                                        aria-labelledby="nav-postEmployment-tab" [ngClass]="{'active':activeTab=='post','show':activeTab=='post'}">
+                                        <h6
+                                            class="tabheader">
+                                            Information Collected After Employee Has Been Hired :
+                                        </h6>
+                                        <hr style="margin-top: 0rem" />
+                                        <div class="row">
+                                            <label
+                                                style="margin-top:5px;margin-left:25px;margin-right:3px;font-weight: bold">Primary
+                                                Job Category
+                                            </label>
+                                            <select style="width:128px;margin-left:5px" class="form-control"
+                                                [(ngModel)]="Employee.primaryJobId" (change)="EmployeeChange()">
+
+                                                <option [value]="i.Key" *ngFor="let i of jobLst">{{i.Value}}</option>
+
+
+                                            </select>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div calss="row">
+                                                    <label
+                                                        style="margin-top:5px;margin-left:10px;margin-right:3px;font-weight: bold">
+                                                        Race/Ethnicity
+                                                    </label>
+                                                </div>
+                                                <div calss="row">
+                                                    <label
+                                                        style="margin-top:5px;margin-left:10px;margin-right:3px;font-weight: 600">
+                                                        Select one
+                                                    </label>
+                                                </div>
+                                                <div calss="row">
+                                                    <select style="width:280px;margin-left:5px"
+                                                        [(ngModel)]="Employee.raceEthnicityLid" class="form-control"
+                                                        (change)="EmployeeChange()">
+
+                                                        <option [value]="i.Key" *ngFor="let i of raceLst">{{i.Value}}
+                                                        </option>
+                                                    </select>
+
+                                                </div>
+                                                <br />
+
+
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div calss="row">
+                                                    <label style="text-align: center" style="font-weight: bold;">
+                                                        Veteran/Disabled Veteran Status
+                                                    </label>
+                                                </div>
+                                                <div calss="row">
+                                                    <label style="margin-top:5px;margin-right:3px;font-weight: 600;">
+                                                        Are you a diasbled veteran or a veteran of the Vietnam era?
+                                                    </label>
+                                                </div>
+                                                <div class="row">
+                                                    <select style="width:158px;margin-left:15px" class="form-control"
+                                                        [(ngModel)]="Employee.veteranDisabledLid"
+                                                        (change)="EmployeeChange()">
+
+
+                                                        <option [value]="i.Key" *ngFor="let i of vetranDisabilityLst">
+                                                            {{i.Value}}</option>
+
+                                                    </select>
+
+                                                </div><br />
+
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div calss="row">
+                                                    <label style="text-align: center" style="font-weight: bold">
+                                                        Disability
+                                                    </label>
+                                                </div>
+                                                <div calss="row">
+                                                    <label style="margin-top:5px;margin-right:3px;font-weight: 600">
+                                                        Are you a person with a disability?
+                                                    </label>
+                                                </div>
+                                                <div class="row">
+                                                    <select style="width:158px;margin-left:15px" class="form-control"
+                                                        [(ngModel)]="Employee.disabilityLid"
+                                                        (change)="EmployeeChange()">
+
+                                                        <option [value]="i.Key" *ngFor="let i of disabilityLst">
+                                                            {{i.Value}}</option>
+
+                                                    </select>
+
+
+
+                                                </div><br />
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--------------------------------------------------OnBoard List------------------------------------------------------->
+<span id="openOnboard" data-toggle="modal" data-target="#onBoard"></span>
+<div class="modal fade  " id="onBoard" tabindex="-1" role="dialog " aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog modal-xl " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Onboard List</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="onboardtable">
+                    <!-- <nb-card-body style="padding: 0.5rem;"> -->
+                    <table class="table  table-hover table-bordered" style="margin-top: 3px;">
+                        <thead>
+                            <th class="pointer p-2">Checklist Options
+                            </th>
+                            <th class="pointer p-2">Completed(Yes/No)
+                            </th>
+                            <th class="pointer completedon p-2">Completed On
+                            </th>
+                            <th class="pointer completedon p-2">Expired On
+                            </th>
+                            <th class="pointer p-2">Upload File
+                            </th>
+                            <th class="pointer p-2" style="width:17%">Action
+                            </th>
+                        </thead>
+                        <tbody>
+
+
+
+                            <tr *ngFor="let item of onboardLst;let i=index">
+                                <td class="p-2">
+                                    {{item.onboardQuestion}}
+                                </td>
+                                <td style="text-align: center;" class="p-2">
+                                    <input id="i" class="checkbox checkbox-primary styled" type="checkbox"
+                                        [(ngModel)]="item.isCompleted" (change)="onboardvaluechange=true;onboard()">
+                                </td>
+                                <td class="p-2">
+                                    <!-- <input type="date" class="form-control" style="width:158px" [(ngModel)]="item.completedOn"
+                                placeholder="mm/dd/yyyy" /> -->
+                                    <my-date-picker [disabled]="!item.isCompleted" [options]="myDatePickerOptions"
+                                        [selDate]="item.completedOn" placeholder="mm/dd/yyyy"
+                                        (inputFieldChanged)="onBoarddates($event,'inputchage',item,'completedOn')"
+                                        (dateChanged)="onBoarddates($event,'datechagned',item,'completedOn')">
+                                    </my-date-picker>
+
+                                </td>
+                                <td class="p-2">
+                                    <!-- <input type="date" class="form-control" style="width:158px" [(ngModel)]="item.completedOn"
+                                placeholder="mm/dd/yyyy" /> -->
+                                    <my-date-picker [disabled]="!item.isCompleted" [options]="myDatePickerOptionsExpired"
+                                        [selDate]="item.expiredOn" placeholder="mm/dd/yyyy"
+                                        (inputFieldChanged)="onBoarddates($event,'inputchage',item,'ExpiredOn')"
+                                        (dateChanged)="onBoarddates($event,'datechagned',item,'ExpiredOn')">
+                                    </my-date-picker>
+
+                                </td>
+                                <td style="width:30%" class="p-2"> 
+                                    <div class="row" style="padding-left: 20px; padding-right: 20px;">
+                                        <input type="file" class="custom-file-input" id="customFile" name="filename"
+                                            style="margin-top: 3px;opacity: 1;width:68%"
+                                            (change)="onFileChanged($event.target.files,i)">
+                                        <!-- <label    *ngIf="selectedFileName==''" for="customFile">Choose file</label> -->
+                                        <!-- <label  *ngIf="selectedFileName !=''"  for="customFile">{{selectedUploadFileName}}</label> -->
+                                        <div class="col"> <button class="btn blue-btn btn-sm"
+                                                [disabled]="selectedFileName ==''||i!=selectedindex" style="float:right"
+                                                (click)="onUploadFile(onboardLst,i);onboard()"><i class="fa fa-upload fa-lg"
+                                                    style="font-size: 15px;"></i></button></div>
+                                    </div>
+                                </td>
+                                <td class="p-2">
+                                    <div class="row">
+                                        <div class="col-lg-8" > {{item.fileName}}</div>
+                                        <div class="col-lg-1" style="padding-right: 2px;"> <button class="btn blue-btn btn-sm"
+                                                [disabled]="item.fileName==null"
+                                                (click)="downloadonboardFile(item.uploadurl)"><i class="fa fa-download"
+                                                    style="font-size: 15px;"></i></button>
+                                        </div>
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <!-- </nb-card-body> -->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn" (click)="saveOnboardData()"> Save&close</button>
+                <button type="button" class="btn blue-btn"(click)="closeOnboard()">close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--------------------------------------------------Employee Client Relationship--------------------------------------->
+<div class="modal fade " *ngIf="enablerelation" id="clientEmployeeRelationship" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Employee-Client Relationship</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <app-relationship [ClientEmployeeRelation]="EmployeeRelation" *ngIf="relationenable" #relationId>
+            </app-relationship>
+            <div class="modal-footer">
+
+                <button class="btn blue-btn" type="button" data-toggle="modal" data-target="#AddEditRelationship" >Create
+                    New
+                    Relationship</button>&nbsp;&nbsp;
+                <button type="button" class="btn blue-btn" data-dismiss="modal"
+                    (click)="enablerelation=false">close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+     
+
+    
+<!---------------------------payor required Id edit and create-------------------------------------------------------------->
+
+<app-payor-required-ids-edit *ngIf="isPayorRequiredEdit==true&&editEmployeeId!=0"
+    (IsViewEditpayorequired)="dataEmitfromChild($event)" [payoRequiredViewEditdata]="payoRequiredViewEdit">
+</app-payor-required-ids-edit>
+
+<!---------------------------pay rate add and create------------------------------------------------------------------->
+
+<app-pay-rates-edit *ngIf="isPayRateEdit==true&&editEmployeeId!=0" (IsViewEditpayrate)="dataEmitfromPayrate($event)"
+    [payrateevntchange]="payrateview">
+
+</app-pay-rates-edit>
+
+<!---------------------------------------close Aleart-------------------------------------------------------------------->
+<span id="cancelmodal" data-toggle="modal" data-target="#CloseModal"></span>
+<div class="modal fade" id="CloseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Close</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                You want to close without save?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal" (click)="back()">Yes</button>
+                <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------------------OnBoard Alert---------------------------------------------------------------->
+
+<span id="onboardalert" data-toggle="modal" data-target="#onboardaleartmodal"></span>
+<div class="modal fade modalbackgrod" id="onboardaleartmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Close</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                You want to close without save?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn btn-sm" (click)="onboardclose()" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!---------------------------------------------Spinner -------------------------------------------------------------->
+<div class="spinnermodal" *ngIf="loading">
+
+
+    <span class="myspinner">
+
+
+    </span>
+
+
+</div>
+<!--==============================Reset Password Alert========================================================================-->
+<span id="Reset_Confirmation1" data-toggle="modal" data-target="#Reset_Confirmation"></span>
+<div class="modal fade " id="Reset_Confirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel" >Reset Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+        </div>
+        <div class="modal-body">
+          Do you want to reset your password?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn blue-btn"  data-toggle="modal" data-target="#ResetPwdmodal">Yes</button>
+          <button type="button" class="btn blue-btn" data-dismiss="modal" >No</button>
+<!-- -------------------------------------------------------------------------------------------------------------->
+  
+  <!-- ============================Reset Password Model========================================== -->
+  <span id="ResetPwdmodal1" data-toggle="modal" data-target="#ResetPwdmodal"></span>
+  <div class="modal fade " id="ResetPwdmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog"  role="document" data-backdrop="static">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel" >Password Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="resetPass">
+            <div class="row">
+              <div class="col-lg-2">
+                <label >Password<sup class="super-script">&nbsp;*</sup></label>
+              </div>
+              <div class="col-lg-5">
+                <input type="password" class="form-control" formControlName="Password" [(ngModel)]="ResetPassword" (keyup)="passvalid($event)" >
+                <span class="help-block text-danger text-center"
+                  *ngIf="!resetPass.get('Password').valid && resetPass.get('Password').touched">
+                  <p>Password is required</p>
+                </span>
+                <span class="help-block text-danger text-center"
+                  *ngIf="passerror && resetPass.get('Password').valid">
+                  <p>Enter valid password</p>
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+              <label ><i>Note:&nbsp;Password should contain atleast 8 characters/
+              digits includes 1 special character, 1 lower and uppercase characters
+              </i></label></div>
+            </div> 
+          </form> 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn blue-btn" [disabled]="!resetPass.valid ||passerror" (click)="ResetPasswrd('Success')">Save & Close</button>
+          <button type="button" class="btn blue-btn" data-dismiss="modal" data-target="#ResetPwdmodal">Close</button>
+        </div>
+      </div>
+  <!-- --------------------------------------- Configure Service---------------------------------------------------------- -->
+  <!-- <div class="modal fade" id="configureService" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-header" id="exampleModalLabel"   *ngIf="isServiceCreate && !isServiceUpdate">Service Configuration</h5>
+          <h5 class="modal-title font-header" id="exampleModalLabel"   *ngIf="!isServiceCreate && isServiceUpdate">Update Configuration</h5> 
+          <label class="text-primary"><i>Note:&nbsp;&nbsp;Drag and drop to add activities</i></label>
+        </div>
+        <div class="modal-body">
+            <div class="row" >
+              <div class="col-lg-12 aligned_from">
+                <label  class="font-header">Service Type</label>
+                <select class="form-control col-lg-6" [(ngModel)]="servName" (ngModelChange)="onServiceChange(servName)">
+                  <option *ngFor="let i of masterServiceList"  [ngValue]="i.id">{{i.masterServiceCode}}</option>
+                </select>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-lg-12 aligned_from">
+                <div class="row border-0 ml-2">
+                  <div class="col-lg-5">
+                 <label class="font-header">Available Activities</label>
+                  
+                 
+                  </div>
+               <div class="col-lg-1"></div>
+                 <div class="col-lg-5">
+                 <label class="font-header">Selected Activities</label>
+                 
+                
+                 </div>
+               </div>
+              
+              <div class="row border-0 ml-2 drag-drop-wrapper">
+             
+                <div class="col-lg-5 border">
+             
+                   <div class="listbox-control1" *ngIf="availableActivities.length != 0">
+                   <ejs-listbox [dataSource]="availableActivities" [allowDragAndDrop]="true" [fields]="setfield" scope="combined-list"></ejs-listbox>
+                   </div>
+                 <div *ngIf="availableActivities.length == 0 && !servName" >
+                   <p>Select service to view activities</p>
+                 </div> 
+                 <div *ngIf="availableActivities.length == 0 && servName" >
+                   <p>No data available</p>
+                 </div> 
+               
+                </div>
+             <div class="col-lg-1"></div>
+               <div class="col-lg-5 border">
+           
+                 <div class="listbox-control2" *ngIf="selectedActivities.length != 0">
+                   <ejs-listbox  [dataSource]="selectedActivities" [allowDragAndDrop]="true" [fields]="setfield" scope="combined-list"></ejs-listbox>
+                 </div>
+ 
+                <div *ngIf="selectedActivities.length == 0">
+                 <p>No data available</p>
+               </div>
+              
+               </div>
+             
+             </div>
+              </div>
+            </div>
+        
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm blue-btn" (click)="createMapping(servName,selectedActivities);" *ngIf="isServiceCreate && !isServiceUpdate">Save & Close</button>
+          <button class="btn btn-sm blue-btn"  (click)="UpdateServiceActivity(selectedActivities);" *ngIf="!isServiceCreate && isServiceUpdate">Update & Close</button>
+          <button class="btn btn-sm blue-btn"  data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div> -->

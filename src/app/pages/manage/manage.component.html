@@ -1,0 +1,640 @@
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+        <h4 class="mb-0 font-header">Manage Services</h4>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="row alert ml-3 mr-3 alert-danger text-dark" *ngIf="deleteAlert==true">
+            <strong>{{deleteError}}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-2">
+    <div class="col pl-0">
+        <div widget class="card border-0 box-shadow">
+        <div class="card-body  widget-body pt-2">
+            <section id="tabs" class="project-tab">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <nav>
+                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                    <a class="nav-item nav-link active" id="nav-Service-tab"
+                                        data-toggle="tab" href="#nav-Service" role="tab"
+                                        aria-controls="nav-Service" aria-selected="true" (click)="getService();selecttab('Service')">Service</a>
+                                    <a class="nav-item nav-link " id="nav-Activity-tab" data-toggle="tab"
+                                        href="#nav-Activity" role="tab"
+                                        aria-controls="nav-Activity" aria-selected="false" (click)="getActivity();selecttab('Activity')">Activity</a>
+                                    <a class="nav-item nav-link " id="nav-serviceandActivity-tab" data-toggle="tab"
+                                        href="#nav-serviceandActivity" role="tab"
+                                        aria-controls="nav-serviceandActivity"
+                                        aria-selected="false" (click)="getServiceActivity();getServiceTypeSatus();selecttab('Serviceactivity')">Service and Activity</a>
+                                </div>
+                                <div class="tab-content mt-3" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-Service" role="tabpanel"
+                                        aria-labelledby="nav-Service-tab">
+                                        <div class="row d-lg-none">
+                                            <div class="col">
+                                              <button *ngIf="fp.servicecreate" type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal"
+                                            (click)="Createupdate('new')" [disabled]="global.globalAgencyId == 0">Add Service</button>&nbsp;
+                                            </div>
+                                            <div class="col text-right">
+                                              <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()" [disabled]="global.globalAgencyId == 0">
+                                                <i class="fa fa-repeat"> </i>Refresh
+                                              </button>
+                                            </div>
+                                        </div>
+                                        <div class="row no-gutters aligned_form">
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-5 d-none d-lg-block ml-0 text-left">
+                                                <button *ngIf="fp.servicecreate" type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal"
+                                                (click)="Createupdate('new')" [disabled]="global.globalAgencyId == 0">Add Service</button>&nbsp;
+                                            </div>
+                                         
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ml-0 aligned_form" >
+                                                <label class="col-lg-4">Select Filter </label>&nbsp;
+                                                <select [(ngModel)]="filterSelect_service" class="form-control" [disabled]="global.globalAgencyId == 0" (ngModelChange)="serviceFilter(filterSelect_service)">
+                                                    <option value="1">Active</option>
+                                                    <option value="2">Inactive</option>
+                                                    <option value="0">ALL</option>
+                                                     
+                                                </select>
+                                              </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-5 d-none d-lg-block ml-0 text-right">
+                                                <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()" [disabled]="global.globalAgencyId == 0">
+                                                    <i class="fa fa-repeat"> </i>Refresh
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row" style="width: 100%;overflow-x: auto;">
+                                            <div *ngIf="global.globalAgencyId==0" class="text-center text-danger center-block">
+                                                <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+                                            </div>
+                                            <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true' allowPaging='true' [allowFiltering]='true'
+                                            [pageSettings]='initialPage'   [filterSettings]='filterOptions' (dataStateChange)= 'dataStateChange($event)' (actionBegin)="onActionComplete($event)" [showColumnChooser]= 'true'  (resizeStop)="onResize($event)">
+                                            <e-columns>
+                                                <e-column minWidth= 100 field="masterServiceCode" headerText="Code" type="string">
+                                                    <ng-template #filterTemplate let-data>
+                                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                                      </ng-template>
+                                                </e-column>
+                                                <e-column minWidth= 175 field="masterServiceName" headerText="Name" type="string">
+                                                    <ng-template #filterTemplate let-data>
+                                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                                      </ng-template>
+                                                </e-column>
+                                                <e-column minWidth= 100 field="masterServiceModifier1" headerText="Modifier 1" type="string">
+                                                    <ng-template #filterTemplate let-data>
+                                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                                      </ng-template>
+                                                </e-column>
+                                                <e-column minWidth= 100 field="masterServiceModifier2" headerText="Modifier 2" type="string">
+                                                    <ng-template #filterTemplate let-data>
+                                                      <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                                    </ng-template>
+                                                </e-column>
+                                                <e-column minWidth= 100 field="masterServiceModifier3" headerText="Modifier 3" type="string">
+                                                    <ng-template #filterTemplate let-data>
+                                                      <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                                    </ng-template>
+                                                </e-column>
+                                                <e-column minWidth= 100 field="masterServiceModifier4" headerText="Modifier 4" type="string">
+                                                    <ng-template #filterTemplate let-data>
+                                                      <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                                    </ng-template>
+                                                </e-column>
+                                                <e-column minWidth= 175 field="serviceDescription" headerText="Description" type="string">
+                                                    <ng-template #filterTemplate let-data>
+                                                      <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                                    </ng-template>
+                                                </e-column>
+                                                <e-column minWidth= 100 field="ratio" headerText="Ratio" type="number"></e-column>
+                                                <e-column minWidth= 100 headerText="Status" uid="status">
+                                                    <ng-template #template let-data>
+                                                    {{data.statusLid== 1 ? "Active" : "Inactive"}}
+                                                    <!-- <label *ngIf="data.statusLid == 1">Active</label>
+                                                    <label *ngIf="data.statusLid != 1">Inactive</label> -->
+                                                    </ng-template>
+                                                </e-column>
+                                                <e-column minWidth= 100 headerText="Actions" uid="action" textAlign="center" [showInColumnChooser]='false'>
+                                                <ng-template #template let-data>
+                                                    <button *ngIf="fp.serviceupdate" class="btn btn-edit-table" data-toggle="modal" data-target="#modal"
+                                                    (click)="Createupdate('edit');selectDetails(data)"><i 
+                                                        class="fa fa-edit"></i></button>&nbsp;
+                                                    <button *ngIf="fp.servicedelete" class="btn btn-delete-table" data-toggle="modal" data-target="#deleteStatusmodal"
+                                                    (click)="selectDetails(data)"><i 
+                                                        class="fa fa-trash"></i></button>
+                                                </ng-template>
+                                                </e-column>
+                                                <e-column width="50" [showInColumnChooser]='false'>
+                                                <ng-template #headerTemplate let-data>
+                                                    <div>
+                                                    <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                                                    </div>
+                                                </ng-template>
+                                                </e-column>
+                                            </e-columns>
+                                            </ejs-grid>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade show" id="nav-Activity" role="tabpanel"
+                                        aria-labelledby="nav-Activity-tab">
+                                        <div class="row d-lg-none">
+                                            <div class="col">
+                                              <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#Activitymodal"
+                                            (click)="CreateupdateActivity('new')" [disabled]="global.globalAgencyId == 0" *ngIf="fp.activitycreate">Add Activity</button>&nbsp;
+                                            </div>
+                                            <div class="col text-right">
+                                              <button type="button" class="btn blue-btn btn-sm" (click)="RefreshActivity()" [disabled]="global.globalAgencyId == 0">
+                                                <i class="fa fa-repeat"> </i>Refresh
+                                              </button>
+                                            </div>
+                                        </div>
+                                        <div class="row no-gutters aligned_form">
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-5 d-none d-lg-block ml-0 text-left">
+                                                <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#Activitymodal"
+                                                (click)="CreateupdateActivity('new')" [disabled]="global.globalAgencyId == 0" *ngIf="fp.activitycreate">Add Activity</button>&nbsp;
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ml-0">
+                                                <label>Select Filter</label>
+                                                <select [(ngModel)]="filterSelect_service" class="MySelectDrop" [disabled]="global.globalAgencyId == 0" (ngModelChange)="ActivityFilter(filterSelect_service)">
+                                                    <option value="1">Active</option>
+                                                    <option value="2">Inactive</option>
+                                                    <option value="0">ALL</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-5 d-none d-lg-block ml-0 text-right">
+                                                <button type="button" class="btn blue-btn btn-sm" (click)="RefreshActivity()" [disabled]="global.globalAgencyId == 0">
+                                                    <i class="fa fa-repeat"> </i>Refresh
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row" style="width: 100%;overflow-x: auto;">
+                                            <div *ngIf="global.globalAgencyId==0" class="text-center text-danger center-block">
+                                                <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+                                            </div>
+                                            <ejs-grid #gridactivity [dataSource]='data1 | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true' allowPaging='true' [allowFiltering]='true'
+                                            [pageSettings]='initialPage' [filterSettings]='filterOptions'  (dataStateChange)= 'dataStateChange1($event)' (actionBegin)="onActionComplete1($event)" [showColumnChooser]= 'true' (resizeStop)="onResizeActivity($event)">
+                                                <e-columns>
+                                                    <e-column minWidth= 100 field="masterActivityCode" headerText="Code" type="string">
+                                                        <ng-template #filterTemplate let-data>
+                                                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                                        </ng-template>
+                                                    </e-column>
+                                                    <e-column minWidth= 100 field="masterActivityName" headerText="Name" type="string">
+                                                        <ng-template #filterTemplate let-data>
+                                                            <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                                          </ng-template>
+                                                    </e-column>
+                                                    <e-column minWidth= 100 headerText="Status" uid="status">
+                                                        <ng-template #template let-data>
+                                                        {{data.statusLid== 1 ? "Active" : "Inactive"}}
+                                                        </ng-template>
+                                                    </e-column>
+                                                    <e-column minWidth= 100 headerText="Actions" uid="action" textAlign="center" [showInColumnChooser]='false'>
+                                                    <ng-template #template let-data>
+                                                        <button class="btn btn-edit-table" *ngIf="fp.activityupdate" data-toggle="modal" data-target="#Activitymodal"
+                                                        (click)="CreateupdateActivity('edit');selectActivityDetails(data)"><i 
+                                                            class="fa fa-edit"></i></button>&nbsp;
+                                                        <button class="btn btn-delete-table" *ngIf="fp.activitydelete" data-toggle="modal" data-target="#deleteActivitymodal"
+                                                        (click)="selectActivityDetails(data)"><i 
+                                                            class="fa fa-trash"></i></button>
+                                                    </ng-template>
+                                                    </e-column>
+                                                    <e-column width="50" [showInColumnChooser]='false'>
+                                                    <ng-template #headerTemplate let-data>
+                                                        <div>
+                                                        <span id='show' (click)='showactivity()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                                                        </div>
+                                                    </ng-template>
+                                                    </e-column>
+                                                </e-columns>
+                                            </ejs-grid>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade show" id="nav-serviceandActivity" role="tabpanel"
+                                        aria-labelledby="nav-serviceandActivity-tab">
+                                        <div class="row d-lg-none">
+                                            <div class="col">
+                                              <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#ServiceActivitymodal"
+                                            (click)="CreateupdateServiceActivity('new')" *ngIf="fp.masterserviceactivitycreate" [disabled]="global.globalAgencyId == 0">Add ServiceActivity</button>&nbsp;
+                                            </div>
+                                            <div class="col text-right">
+                                              <button type="button" class="btn blue-btn btn-sm" (click)="RefreshServiceActivity()" [disabled]="global.globalAgencyId == 0">
+                                                <i class="fa fa-repeat"> </i>Refresh
+                                              </button>
+                                            </div>
+                                        </div>
+                                        <div class="row no-gutters aligned_form">
+                                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-5 d-none d-lg-block ml-0 text-left">
+                                                <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#ServiceActivitymodal"
+                                                (click)="CreateupdateServiceActivity('new')" *ngIf="fp.masterserviceactivitycreate" [disabled]="global.globalAgencyId == 0">Add ServiceActivity</button>&nbsp;
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5 ml-0">
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-5 d-none d-lg-block ml-0 text-right">
+                                                <button type="button" class="btn blue-btn btn-sm" (click)="RefreshServiceActivity()" [disabled]="global.globalAgencyId == 0">
+                                                    <i class="fa fa-repeat"> </i>Refresh
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row" style="width: 100%;overflow-x: auto;">
+                                            <div *ngIf="global.globalAgencyId==0" class="text-center text-danger center-block">
+                                                <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+                                            </div>
+                                            <ejs-grid #gridserviceactivity [dataSource]='data2 | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true' allowPaging='true' [allowFiltering]='true'
+                                            [pageSettings]='initialPage' [filterSettings]='filterOptions'  (dataStateChange)= 'dataStateChange2($event)' (actionBegin)="onActionComplete2($event)" [showColumnChooser]= 'true' (resizeStop)="onResizeServiceActivity($event)">
+                                                <e-columns>
+                                                    <!-- <e-column headerText="S.No.">
+                                                        <ng-template #template let-data>
+                                                            {{data.id}}
+                                                        </ng-template>
+                                                    </e-column> -->
+                                                    <e-column minWidth= 100 field="masterServiceName" headerText="Service" type="string">
+                                                        <ng-template #filterTemplate let-data>
+                                                            <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                                          </ng-template>
+                                                    </e-column>
+                                                    <e-column minWidth= 100 headerText="Actions" uid="action" textAlign="center" [showInColumnChooser]='false'>
+                                                    <ng-template #template let-data>
+                                                        <button class="btn btn-edit-table" data-toggle="modal" *ngIf="fp.masterserviceactivityupdate" data-target="#ServiceActivitymodal"
+                                                        (click)="CreateupdateServiceActivity('edit');selectServiceActivityDetails(data)"><i 
+                                                            class="fa fa-edit"></i></button>&nbsp;
+                                                    </ng-template>
+                                                    </e-column>
+                                                    <e-column width="50" [showInColumnChooser]='false'>
+                                                    <ng-template #headerTemplate let-data>
+                                                        <div>
+                                                        <span id='show' (click)='showserviceact()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                                                        </div>
+                                                    </ng-template>
+                                                    </e-column>
+                                                </e-columns>
+                                            </ejs-grid>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================Service Add and update Modal===================================== -->
+<span id="openModal" data-target="#modal" data-toggle="modal"></span>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog create-update-zip" role="document" data-backdrop="static">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" ><span
+                    *ngIf="ModalType =='new'"> Create Service</span> <span *ngIf="ModalType =='edit'">Update Service</span> </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="ServiceForm">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Code<span class="super-script">*</span></label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" formControlName="Code" [(ngModel)]="Service.masterServiceCode" (ngModelChange)="checkpopupService('Code')">
+                        </div>
+                    </div>
+                    <span class="help-block text-danger text-center"
+                    *ngIf="!ServiceForm.get('Code').valid && ServiceForm.get('Code').touched">
+                    <p>Please Enter Code</p>
+                    </span>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Modifier 1</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" formControlName="Modifier1" [(ngModel)]="Service.masterServiceModifier1" (ngModelChange)="checkpopupService('Modifier1')">
+                        </div>
+                    </div>
+                    <!-- <span class="help-block text-danger text-center"
+                    *ngIf="!ServiceForm.get('Modifier1').valid && ServiceForm.get('Modifier1').touched">
+                    <p>Please Enter Modifier1</p>
+                    </span> -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Modifier 2</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" formControlName="Modifier2" [(ngModel)]="Service.masterServiceModifier2" (ngModelChange)="checkpopupService('Modifier2')">
+                        </div>
+                    </div>
+                    <!-- <span class="help-block text-danger text-center"
+                    *ngIf="!ServiceForm.get('Modifier2').valid && ServiceForm.get('Modifier2').touched">
+                    <p>Please Enter Modifier2</p>
+                    </span> -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Modifier 3</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" formControlName="Modifier3" [(ngModel)]="Service.masterServiceModifier3" (ngModelChange)="checkpopupService('Modifier3')">
+                        </div>
+                    </div>
+                    <!-- <span class="help-block text-danger text-center"
+                    *ngIf="!ServiceForm.get('Modifier3').valid && ServiceForm.get('Modifier3').touched">
+                    <p>Please Enter Modifier3</p>
+                    </span> -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Modifier 4</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" formControlName="Modifier4" [(ngModel)]="Service.masterServiceModifier4" (ngModelChange)="checkpopupService('Modifier4')">
+                        </div>
+                    </div>
+                    <!-- <span class="help-block text-danger text-center"
+                    *ngIf="!ServiceForm.get('Modifier4').valid && ServiceForm.get('Modifier4').touched">
+                    <p>Please Enter Modifier4</p>
+                    </span> -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Name<span class="super-script">*</span></label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" formControlName="Name" [(ngModel)]="Service.masterServiceName" (ngModelChange)="checkpopupService('Name')">
+                        </div>
+                    </div>
+                    <span class="help-block text-danger text-center"
+                    *ngIf="!ServiceForm.get('Name').valid && ServiceForm.get('Name').touched">
+                    <p>Please Enter Name</p>
+                    </span>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Description<span class="super-script">*</span></label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" formControlName="Description" [(ngModel)]="Service.serviceDescription" (ngModelChange)="checkpopupService('Description')">
+                        </div>
+                    </div>
+                    <span class="help-block text-danger text-center"
+                    *ngIf="!ServiceForm.get('Description').valid && ServiceForm.get('Description').touched">
+                    <p>Please Enter Description</p>
+                    </span>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Status<span class="super-script">*</span></label>
+                        </div>
+                        <div class="col-lg-6">
+                            <select style="font-weight: 600;" class="form-control" formControlName="Status"
+                            [(ngModel)]="Service.statusLid" (ngModelChange)="checkpopupService('Status')">
+                            <option></option>
+                            <option [value]=i.Key *ngFor="let i of StatusList">{{i.Value}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <span class="help-block text-danger text-center"
+                    *ngIf="!ServiceForm.get('Status').valid && ServiceForm.get('Status').touched">
+                    <p>Please Enter Status</p>
+                    </span>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Ratio<span class="super-script">*</span></label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="number" class="form-control" formControlName="Ratio" [(ngModel)]="Service.ratio" (ngModelChange)="checkpopupService('Ratio')">
+                        </div>
+                    </div>
+                    <span class="help-block text-danger text-center"
+                    *ngIf="!ServiceForm.get('Ratio').valid && ServiceForm.get('Ratio').touched">
+                    <p>Please Enter Ratio</p>
+                    </span>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn blue-btn btn-sm" [disabled]="!ServiceForm.valid" (click)="SaveOrUpdateService()"><span *ngIf="ModalType =='new'"> Save &
+                    Close</span> <span *ngIf="ModalType =='edit'">Update & Close</span> </button>
+                <button type="button" class="btn blue-btn btn-sm" (click)="openDialogService()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================================================Activity Add & Update Form============================= -->
+<span id="openModal1" data-target="#Activitymodal" data-toggle="modal"></span>
+<div class="modal fade" id="Activitymodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog create-update-zip" role="document" data-backdrop="static">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" ><span
+                    *ngIf="ModalType =='new'"> Create Activity</span> <span *ngIf="ModalType =='edit'">Update Activity</span> </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="ActivityForm">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Code<span class="super-script">*</span></label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" formControlName="Code" [(ngModel)]="Activity.masterActivityCode" (change)="checkpopActivity()">
+                        </div>
+                    </div>
+                    <span class="help-block text-danger text-center"
+                    *ngIf="!ActivityForm.get('Code').valid && ActivityForm.get('Code').touched">
+                    <p>Please Enter Code</p>
+                    </span>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Name<span class="super-script">*</span></label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" formControlName="Name" [(ngModel)]="Activity.masterActivityName" (change)="checkpopActivity()">
+                        </div>
+                    </div>
+                    <span class="help-block text-danger text-center"
+                    *ngIf="!ActivityForm.get('Name').valid && ActivityForm.get('Name').touched">
+                    <p>Please Enter Name</p>
+                    </span>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Status<span class="super-script">*</span></label>
+                        </div>
+                        <div class="col-lg-6">
+                            <select style="font-weight: 600;" class="form-control" formControlName="Status"
+                            [(ngModel)]="Activity.statusLid" (change)="checkpopActivity()">
+                            <option [value]=i.Key *ngFor="let i of StatusList">{{i.Value}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <span class="help-block text-danger text-center"
+                    *ngIf="!ActivityForm.get('Status').valid && ActivityForm.get('Status').touched">
+                    <p>Please Enter Status</p>
+                    </span>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn blue-btn btn-sm" [disabled]="!ActivityForm.valid" (click)="SaveOrUpdateActivity()"><span *ngIf="ModalType =='new'"> Save &
+                    Close</span> <span *ngIf="ModalType =='edit'">Update & Close</span> </button>
+                <button type="button" class="btn blue-btn btn-sm" (click)="openDialogActivity()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================================================ServiceActivity Add & Update Form============================= -->
+<span id="openModal2" data-target="#ServiceActivitymodal" data-toggle="modal"></span>
+<div class="modal fade" id="ServiceActivitymodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog create-update-sa" role="document" data-backdrop="static">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" ><span
+                    *ngIf="ModalType =='new'"> Create ServiceActivity</span> <span *ngIf="ModalType =='edit'">Update ServiceActivity</span> </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label>Service Type</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <ng-select [(ngModel)]="ServiceActivityArray1.masterServiceId" (ngModelChange)="getActivityTypeSatus(ServiceActivityArray1.masterServiceId)"
+                        [clearable]="true"  [searchable]="true" [items]="ServiceActivityArray" bindLabel="label" bindValue="value"
+                        >
+                            <!-- <option *ngFor="let service of ServiceActivityArray" [value]="service.value">{{service.label}}</option> -->
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="example-container">
+                            <label>Available Activities</label>
+                            <div cdkDropList #doneList="cdkDropList" class="example-list" [cdkDropListData]="availableActivities"
+                            (cdkDropListDropped)="drop($event);checkpopServiceActivity()" [cdkDropListConnectedTo]="[todoList]">
+                                <div *ngIf="availableActivities.length == 0 && ModalType == 'new'">
+                                    <p>Select service to view activities</p>
+                                </div> 
+                                <div *ngIf="availableActivities.length == 0 && ModalType == 'edit'">
+                                    <p>No data available!</p>
+                                </div> 
+                                <div *ngIf="availableActivities.length != 0">
+                                    <div class="example-box" *ngFor="let item of availableActivities" cdkDrag>
+                                    {{ item.Value }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="example-container">
+                            <label>Selected Activities</label>
+                            <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="selectedActivities"
+                                [cdkDropListConnectedTo]="[doneList]" class="example-list" (cdkDropListDropped)="drop($event);checkpopServiceActivity()">
+                                <div *ngIf="selectedActivities.length == 0">
+                                    <p>No data available!</p>
+                                </div>
+                                <div *ngIf="selectedActivities.length != 0">
+                                    <div class="example-box" *ngFor="let item of selectedActivities" cdkDrag>
+                                    {{ item.Value }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn blue-btn btn-sm" (click)="SaveOrUpdateServiceActivity(ServiceActivityArray1)"><span *ngIf="ModalType =='new'"> Save &
+                    Close</span> <span *ngIf="ModalType =='edit'">Update & Close</span> </button>
+                <button type="button" class="btn blue-btn btn-sm" (click)="openDialogServiceActivity()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- =====================================Delete Status Confirmation Modal============================== -->
+<span id="deleteservicemodal"  data-toggle="modal" data-target="#deleteStatusmodal"  ></span>
+<div class="modal fade" id="deleteStatusmodal" data-backdrop="static" data-toggle="modal">
+  <div class="modal-dialog delete-zip" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <label>Do you want to delete this record ?</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" >
+        <button type="button" class="btn blue-btn btn-sm" (click)="deleteStatus()">Delete</button>
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================Delete Activity Confirmation Modal============================== -->
+<div class="modal fade" id="deleteActivitymodal" data-backdrop="static">
+  <div class="modal-dialog delete-zip" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <label>Do you want to delete this record ?</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" >
+        <button type="button" class="btn blue-btn btn-sm" (click)="deleteActivity()">Delete</button>
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==============close without save modal================================= -->
+<span id="cancelmodal" data-toggle="modal" data-target="#CloseModal"></span>
+<div class="modal fade primarymodal" id="CloseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" >Close</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               You want to close without saving?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn blue-btn btn-sm" (click)="closeAddUpdateModal()">Yes</button>
+            <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

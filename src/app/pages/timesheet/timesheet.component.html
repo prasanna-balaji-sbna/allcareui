@@ -1,0 +1,1027 @@
+<!--------------------------------------Header----------------------------------------------------------------------------->
+
+<div class="row mb-2" *ngIf="!manualEntry">
+    <div class="col pl-0">
+        <div widget class="card border-0 box-shadow">
+            <div class="card-header transparent  text-muted">
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4 class="mb-0 font-header">Timesheet</h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <!-- <label>Filter by type &nbsp;</label>
+                              <select [(ngModel)]="employeeFilter.employeeType" class="form-control col-7"
+                                  (ngModelChange)="filterchange(employeeFilter)" [disabled]="global.globalAgencyId==0">
+                                  <option [value]=i.Key *ngFor="let i of EmployeeTypeList">{{i.Value}}</option>
+                                </select>
+                        </div> -->
+
+                        <button class="btn blue-btn float-right" (click)="addEdit()">Add
+                        Manual Entry</button>&nbsp;&nbsp;
+                    </div>
+
+                     <!-- <button class="btn blue-btn" *ngIf="" (click)="openQP()">Add QP Entry</button> -->
+
+                </div>
+
+            </div>
+            <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                <div class="row">
+
+
+
+                    <div class="col-lg-2  ">
+                        <div class="row">
+                            <div class="col-lg-5 buttonpanddinglr">
+                                <span>Start date</span>
+                            </div>
+
+                            <div class="col-lg-7 buttonpanddinglr">
+                                <my-date-picker [options]="myDatePickerOptions" [selDate]="filters.filterStartDate"
+                                    placeholder="mm/dd/yyyy"
+                                    (inputFieldChanged)="newdates($event,'inputchage','filterstart')"
+                                    (dateChanged)="newdates($event,'datechagned','filterstart')"
+                                    [disabled]="this.global.globalAgencyId==0">
+                                </my-date-picker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2  buttonpanddingr">
+                        <div class="row">
+                            <div class="col-lg-5 buttonpanddinglr">
+                                <span>End date</span>
+                            </div>
+                            <div class="col-lg-7  buttonpanddinglr">
+
+                                <my-date-picker [options]="myDatePickerOptions" [selDate]="filters.filterEndDate"
+                                    placeholder="mm/dd/yyyy"
+                                    (inputFieldChanged)="newdates($event,'inputchage','filterend')"
+                                    (dateChanged)="newdates($event,'datechagned','filterend')"
+                                    [disabled]="this.global.globalAgencyId==0">
+                                </my-date-picker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class=row>
+                            <div class="col-lg-10 ">
+                                <div class=row>
+                                    <div class="col-lg-4  buttonpanddingr">
+
+                                        <div class="row">
+                                            <div class="col-lg-5 buttonpanddingr">
+                                                <span>Employee</span>
+                                            </div>
+
+                                            <div class="col-lg-7 buttonpanddinglr">
+                                                <ng-select [(ngModel)]="filters.filterEmployee"  [searchable]="true"
+                                                    [clearable]="true" [items]="EmployeeDropDown" bindLabel="Value"
+                                                    bindValue="Key" [disabled]="this.global.globalAgencyId==0" >
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4  buttonpanddingr">
+
+                                        <div class="row">
+                                            <div class="col-lg-4 buttonpanddingr">
+                                                <span>Client</span>
+                                            </div>
+                                            <div class="col-lg-8 buttonpanddinglr">
+                                                <ng-select [(ngModel)]="filters.filterClient" [searchable]="true"
+                                                    [clearable]="true" [items]="ClinetDropDown" bindLabel="names"
+                                                    bindValue="id" [disabled]="this.global.globalAgencyId==0">
+
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 buttonpanddingr">
+
+                                        <div class="row">
+                                            <div class="col-lg-4 buttonpanddingr">
+                                                <span>Payor</span>
+                                            </div>
+                                            <div class="col-lg-8 buttonpanddinglr">
+
+
+                                                <ng-select [(ngModel)]="filters.filterPayor" [searchable]="true"
+                                                    [clearable]="true" [items]="PayorDropDown" bindLabel="Value"
+                                                    bindValue="Key" [disabled]="this.global.globalAgencyId==0">
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="col-lg-2 ">
+                                <div>
+                                    <button type="button" class="btn blue-btn" [disabled]="this.global.globalAgencyId==0||
+                         (filters.filterStartDate==null||filters.filterStartDate==''||filters.filterStartDate==undefined)&&(filters.filterClient==null||filters.filterClient==undefined)&&
+                         (filters.filterEmployee==null||filters.filterEmployee==undefined)&&(filters.filterEndDate==null||filters.filterEndDate==''||filters.filterEndDate==undefined)&&
+                         (filters.filterPayor==null||filters.filterPayor==undefined)" (click)="timesheetfilter()">Apply
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!---------------------------------------Hirarical Binding------------------------------------------------------------------------>
+<div >
+    <div class="row mb-2" *ngIf="!manualEntry ">
+        <div class="col pl-0">
+
+            <div widget class="card border-0 box-shadow">
+                <div class="card-body  widget-body pt-2">
+                    <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+                        <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view
+                            details</label>
+                    </div>
+                    <button class="btn blue-btn" (click)="Refresh()" [disabled]="this.global.globalAgencyId==0"><i
+                            _ngcontent-lep-c69="" class="fa fa-repeat">&nbsp;</i>Refresh</button>
+                    <div class="control-section">
+                        <ejs-grid #grid [dataSource]='data|async' *ngIf="global.globalAgencyId!=0" [allowResizing]='true'  (resizeStop)="onResize($event)"
+                            (queryCellInfo)='validatebutton($event)' [childGrid]='childGrid' [allowSorting]='true'
+                            allowPaging='true' [allowFiltering]='true' (dataStateChange)='dataStateChange($event)'
+                            [pageSettings]='initialPage' [filterSettings]='filterOptions' 
+                            (actionComplete)="onActionComplete($event)"  [showColumnChooser]= 'true' >
+                            <e-columns>
+                                <e-column minWidth= 120 field='clientName' headerText='Client' textAlign='left' [allowEditing]='false'
+                                     type='string'>
+                                     <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                    </ng-template>
+                                </e-column>
+                                <e-column field='EmployeeName' headerText='Employee' textAlign='left'
+                                    [allowEditing]='false' minWidth= 120 type='string'>
+                                    <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                    </ng-template>
+                                </e-column>
+
+                                <e-column field='fromDate' headerText='From Date' textAlign='left'
+                                    [allowEditing]='false' minWidth= 100 type='date' [format]='formatOptions'
+                                    [allowFiltering]="false"  [allowSorting]='false'>
+                                </e-column>
+                                <e-column field='toDate' headerText='To Date' textAlign='left' [allowEditing]='false'
+                                    minWidth= 100 type='date' [format]='formatOptions' [allowFiltering]="false"  [allowSorting]='false'></e-column>
+                                <!-- <e-column field='isCliSignature' headerText='Client Signature' textAlign='left'
+                                    [allowEditing]='false' minWidth= 100 type='string'>
+                                    <ng-template #filterTemplate let-data>
+                                        <ejs-dropdownlist id='dropdata' placeholder='Select a Signature'
+                                            [dataSource]='dropdatas' [popupHeight]='height'></ejs-dropdownlist>
+                                    </ng-template>
+                                </e-column>
+                                <e-column field='isEmpSignature' headerText='Employee Signature' textAlign='left'
+                                    [allowEditing]='false' minWidth= 100 type='string'>
+                                    <ng-template #filterTemplate let-data>
+                                        <ejs-dropdownlist id='dropdata1' placeholder='Select a Signature'
+                                            [dataSource]='dropdatas' [popupHeight]='height'></ejs-dropdownlist>
+                                    </ng-template>
+                                </e-column> -->
+                                <e-column field='timesheetStatusLid' headerText='Timesheet Status' textAlign='left'
+                                    [allowEditing]='false' minWidth= 100 type='string' [allowFiltering]="false">
+                                    <ejs-dropdownlist id='dropdata1' placeholder='Select a Signature'
+                                        [dataSource]='dropdata1' [popupHeight]='height'></ejs-dropdownlist>
+                                </e-column>
+                                <!-- <e-column field='eTimesheet' headerText='E-Timesheet' textAlign='left' minWidth= 80
+                                    [allowFiltering]="false">
+
+                                </e-column> -->
+                                <e-column field="timesheet" uid="action" headerText="Actions" textAlign='center'
+                                    [allowEditing]='false' Width= 80  [allowFiltering]="false">
+                                    <ng-template #template let-data>
+                                        <button class="btn btn-edit-table Ationsubbtn"
+                                            (click)="getTimesheetUpload(data.serialNo);editserialnumber=data.serialNo"
+                                            data-target="#timesheetuploadview" data-toggle="modal"><i
+                                                class="fa fa-eye fa-lg"></i></button>
+                                        <button class="btn btn-edit-table Ationsubbtn" 
+                                            data-target="#EditClientEmployee" data-toggle="modal"
+                                            (click)="edittimesheet(data,$event)"><i class="fa fa-edit"></i></button>
+                                        <button data-target="#deleteAllTimesheet" data-toggle="modal"
+                                            class=" btn btn-delete-table"  (click)="editserialnumber=data.serialNo" >
+                                            <i class="fa fa-trash fa-lg"></i></button>
+
+                                    </ng-template>
+                                </e-column>
+
+                            </e-columns>
+                        </ejs-grid>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!----------------------------------------child templete---------------------------------------------------------------------->
+
+<ng-template #childtemplate let-data>
+    <div><button class="btn btn-edit-table Ationsubbtn"><i class="fa fa-edit" (click)="openedit($event)" ></i></button>
+        <button class="btn btn-delete-table" id="enablechilddelete">
+            <i class="fa fa-trash fa-lg" (click)="deletetimesheetpopup(data)"></i></button></div>
+</ng-template>
+
+<!-----------------------------------------Add Manual Entry---------------------------------------------------------------->
+
+
+
+<div *ngIf="manualEntry">
+
+    <div class="row mb-2">
+        <div class="col pl-0">
+            <div widget class="card border-0 box-shadow">
+                <div class="card-header transparent  text-muted">
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h4 class="mb-0 font-header">Add manual timesheets</h4>
+                        </div>
+                        <div class="col-lg-6">
+                            <h5 class="notealert">Note:Row in red color is already entered</h5>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                    <div class="row">
+                        <div class="col-lg-4" style="border-right: solid 2px #004092;">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <label class="manualentry-label">Employee
+                                        Name</label>
+                                </div>
+                                <div class="col-lg-7">
+
+                                    <ng-select [(ngModel)]="Employee" [searchable]="true" [clearable]="true"
+                                        [items]="EmployeeDropDown" bindLabel="Value" class="tdropdown" bindValue="Key"
+                                        (change)="timesheetclose=true" (ngModelChange)="enableEmp(Employee)">
+                                    </ng-select>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row mt-3">
+                                <div class="col-lg-5">
+                                    <label class="manualentry-label">Client
+                                        Name</label>
+                                </div>
+                                <div class="col-lg-7">
+
+                                    <ng-select [(ngModel)]="Client" [searchable]="true" [clearable]="true"
+                                        [items]="ClinetDropDown" bindLabel="names" class="tdropdown" bindValue="id"
+                                        (ngModelChange)="enableCLi(Client)" [disabled]="eanbleclient">
+                                    </ng-select>
+                                </div>
+                            </div>
+
+
+                            <div class="row mt-3">
+                                <div class="col-lg-5">
+                                    <label class="manualentry-label">Start
+                                        Date</label>
+                                </div>
+                                <div class="col-lg-7">
+
+                                    <my-date-picker [options]="myDatePickerOptions" [selDate]="start"
+                                        placeholder="mm/dd/yyyy"
+                                        (inputFieldChanged)="newdates($event,'inputchage','start')"
+                                        (dateChanged)="newdates($event,'datechagned','start');startdates(start, end, Client)"
+                                        [disabled]="enablestart">
+                                    </my-date-picker>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-5">
+                                    <label class="manualentry-label">End
+                                        Date</label>
+                                </div>
+                                <div class="col-lg-7">
+
+                                    <my-date-picker [options]="myDatePickerOptions" [selDate]="end"
+                                        placeholder="mm/dd/yyyy"
+                                        (inputFieldChanged)="newdates($event,'inputchage','end')"
+                                        (dateChanged)="newdates($event,'datechagned','end');startdates(start, end, Client)"
+                                        [disabled]="eanbleend">
+                                    </my-date-picker>
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-lg-5">
+                                    <label class="manualentry-label">Service</label>
+                                </div>
+                                <div class="col-lg-7">
+                                    <ng-select multiple="true" [(ngModel)]="serviceName" [searchable]="true"
+                                        [clearable]="true" [items]="serviceList" class="tdropdown" bindLabel="Value"
+                                        bindValue="Key" (ngModelChange)="show(start,end,serviceName);"
+                                        [disabled]="eanbleservice">
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-lg-6" *ngIf="isEmp">
+                                    <label class="subtablelabel ml-3">Employee
+                                        Info</label>
+
+
+
+                                    <table class="table  table-hover table-bordered mb-3">
+                                        <thead>
+                                            <th class="pointer ttablehead">UMPI
+                                            </th>
+                                            <th class="pointer ttablehead">Insurance
+                                                Provider
+                                                ID
+                                            </th>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    {{umpi}}
+                                                </td>
+                                                <td>
+                                                    {{payorreqID}}
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+                                <div class="col-lg-6" *ngIf="isCliInfo">
+                                    <label class="subtablelabel ml-3">Client
+                                        Info</label>
+
+
+                                    <table class="table  table-hover table-bordered mb-3">
+                                        <thead>
+                                            <th class="pointer ttablehead">Member DOB
+                                            </th>
+                                            <th class="pointer ttablehead">Member MA#
+                                            </th>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    {{clientdob|date:'MM/dd/yyyy'}}
+                                                </td>
+                                                <td>
+                                                    {{memberma}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="subtablelabel mt-3" *ngIf="isIns || dontshowAuth">Authorization
+                                    Details</label></div>
+                            <div class="row tdropdown">
+                                <table class="table  table-hover table-bordered " *ngIf="isIns">
+                                    <thead>
+                                        <th class="pointer ttablehead">Start Date
+                                        </th>
+                                        <th class="pointer ttablehead">End Date
+                                        </th>
+                                        <th class="pointer ttablehead">Service
+                                        </th>
+                                        <th class="pointer ttablehead">Insurance Number#
+                                        </th>
+                                        <th class="pointer ttablehead">Total Units
+                                        </th>
+                                        <th class="pointer ttablehead">Payer Name
+                                        </th>
+                                        <th class="pointer ttablehead">Units Used
+                                        </th>
+                                        <th class="pointer ttablehead">Units Remaining
+                                        </th>
+                                        <th class="pointer ttablehead">Hours/day
+                                        </th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let i of authorizationdetails">
+                                            <td>
+                                                {{i.startDate| date:'MM/dd/yyyy'}}
+                                            </td>
+                                            <td>
+                                                {{i.endDate| date:'MM/dd/yyyy'}}
+                                            </td>
+                                            <td>
+                                                {{i.masterServiceCode}}
+                                            </td>
+                                            <td>
+                                                {{i.insuranceNo}}
+                                            </td>
+                                            <td class="text-right">
+                                                {{i.totalUnits}}
+                                            </td>
+                                            <td class="text-right">
+                                                {{i.payorName}}
+                                            </td>
+                                            <td class="text-right">
+                                                {{i.unitsUsed}}
+                                            </td>
+                                            <td class="text-right">
+                                                {{i.unitsRemaining}}
+                                            </td>
+                                            <td class="text-right">
+                                                {{i.unithr }} hrs {{i.unitmin}} mins
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row pt-3" *ngIf="dontshowAuth">
+                                <div class="col-lg-8">
+                                    <label class="subtablelabel">No
+                                        authorization available, Click
+                                        Add Authorization to add service details</label>
+                                </div>
+
+                                <div class="col-lg-4" class="text-right"><button class="m-5" class="btn blue-btn"
+                                        (click)="addClientAuth()">Add New
+                                        Authorization</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row pt-3">
+                        <!-- <div style="margin-left: 40%;">
+
+                        </div> -->
+                        <div class="col-lg-5">
+
+                        </div>
+                        <div  class="col-lg-7" >
+                            <div class="row">
+                                <label class="col-lg-4">Add Bulk Hours(per day) </label>
+                                <div class="col-lg-6">  <input type="text"  class="form-control"
+                                [(ngModel)]="Allhours" (keypress)="numberonly($event,'All')"></div>
+                                <div class="col-lg-2"><button type="button" class="btn blue-btn btn-sm" (click)="addTime()"
+                                    [disabled]="orderList.length==0">
+                                    Apply</button>
+                            
+                            </div>
+                        </div> 
+                    </div>
+                    <table class="table table-hover table-bordered mt-3">
+                        <thead>
+                            <th class="pointer">Services
+                            </th>
+                            <th class="pointer">Day
+                            </th>
+                           
+                            <th class="pointer">Date
+                            </th>
+                           
+
+                            <th class="pointer" class="text-center">Total Hours
+                            </th>
+                            <th class="pointer" class="text-center">Notes
+                            </th>
+                        </thead>
+                        <tbody class="manualtablescroll ">
+                            <tr *ngFor="let item of orderList;let i=index"
+                                [ngStyle]="{'background-color': (item.isDisable == true) ? '#ff6347' : ((i%2==0)?'#f5f5f5':'#ffffff')}">
+                               
+                                <td tabindex="-1" [ngStyle]="{'color':(item.isDisable == true) ?'white':'black'}">
+                                    {{item.service }}
+                                </td>
+                                <td tabindex="-1" [ngStyle]="{'color':(item.isDisable == true) ?'white':'black'}">
+                                    {{item.Day}}
+                                </td>
+                               
+                                <td tabindex="-1" [ngStyle]="{'color':(item.isDisable == true) ?'white':'black'}">
+                                    {{item.Date}}
+                                </td>
+                               
+
+                                <td [attr.contenteditable]="true"
+                                    [ngStyle]="{'color':(item.isDisable == true) ?'white':'black'}"
+                                    (keypress)="numberonly($event,'create')" (focusout)="savehours($event,i)"
+                                    id="editable_div{{i}}">
+
+                                    {{item.tcHours}}
+                                </td>
+                                <td [attr.contenteditable]="true"
+                                    [ngStyle]="{'color':(item.isDisable == true) ?'white':'black'}"
+                                    (focusout)="savenote($event,i)" tabindex="-1">
+
+                                    {{item.notes}}
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="row w-100">
+                        <div class="col-6"></div>
+                        <div class="col-5">
+                            <div class="custom-file ">
+                                <input type="file" #files class="custom-file-input" id="customFile" name="filename"
+                                    (change)="onFileChanged($event);selected=!selected;timesheetclose=true"
+                                    accept=".pdf" multiple />
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <button class="btn btnclass" [disabled]="!selected" data-toggle="modal"
+                                data-target="#openpdf"><i class="fa fa-eye fa-lg" style="color:white"></i></button>
+                        </div>
+
+                    </div>
+                    <div class="row  w-100">
+                        <div class="col-6"></div>
+                        <div class="col-5">
+                            <ng-container *ngIf="selected">
+                                <div *ngFor=" let val of filearray" style=" color: #004290;">
+                                    {{val.TimesheetUploadName}}
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+
+
+                        <label>
+                            Enterd Total Hours :{{enterdhr}} hrs &nbsp;&nbsp;{{entermin}} mins
+                        </label>
+
+
+
+                    </div>
+                    <div class="col-lg-6 mt-3">
+                        <div class="row" class="timesheet-footer">
+                            <button class="btn  blue-btn btn-sm Ationsubbtn"
+                                [disabled]="serviceName==null||serviceName==''||serviceName==undefined||serviceName.length==0"
+                                (click)="SaveandNew(orderList)">Save & New</button>
+                            <button class="btn  blue-btn btn-sm Ationsubbtn" (click)="succCliAdd(orderList)"
+                                [disabled]="serviceName==null||serviceName==''||serviceName==undefined||serviceName.length==0">Save
+                                & Close</button>
+                            <button class="btn  blue-btn btn-sm Ationsubbtn" (click)="backwithalert()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-----------------------------------------------Over All Edit Employee and client----------------------------------------->
+<span data-target="#EditClientEmployee" data-toggle="modal" id="editall"></span>
+<div class="modal fade " id="EditClientEmployee" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Edit Timesheet</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label class="manualentry-label">Employee </label>
+                    </div>
+                    <div class="col-lg-8">
+                        <ng-select [(ngModel)]="editemp" [searchable]="true" [clearable]="true" class="tdropdown"
+                            [items]="EmployeeDropDown" bindLabel="Value" bindValue="Key">
+                        </ng-select>
+                    </div>
+                </div>
+
+
+
+                <div class="row mt-3">
+                    <div class="col-lg-4">
+                        <label class="manualentry-label">Client </label>
+                    </div>
+                    <div class="col-lg-8">
+                        <ng-select [clearable]="true" [searchable]="true" class="tdropdown" [(ngModel)]="editcli"
+                            [items]="ClinetDropDown" bindLabel="names" bindValue="id">
+
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn" [disabled]="editcli==null||editcli==undefined||
+          editemp==undefined||editemp==null" (click)="editTotaltimesheet()">Update & Close</button>
+                <button type="button" class="btn blue-btn" data-dismiss="modal" data-target="#modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------------Delete All Timesheet using Serial Number -------------------------------------->
+<span data-target="#deleteAllTimesheet" data-toggle="modal" id="deleteall"></span>
+<div class="modal fade " id="deleteAllTimesheet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Delete Timesheet</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr!=''" role="alert">
+                <p>{{saveErr}}</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="saveErr=''">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="resetPass">
+
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <label class="manualentry-label">Password<sup style="color:red; font-size: 1.35em;
+                          top: 0em;">&nbsp;*</sup></label>
+                        </div>
+                        <div class="col-lg-5">
+                            <input type="password" class="form-control" formControlName="Password"
+                                [(ngModel)]="deleteList.admin_Password" (keyup)="passvalid($event)">
+                            <div *ngIf="resetPass.controls['Password'].invalid && (resetPass.controls['Password'].dirty || resetPass.controls['Password'].touched) "
+                                class="alert alert-danger" style="height: 30px; margin-top: 10px;">
+                                <div *ngIf="resetPass.controls['Password'].errors.required">
+                                    Password is required.
+                                </div>
+                            </div>
+                            <div *ngIf="passerror && resetPass.controls['Password'].valid  " class="alert alert-danger">
+                                <div>
+                                    Enter Valid Password
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="passwordnote mt-5 "><i>Note:&nbsp;Password should contain atleast 8
+                                    characters/ digits includes 1 special character, 1 lower and uppercase characters
+                                </i></label>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn" [disabled]="!resetPass.valid ||passerror"
+                    (click)="deletetotalTimesheet()">Delete</button>
+                <button type="button" class="btn blue-btn" data-dismiss="modal" data-target="#modal"
+                    (click)="CancelDelete()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-----------------------------------------update timesheet--------------------------------------------------------------------->
+<span data-target="#updateTimesheet" data-toggle="modal" id="update"></span>
+<div class="modal fade " id="updateTimesheet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Update Timesheet</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">Employee
+                                Name</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control" [(ngModel)]="editEmployee" [disabled]="true">
+
+
+                        </div>
+
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">Client
+                                Name</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control" [(ngModel)]="editClient" [disabled]="true">
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">TimeSheet
+                                Date</label>
+                        </div>
+                        <div class="col-lg-12">
+
+                            <my-date-picker [options]="myDatePickerOptions" [selDate]="editDate"
+                                placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','editdate')"
+                                (dateChanged)="newdates($event,'datechagned','editdate')">
+                            </my-date-picker>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">Service</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <!-- <input type="text" class="form-control" [(ngModel)]="editservice" [disabled]="true"> -->
+
+                            <ng-select  [(ngModel)]="editservice" [searchable]="true"
+                                        [clearable]="true" [items]="serviceList" class="tdropdown" bindLabel="Value"
+                                        bindValue="Key" 
+                                      >
+                                    </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">Work
+                                Hour</label>
+                        </div>
+                        <div class="col-lg-12">
+
+                            <input type="text" class="form-control" [(ngModel)]="edittime"
+                                (keypress)="numberonly($event,'update')" >
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">Notes</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control" [(ngModel)]="editNotes">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <p class="notealert ml-0"> Note:Date,work Hours & note field only
+                            editable</p>
+                    </div>
+                    <div class="col-lg-5">
+                        <button class="btn blue-btn" (click)="update();">
+                            Update&Close
+                        </button>
+                        <button class="btn blue-btn" data-dismiss="modal" data-target="#modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------- View Timesheet uplod------------------------------------------------------------>
+<span data-target="#timesheetuploadview" data-toggle="modal" id="uploadtimesheetview"></span>
+<div class="modal fade " id="timesheetuploadview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row w-100">
+                    <div class="col-lg-9">
+                        <h5 class="modal-title font-header">TimeSheet Upload</h5>
+                    </div>
+                    <div class="col-lg-3"> <button class="btn blue-btn w-75" type="button" data-target="#timsheetupload"
+                            data-toggle="modal">Upload</button>
+                            <button type="button" class="close w-25" data-dismiss="modal">&times;</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <ejs-grid #gridtimesheetupload [dataSource]='timesheetuploaddata' [allowSorting]='true' [allowResizing]='true' allowPaging='true' (resizeStop)="onResize_timesheetupload($event)">
+                    <e-columns>
+                        <e-column minWidth= 100 field="serialnumber" headerText="S.NO."></e-column>
+                        <e-column minWidth= 100 field="sequenceNumber" headerText="Sequence Number"></e-column>
+                        <e-column minWidth= 100 field="timesheetUploadName" headerText="Timesheet Upload"></e-column>
+                        <e-column minWidth= 100 headerText="Actions" uid="action" textAlign='center' [allowEditing]='false'>
+                            <ng-template #template let-data>
+                                <button class="btn blue-btn" (click)="downloadfile(data)"><i
+                                        class="fa fa-download"></i></button>&nbsp;
+
+                            </ng-template>
+                        </e-column>
+                    </e-columns>
+                </ejs-grid>
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn blue-btn" data-dismiss="modal" data-target="#modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------Timesheet upload ------------------------------------------------------>
+<span data-target="#timsheetupload" data-toggle="modal" id="uploads"></span>
+<div class="modal fade modalbackgrod " id="timsheetupload" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row w-100 ml-0">
+                    <div class="col-lg-12 pr-0" style="display: flex;">
+                        <h5 class="modal-title font-header w-75">TimeSheet Upload</h5>
+                        <button type="button" class="close" data-dismiss="modal w-25">&times;</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding-left: 3%;">
+                    <div class="custom-file" style="max-width: 80%;">
+                        <input type="file" class="custom-file-input" id="customFile" name="filename" #myInput
+                            accept=".pdf" (change)="onFileChanged($event)" style="margin-top: 3px;" multiple>
+
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+
+                    </div>&nbsp;&nbsp;
+                    <button class="btn blue-btn" [disabled]="!selected" data-toggle="modal" data-target="#openpdf"><i
+                            class="fa fa-eye"></i></button>
+                </div>
+                <ng-container *ngIf="selected">
+                    <div *ngFor=" let val of filearray" style="color: #004290;">
+                        {{val.TimesheetUploadName}}
+                    </div>
+                </ng-container>
+            </div>
+            <div class="modal-footer">
+                <button class="btn blue-btn" type="button" (click)="uploadTimesheet();filearray=[];selected=false"
+                    [disabled]="!selected">Save</button>
+                <button type="button" class="btn blue-btn" (click)="filearray=[];selected=false" data-dismiss="modal"
+                    data-target="#modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------Spinner -------------------------------------------------------------->
+<div class="spinnermodal" *ngIf="loading">
+
+    <span class="myspinner"></span>
+
+</div>
+
+<!----------------------------delete individual timesheet----------------------------------------------------->
+<span data-target="#deleteTimesheet" data-toggle="modal" id="delete"></span>
+<div class="modal fade " id="deleteTimesheet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Edit Timesheet</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr!=''" role="alert">
+                <p>{{saveErr}}</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="saveErr=''">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="resetPass">
+
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <label style="font-weight: 600;margin-top:6px;">Password<sup style="color:red; font-size: 1.35em;
+                          top: 0em;">&nbsp;*</sup></label>
+                        </div>
+                        <div class="col-lg-5">
+                            <input type="password" class="form-control" formControlName="Password"
+                                [(ngModel)]="deleteList.admin_Password" (keyup)="passvalid($event)">
+                            <div *ngIf="resetPass.controls['Password'].invalid && (resetPass.controls['Password'].dirty || resetPass.controls['Password'].touched) "
+                                class="alert alert-danger" style="height: 30px; margin-top: 10px;">
+                                <div *ngIf="resetPass.controls['Password'].errors.required">
+                                    Password is required.
+                                </div>
+                            </div>
+                            <div *ngIf="passerror && resetPass.controls['Password'].valid  " class="alert alert-danger">
+                                <div>
+                                    Enter Valid Password
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="passwordnote mt-5"><i>Note:&nbsp;Password should
+                                    contain atleast 8
+                                    characters/
+                                    digits includes 1 special character, 1 lower and uppercase characters
+                                </i></label>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn" [disabled]="!resetPass.valid ||passerror"
+                    (click)="deleteTimesheet()">Delete</button>
+                <button type="button" class="btn blue-btn" data-dismiss="modal" data-target="#modal"
+                    (click)="CancelDelete()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------------client Authorization--------------------------------------------------------------->
+<div *ngIf="EditAuthorization">
+    <app-client-authorization-edit *ngIf="EditAuthorization" (EventToEditAuth)="dataEmitfromChild($event)"
+        [DataFromAuthorizationList]="authinput">
+    </app-client-authorization-edit>
+</div>
+<!----------------------------close alert-->
+<span id="closealert" data-toggle="modal" data-target="#closetimesheet"></span>
+<div class="modal fade modalbackgrod" id="closetimesheet" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Close</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+               You want to close without save?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn btn-sm" (click)="back()" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!---------------------open pdf------------------------------------------------------>
+<span id="openpdfmodal" data-toggle="modal" data-target="#openpdf"></span>
+<div class="modal fade modalbackgrod " id="openpdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog pdfviewmodal" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">View file</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <pdf-viewer [src]="pdfSrc" [render-text]="true" style="display: block;height:500px"></pdf-viewer>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-ui-loader  *ngIf="loading==true"></ngx-ui-loader>

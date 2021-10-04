@@ -1,0 +1,55 @@
+// input[type=checkbox]
+// {
+   
+//   width: 1.30rem;
+//   height: 1.30rem;
+// }
+.border-bottom{
+    border-bottom: 1px solid black;
+}
+
+.table-responsive
+{
+    height: 500px;
+ 
+}
+.table-fixed {
+    width: 100%;
+  }
+  
+  /*This will work on every browser but Chrome Browser*/
+  .table-fixed thead {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+  
+  }
+  
+  /*This will work on every browser*/
+  .table-fixed thead th {
+      position: sticky;
+      position: -webkit-sticky;
+      top: 0;
+      background-color: white;
+    
+  
+  }
+  .text_right{
+    float: right;
+}
+.tableoverflow{
+ overflow: auto; max-height: 600px;
+}
+.textcolor{
+  color: #004290 !important;
+}
+// .card {
+//   max-height: 200px;
+// }
+
+.custom-switch .custom-control-label::before {
+  left: -2.25rem;
+  width: 1.75rem !important;
+  pointer-events: all;
+  border-radius: 0.5rem;
+}

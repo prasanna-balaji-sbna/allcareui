@@ -1,0 +1,34 @@
+[{
+    "id": 1,
+    "accountName": "A/C1",
+    "accountNumber":100210012221,
+    "branchName": "SBI",
+    "ifsc": "SBI0001364",
+    "bankName": "SBI"
+    
+},
+{
+    "id": 2,
+    "accountName": "A/C2",
+    "accountNumber": 120210012221,
+    "branchName": "HDFC",
+    "ifsc": "HDFC0001365",
+    "bankName": "HDFC"
+},
+{
+    "id": 1,
+    "accountName": "A/C3",
+    "accountNumber": 130210012221,
+    "branchName": "HDFC",
+    "ifsc": "HDFC0001365",
+    "bankName": "HDFC"
+},
+{
+    "id": 4,
+    "accountName": "A/C4",
+    "accountNumber": 140210012221,
+    "branchName": "SBI",
+    "ifsc": "SBI0001364",
+    "bankName": "SBI"
+}
+]

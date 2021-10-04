@@ -1,0 +1,265 @@
+
+<div class="row mb-2" *ngIf="!clientEnable">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted" *ngIf="!clientedit">
+        <h4 class="mb-0 font-header">Case Manager</h4>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+          <div class="row d-lg-none">
+              <div class="col">
+                <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#casemodalopen" *ngIf="fp.casemanagercreate " (click)="CaseCreateupdate('new')" [disabled]="global.globalAgencyId == 0">Add
+                  Case Manager</button>
+              </div>
+              <div class="col text-right">
+                  <button type="button" class="btn blue-btn btn-sm " (click)="Refresh()" [disabled]="global.globalAgencyId == 0">
+                  <i class="fa fa-repeat"> Refresh </i>
+                </button>
+              </div>
+          </div>
+        <div class="row no-gutters ">
+          
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-5 d-none d-lg-block  mt-1">
+                <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#casemodalopen" [disabled]="global.globalAgencyId == 0" *ngIf="fp.casemanagercreate " (click)="CaseCreateupdate('new')">Add
+                  Case Manager</button>&nbsp;&nbsp;
+              </div>
+            
+              <div class="col-lg-4 col-md-6 col-sm-6 ol-xs-12 mt-2 aligned_form" no-padding>
+                <label>FilterBy </label>&nbsp;
+                <select [(ngModel)]="SearchColumn" class="form-control col-lg-6 col-md-6 col-sm-8 ol-xs-4" [disabled]="global.globalAgencyId == 0" (ngModelChange)="setDefaultValue()">
+                  <option *ngFor="let item of filterItems | keyvalue" [ngValue]="item"> {{item.value}}</option>
+               
+                            
+                </select>
+              </div>
+              <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6 mt-2 aligned_form padding-0" *ngIf="SearchColumn.key!=''">
+                <label>{{SearchColumn.value}}</label>&nbsp;
+                <input (keydown)="onKeydown($event)" type="text" class="form-control col-lg-4 col-md-6 col-sm-8 ol-xs-6 "
+                  [(ngModel)]="SearchText" [disabled]="global.globalAgencyId == 0" />&nbsp;&nbsp;
+                <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId == 0" (click)="Search()">
+                  Apply
+                </button>
+              
+              </div>
+              <div class="d-none d-lg-block col-lg-1 mt-1">
+                <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId == 0" (click)="Refresh()">
+                  <i class="fa fa-repeat"> </i>Refresh
+                </button>&nbsp;&nbsp;
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ////////////////////////////////////////////////////////////////////////////// -->
+
+
+
+<!-- /////////////////////////////////////////////////////////////////// -->
+<div class="row mb-2">
+  <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+          <div class="card-body  widget-body pt-2"> 
+          <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+              <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+          </div>
+                  <!-- <div class="text-right col-1 mr-5 pr-5 pl-0">
+                    <ss-multiselect-dropdown class="custom-multiselect" [options]="columns" [settings]="columnsSettings"
+                    (ngModelChange)="changeColumns()" [(ngModel)]="columnsSelected"></ss-multiselect-dropdown> 
+                  </div> -->
+                <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true' allowPaging='true' [allowFiltering]='true' (resizeStop)="onResize($event)"
+                [pageSettings]='initialPage'   [filterSettings]='filterOptions' (actionBegin)="onActionComplete($event)" [showColumnChooser]= 'true' (dataStateChange)= 'dataStateChange($event)'>
+                  <e-columns>
+                    <e-column minWidth= 100 field="caseManagerName" headerText="Name" type="string">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="county" headerText="County" type="string">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="telephone" headerText="Telephone" type="string">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="fax" headerText="Fax" type="string">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="alternate_Fax" headerText="Alternative Fax" type="string">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100 field="email" headerText="Email" type="string">
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column minWidth= 100  uid="action"headerText="Actions" textAlign="center" [showInColumnChooser]='false'>
+                      <ng-template #template let-data *ngIf="!clientEnable">
+                        <button *ngIf="fp.casemanagerupdate" class="btn btn-edit-table" data-toggle="modal" data-target="#casemodalopen"
+                          (click)="CaseCreateupdate('edit');selectCasedetails(data)"><i 
+                            class="fa fa-edit"></i></button>&nbsp;
+                        <button *ngIf="fp.casemanagerdelete" class="btn btn-delete-table" data-toggle="modal" data-target="#deletemodal"
+                          (click)="selectCasedetails(data)"><i 
+                            class="fa fa-trash"></i></button>
+                      </ng-template>
+                      <ng-template #template let-data *ngIf="clientEnable">
+                        <input type="radio" (change)="caseemit(data)" >
+                       </ng-template>
+                    </e-column>
+                    <!--------------------------------table header icon---------------->
+                    <e-column width="50" [showInColumnChooser]='false'>
+                      <ng-template #headerTemplate let-data>
+                        <div>
+                        <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                        </div>
+                      </ng-template>
+                    </e-column>
+                  </e-columns>
+                </ejs-grid>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- ////////////////////////////////Create and Update model/////////////////////////////////// -->
+<span id="opencasemanModal1" data-target="#casemodalopen" data-toggle="modal"></span>
+<div class="modal fade modalbackgrod" id="casemodalopen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog create-update-zip" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title font-header" id="exampleModalLabel" ><span
+            *ngIf="ModelType =='new'"> Create Case Manager</span> <span *ngIf="ModelType =='edit'">Update Case
+            Manager</span> </h5>
+            <button type="button" class="close" (click)="closecase()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+          <div class="modal-body">
+            <form [formGroup]="CaseForm">
+              <div class="row">
+                <div class="col-lg-5">
+                  <label>Name<sup class="super-script">*</sup>
+                  </label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" class="form-control" formControlName="caseManagerName" [(ngModel)]="Case.caseManagerName" name="caseManagerName" (ngModelChange)="checkpopup('Name')"/>
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!CaseForm.get('caseManagerName').valid && CaseForm.get('caseManagerName').touched">
+                <p>Please Enter Name</p>
+              </span>
+              <div class="row">
+                <div class="col-lg-5">
+                  <label>County</label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" class="form-control"formControlName="County" [(ngModel)]="Case.county" name="county" (ngModelChange)="checkpopup('County')">
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-5">
+                  <label>Telephone</label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" min="0" max="99999999999999" (keypress)="numberOnly($event)" maxlength="14" class="form-control" formControlName="Telephone" [(ngModel)]="Case.telephone" (ngModelChange)="DemographicPhoneFormat();checkpopup('Telephone')" name="Telephone" />
+                </div>
+              </div>  
+        
+              <div class="row">
+                <div class="col-lg-5">
+                  <label>Fax</label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" min="0" max="99999999999999" (keypress)="numberOnly($event)" maxlength="14" class="form-control" formControlName="Fax" [(ngModel)]="Case.fax" (ngModelChange)="DemographicPhoneFormat1();checkpopup('Fax')"name="Fax"/>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-lg-5">
+                  <label>Alternate Fax</label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" min="0" max="99999999999999" (keypress)="numberOnly($event)" maxlength="14" class="form-control" formControlName="Alternate_Fax" [(ngModel)]="Case.alternate_Fax" (ngModelChange)="DemographicPhoneFormat2();checkpopup('AlternateFax')" name="Alternate_Fax" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-5">
+                  <label>Email</label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" class="form-control" formControlName="Email" [(ngModel)]="Case.email" name="Email" (ngModelChange)="checkpopup('Email')"/>
+                </div>
+              </div>
+              <!-- <span class="help-block text-danger text-center"
+                *ngIf="!CaseForm.get('Email').valid && CaseForm.get('Email').touched ">
+                <p>Please Enter Email</p>
+              </span> -->
+
+            </form>
+          </div>
+        <div class="modal-footer">
+          <button class="btn blue-btn btn-sm"  (click)="SaveOrUpdateCase();"
+          [disabled]="!CaseForm.valid"><span *ngIf="ModelType =='new'"> Save &
+            Close</span> <span *ngIf="ModelType =='edit'">Update & Close</span> </button>
+        <button type="button" class="btn blue-btn btn-sm" (click)="openDialog()">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<span id="openModal2" data-target="#deletemodal" data-toggle="modal"></span>
+<div class="modal fade modalbackgrod" id="deletemodal" >
+  <div class="modal-dialog delete-zip" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header">Delete Record</h5>
+        <button type="button" class="close"  aria-label="Close" (click)="canceldelete()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <label>Do you want to delete this record ?</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn btn-sm" (click)="deleteCase()">Delete</button>
+        <button type="button" class="btn blue-btn btn-sm"  (click)="canceldelete()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==============close without save modal================================= -->
+<span id="cancelcasemanmodal" data-toggle="modal" data-target="#ClosecasemanModal"></span>
+<div class="modal fade primarymodal modalbackgrod" id="ClosecasemanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" >Close</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+              You want to close without save?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn blue-btn btn-sm" (click)="closeAddUpdateModal()">Yes</button>
+            <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

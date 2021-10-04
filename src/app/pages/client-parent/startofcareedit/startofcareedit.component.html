@@ -1,0 +1,147 @@
+<!-- ///////////////////////////////////////////////////// -->
+
+<body>
+    <span id="modelopensoc" data-toggle="modal" data-target="#clientsocedit"></span>
+    <div class="modal hide fade" id="clientsocedit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="DataFromSOC.isEditSOC==false"> New
+                        Start Of Care </h5>
+                    <h5 class="modal-title font-header" id="exampleModalLabel" *ngIf="DataFromSOC.isEditSOC==true"> Edit
+                        Start Of Care </h5>
+                </div>
+                <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveSOCErr!=''" role="alert">
+                    <p>{{saveSOCErr}}</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                        (click)="saveSOCErr=''">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <label>Start of Care<sup class="super-script">&nbsp;*</sup></label>
+                        </div>
+                        <div class="col-lg-7">
+                            <my-date-picker [options]="myDatePickerOptions" [selDate]="startOfCare.startDate"
+                                placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','startDate')"
+                                (dateChanged)="newdates($event,'datechagned','startDate')">
+                            </my-date-picker>
+                        </div>
+                        <div class="col-lg-5 mt-1">
+                            <label>Company <sup class="super-script">&nbsp;*</sup></label>
+                        </div>
+                        <div class="col-lg-7  mt-1">
+                            <ng-select [items]="companyList" class="w-100" [searchable]="true" [clearable]="true"
+                                bindLabel="Value" bindValue="Key" [(ngModel)]="startOfCare.companyId">
+                            </ng-select>
+                        </div>
+                        <div class="col-lg-5  mt-1">
+                            <label>Discharge </label>
+                        </div>
+                        <div class="col-lg-7  mt-1">
+                            <div *ngFor="let i of dischargeStatus">
+                                <input type="radio" [value]="i.Key" [(ngModel)]="startOfCare.dischargeLid"
+                                    (ngModelChange)="getDischargeValue(i.Value)">
+                                {{i.Value}}&nbsp;&nbsp;
+                            </div>
+                        </div>
+                        <div class="col-lg-5  mt-1">
+                            <label>Discharge Date</label>
+                        </div>
+                        <div class="col-lg-7  mt-1">
+                            <my-date-picker [options]="myDatePickerOptions" [disabled]="!dischargeDateDisable"
+                                [selDate]="startOfCare.dischargeDate" placeholder="mm/dd/yyyy"
+                                (inputFieldChanged)="newdates($event,'inputchage','dischargeDate')"
+                                (dateChanged)="newdates($event,'datechagned','dischargeDate')">
+                            </my-date-picker>
+                        </div>
+                        <div class="col-lg-5  mt-1">
+                            <label>D/C Status Code</label>
+                        </div>
+                        <div class="col-lg-6  mt-1">
+                            <ng-select class="w-100" [items]="DCList" [searchable]="true" [clearable]="true" [disabled]="!dischargeDateDisable"
+                                bindLabel="Value" bindValue="Key" [(ngModel)]="startOfCare.dischargeCodeDetailId" (ngModelChange)="getDcCode(startOfCare.dischargeCodeDetailId)">
+                            </ng-select>
+                        </div>
+                        <div class="col-lg-1  mt-1 paddingbtnl">
+                            <button class="btn btn-sm btn-primary" (click)="opendischarge()" [disabled]="!dischargeDateDisable">
+                                <i class="fa fa fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <!-- (click)="viewDCCodes(dcCodes)" -->
+
+
+                    <div class="row  mt-1">
+                        <div class="col-lg-5">
+                            <label>Description</label>
+                        </div>
+                        <div class="col-lg-7">
+                            <textarea class="form-control w-100" [(ngModel)]="startOfCare.description" [disabled]="!dischargeDateDisable"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-primary">
+                        <span *ngIf="DataFromSOC.isEditSOC==false" [disabled]="startOfCare.startDate==null||startOfCare.startDate==undefined
+                        ||startOfCare.companyId==null||startOfCare.companyId==undefined"
+                         (click)="saveSOCRecord(startOfCare)"> Save &
+                            Close</span>
+                        <span *ngIf="DataFromSOC.isEditSOC==true" (click)="saveSOCRecord(startOfCare)"
+                        [disabled]="startOfCare.startDate==null||startOfCare.startDate==undefined
+                        ||startOfCare.companyId==null||startOfCare.companyId==undefined"> Update &
+                            Close</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-primary" (click)="Closedialog()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span id="dischargeopen" data-toggle="modal" data-target="#discharge"></span>
+    <div class="modal hide fade modalbackgrod" id="discharge" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog  dc-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-header" id="exampleModalLabel"> Discharge Codes & Description </h5>
+
+                </div>
+                <div class="modal-body dc-modalbody">
+
+                    <app-dccodes *ngIf="enabledischage" (dataFromDC)=datchange($event) [changevalue]="Dcvalue">
+                    </app-dccodes>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-sm btn-primary" (click)="Closedcdialog()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <span id="delete" data-toggle="modal" data-target="#deleteSCO"></span>
+<div class="modal hide fade modalbackgrod" id="deleteSCO" tabindex="-1" aria-labelledby="exampleModalLabel"
+aria-hidden="true" data-backdrop="static">
+<div class="modal-dialog  ICD-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title font-header" id="exampleModalLabel">Delete Record</h5>  
+        
+        </div>
+        <div class="modal-body ">
+            Do you want to delete this record ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-primary" (click)="deleteSOC()">Yes</button>
+            
+            <button type="button" class="btn btn-sm btn-primary" (click)="closedelete()" >No</button>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+

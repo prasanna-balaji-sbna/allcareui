@@ -1,0 +1,166 @@
+<div class="row mb-2">
+    <div class="col pl-0">
+        <div widget class="card border-0 box-shadow">
+            <div class="card-header transparent  text-muted">
+
+                <div class="row">
+                    <div class="col-lg-11">
+                        <h4 class="mb-0 font-header">Client Report</h4>
+                    </div>
+                    <div class="col-lg-1">
+                        <button type="button" class="btn blue-btn" (click)="back()">Close</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <div class="row">
+                            <div class="col-lg-3  d-inline-flex">
+                                <label style="font-weight: 600">Start Date</label>
+
+                                <my-date-picker [options]="myDatePickerOptions" [selDate]="aidfilter.start"
+                                    placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','start')"
+                                    (dateChanged)="newdates($event,'datechagned','start')"
+                                    [disabled]="this.global.globalAgencyId==0" class="w-75">
+                                </my-date-picker>
+                            </div>
+                            <div class="col-lg-3  d-inline-flex">
+                                <label style="font-weight: 600">End Date</label>
+
+                                <my-date-picker [options]="myDatePickerOptions" [selDate]="aidfilter.end"
+                                    placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','end')"
+                                    (dateChanged)="newdates($event,'datechagned','end')"
+                                    [disabled]="this.global.globalAgencyId==0" class="w-75">
+                                </my-date-picker>
+                            </div>
+                            <div class="col-lg-3  d-inline-flex">
+                                <label style="font-weight: 600">Client</label>
+
+                                <ng-select [(ngModel)]="aidfilter.client" [searchable]="true" [clearable]="true"
+                                    [items]="clientlist" bindLabel="label" bindValue="value"
+                                    [disabled]="this.global.globalAgencyId==0" class="w-75 new"></ng-select>
+                            </div>
+                            <div class="col-lg-3 d-inline-flex">
+                                <label style="font-weight: 600">Filter By</label>
+
+                                <ng-select [(ngModel)]="aidfilter.status" [searchable]="true" [clearable]="true"
+                                    [items]="clientReportFilterList" bindLabel="label" bindValue="value"
+                                    [disabled]="this.global.globalAgencyId==0" class="w-75"></ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="button" class="btn blue-btn" (click)="getreportLst()">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col pl-0">
+        <div widget class="card border-0 box-shadow">
+            <div class="card-body  widget-body pt-2">
+                <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+                    <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view
+                        details</label>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2 d-inline-flex">
+                        <button type="button" class="btn blue-btn btn-sm butstyle" (click)="Refresh()"
+                            [disabled]="global.globalAgencyId==0">
+                            <i class="fa fa-repeat"> </i>Refresh
+                        </button>
+                        <button type="button"  class="btn blue-btn btn-sm butstyle ml-1"
+                            data-target="#printalert" data-toggle="modal" [disabled]="global.globalAgencyId==0||datalength==0">
+                            <i class="fa fa-print"> </i>Print
+                        </button>
+                    </div>
+
+                </div>
+                <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true'
+                    allowPaging='true' [allowFiltering]='true' [pageSettings]='initialPage'
+                    [filterSettings]='filterOptions' (dataStateChange)='dataStateChange($event)'
+                    (actionBegin)="onActionComplete($event)"(resizeStop)="onResize($event)"  >
+                    <e-columns>
+                        <e-column minWidth= 100 field="clientName" headerText="Client Name" type="string">
+                            <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                            </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="dOB" headerText="DOB" type='date' [format]='formatOptions'></e-column>
+                        <e-column minWidth= 100 field="startDate" headerText="Start Date" type='date' [format]='formatOptions'>
+                        </e-column>
+                        <e-column minWidth= 100 field="endDate" headerText="End Date" type='date' [format]='formatOptions'></e-column>
+                        <e-column minWidth= 100 field="insuranceNumber" headerText="Insurance No" type='string'>
+                            <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                            </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="companyName" headerText="Company"  type='string'>
+                            <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                            </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="payorName" headerText="Payor" >
+                            <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                            </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="serviceCode" headerText="Service" >
+                            <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                            </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="totalUnits" headerText="Total Unit" >
+                            <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                            </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="exceededUnits" headerText="Exceeded Unit" >
+                            <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                            </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="usedUnits" headerText="Used Unit" >
+                            <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                            </ng-template>
+                        </e-column>
+                        <e-column minWidth= 100 field="remainingUnits" headerText="Remaining Unit" >
+                            <ng-template #filterTemplate let-data>
+                              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                            </ng-template>
+                        </e-column>
+                    </e-columns>
+                </ejs-grid>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--------------------------------------------print Modal open-------------------------------------------------------->
+<div class="modal fade" id="printalert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Print confirmation</h5>
+            </div>
+            <div class="modal-body">
+                Do you want to print this record ?
+            </div>
+            <div class="modal-footer">
+
+                <button class="btn blue-btn btn-sm butstyle " data-dismiss="modal" (click)="print()">Print
+                </button>
+                <button class="btn blue-btn btn-sm butstyle " data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+[{
+    "id":"Account-1",
+   "AccountName":"Name1",
+   "bankAccountNo":"018476548652",
+   "branchName":"SBI",
+   "IFSC":"SBI47564",
+   "bankName": "SBI"
+    
+},
+{
+    "id": "Account-2",
+    "AccountName":"Name2",
+    "bankAccountNo":"118476548652",
+    "branchName":"HDFC",
+    "IFSC":"HDFC47564",
+    "bankName": "HDFC"
+},
+{
+    "id": "Account-3",
+    "AccountName":"Name3",
+    "bankAccountNo":"008476548652",
+    "branchName":"SBI",
+    "IFSC":"SBI47564",
+    "bankName": "SBI"
+}
+]

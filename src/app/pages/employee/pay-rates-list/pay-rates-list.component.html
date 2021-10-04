@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-lg-5  offset-lg-7" style="text-align: right;">
+    <button class="btn blue-btn btn-sm" type="button" (click)="editPayrate('manage',0)" >Manage Pay Rate Units
+    </button>&nbsp;
+    <button (click)="editPayrate('new',0)" class="btn blue-btn btn-sm" *ngIf="fp.payratescreate">Add
+      Payrates</button>
+  </div>
+</div>
+<ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' (headerCellInfo)='headerCellInfo($event)'(queryCellInfo)='tooltip($event)' [allowSorting]='true' allowPaging='true' [allowFiltering]='true'
+[pageSettings]='initialPage' [filterSettings]='filterOptions'  (resizeStop)="onResize($event)" (dataStateChange)='dataStateChange($event)' (actionBegin)="onActionComplete($event)">
+<e-columns>
+  <e-column minWidth= 100 field="masterServiceName" headerText="Service">
+    <ng-template #filterTemplate let-data>
+      <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+    </ng-template>
+  </e-column>
+  <e-column minWidth= 100 field="startDate" headerText="Start Date" type="date" [format]='formatOptions'></e-column>
+  <e-column minWidth= 100 field="payRate" headerText="Pay Rate"></e-column>
+  <e-column minWidth= 100 field="payarateunit" headerText="Rate Unit">
+    <ng-template #filterTemplate let-data>
+      <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+    </ng-template>
+  </e-column>
+  <e-column minWidth= 100 headerText="Actions" uid="action" textAlign='center'>
+    <ng-template #template let-data>
+      <button class="btn btn-edit-table"(click)="editPayrate('edit',data)" *ngIf="fp.payratesupdate" ><i 
+          class="fa fa-edit"></i></button>
+          <button 
+          class=" btn btn-delete-table deletebtnpad" (click)="editPayrate('delete',data)" *ngIf="fp.payratesdelete">
+          <i class="fa fa-trash fa-lg"></i></button>
+    </ng-template>
+  </e-column>
+</e-columns>
+</ejs-grid>
+
+<ngx-ui-loader></ngx-ui-loader>

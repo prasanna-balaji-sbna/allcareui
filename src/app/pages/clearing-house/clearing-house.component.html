@@ -1,0 +1,471 @@
+
+<!-- <p>clearing-house works!</p> -->
+
+<!-- ////////////////////////////////////////////////////////////////////////////// -->
+
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+        <h4 class="mb-0 font-header">Clearing House</h4>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+          <div class="row d-lg-none">
+              <div class="col">
+                <button type="button" *ngIf="fp.clearinghousecreate " class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal" [disabled]="global.globalAgencyId == 0" (click)="OpenCreateupdate('new')">Add
+                  Clearing House</button>
+              </div>
+              <div class="col text-right">
+              <button type="button" class="btn blue-btn btn-sm " (click)="Refresh()" [disabled]="global.globalAgencyId == 0">
+                  <i class="fa fa-repeat"> Refresh </i>
+                </button>
+              </div>
+          </div>
+        <div class="row no-gutters ">
+          
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-5 d-none d-lg-block  mt-1">
+                <button type="button" *ngIf="fp.clearinghousecreate " class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal" [disabled]="global.globalAgencyId == 0" (click)="OpenCreateupdate('new')">Add
+                  Clearing House</button>&nbsp;&nbsp;
+              </div>
+            
+              <div class="col-lg-4 col-md-6 col-sm-6 ol-xs-12 mt-2 aligned_form" no-padding>
+                <label>Filter By </label>&nbsp;
+                <select [(ngModel)]="SearchColumn" class="form-control col-lg-6 col-md-6 col-sm-8 ol-xs-4" [disabled]="global.globalAgencyId == 0" (ngModelChange)="setDefaultValue()">
+                  <option *ngFor="let item of filterItems | keyvalue" [ngValue]="item"> {{item.value}}</option>
+               
+                            
+                </select>
+              </div>
+              <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6 mt-2 aligned_form padding-0" *ngIf="SearchColumn.key!=''">
+                <label>{{SearchColumn.value}}</label>&nbsp;
+                <input (keydown)="onKeydown($event)" type="text" class="form-control col-lg-4 col-md-6 col-sm-8 ol-xs-6 "
+                  [(ngModel)]="SearchText" [disabled]="global.globalAgencyId == 0"/>&nbsp;&nbsp;
+                <button type="button" class="btn blue-btn btn-sm" (click)="Search()" [disabled]="global.globalAgencyId == 0">
+                  Apply
+                </button>
+              
+              </div>
+              <div class="d-none d-lg-block col-lg-1 mt-1">
+               
+                <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()" [disabled]="global.globalAgencyId == 0">
+                  <i class="fa fa-repeat"> </i>Refresh
+                </button>&nbsp;&nbsp;
+               
+               
+            </div>
+         
+            
+            </div>
+       
+   
+
+
+
+       
+      </div>
+    
+    </div>
+  </div>
+</div>
+<!-- ////////////////////////////////////////////////////////////////////////////// -->
+
+
+<div class="row mb-2">
+  <div class="col pl-0">
+
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+
+      <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+          <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+      </div>
+
+        <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true' allowPaging='true' [allowFiltering]='true'
+          [pageSettings]='initialPage'   [filterSettings]='filterOptions' (actionBegin)="onActionComplete($event)" [showColumnChooser]= 'true' (dataStateChange)= 'dataStateChange($event)' (resizeStop)="onResize($event)">
+          <e-columns>
+            <!-- <e-column field="clearingHouseId" headerText="Id"></e-column> -->
+            <e-column field="name" minWidth= 100 headerText="Name" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="modifier" minWidth= 100 headerText="Modifier" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="fax" minWidth= 100 headerText="Fax" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="receiverIDQualifier_Name" minWidth= 100 headerText="Receiver ID Qualifier" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="receiverId" minWidth= 100 headerText="Receiver Id" type="number"></e-column>
+            <e-column field="senderIdQualifier_Name" minWidth= 100 headerText="Sender Id Qualifier" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="senderId" minWidth= 100 headerText="Sender Id" type="number"></e-column>
+            <e-column field="formatTypeName" minWidth= 100 headerText="Format Type" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="fileNameFormatType" minWidth= 100 headerText="File Name Format Type" type="number"></e-column>
+            <e-column field="tradingPartnerID2" minWidth= 100 headerText="Trading Partner ID2" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column uid="action" headerText="Actions" minWidth= 100 textAlign="center" [showInColumnChooser]='false'>
+              <ng-template #template let-data>
+                <button *ngIf="fp.clearinghouseupdate" class="btn btn-edit-table" data-toggle="modal" data-target="#modal"
+                 (click)="OpenCreateupdate('edit');selectCHDetails(data)">
+                <i class="fa fa-edit"></i></button>&nbsp;
+              </ng-template>
+            </e-column>
+            <!--------------------------------table header icon---------------->
+            <e-column width="50" [showInColumnChooser]='false'>
+              <ng-template #headerTemplate let-data>
+                <div>
+                <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                </div>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<span id="openModal1" data-target="#modal" data-toggle="modal"></span>
+<div class="modal fade " id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog CHAddUPdateModel mt-0" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel" ><span
+            *ngIf="ModelType =='new'"> Create Clearing House</span> <span *ngIf="ModelType =='edit'">Update Clearing
+            House</span> </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="clearHouseForm">
+
+            <div class="row mb-1">
+                <div class="col-lg-6">
+                <label style="font-weight: 600;margin-top: 0px;">ID <sup  class="super-script">&nbsp;*</sup></label>
+                </div>
+                <div class="col-lg-6">
+                <input type="text" class="form-control" formControlName="ClearingHouseId" [(ngModel)]="ClearH.clearingHouseId" (ngModelChange)="checkpopup('Id')">
+                </div>
+            </div>
+            <span class="help-block text-danger text-center"
+                *ngIf="!clearHouseForm.get('ClearingHouseId').valid && clearHouseForm.get('ClearingHouseId').touched">
+                <p>Please Enter ClearingHouseId</p>
+            </span>
+
+            <div class="row mb-1">
+                <div class="col-lg-6">
+                <label >Name <sup  class="super-script">&nbsp;*</sup></label>
+                </div>
+                <div class="col-lg-6">
+                <input type="text" class="form-control" formControlName="Name" [(ngModel)]="ClearH.name" (ngModelChange)="checkpopup('Name')">
+                </div>
+            </div>
+            <span class="help-block text-danger text-center"
+                *ngIf="!clearHouseForm.get('Name').valid && clearHouseForm.get('Name').touched">
+                <p>Please Enter Name</p>
+            </span>
+            <div class="row mb-1">
+                <div class="col-lg-6">
+                <label>Modifier</label>
+                </div>
+                <div class="col-lg-6">
+                <input type="text" class="form-control" formControlName="Modifier" [(ngModel)]="ClearH.modifier" (ngModelChange)="checkpopup('Modifier')">
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-lg-6">
+                <label >Format Type</label>
+                </div>
+                <div class="col-lg-6">
+                <select style="font-weight: 600;" formControlName="FormatTypeLid" class="form-control" [(ngModel)]="ClearH.formatTypeLid" (ngModelChange)="checkpopup('FormatTypeLid')">
+                <option [value]=i.Key *ngFor="let i of format_type">{{i.Value}}</option>
+                </select>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-lg-6">
+                <label >Trading Partner ID2</label>
+                </div>
+                <div class="col-lg-6">
+                <input type="text" min="0" class="form-control" formControlName="TradingPartnerID2" [(ngModel)]="ClearH.tradingPartnerID2" (ngModelChange)="checkpopup('TradingPartnerID2')">
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-lg-6">
+                <label >Sender ID<sup  class="super-script">&nbsp;*</sup></label>
+                </div>
+                <div class="col-lg-6">
+                <input type="text" class="form-control" formControlName="SenderID" [(ngModel)]="ClearH.senderId" (ngModelChange)="checkpopup('SenderID')">
+                </div>
+            </div>
+
+            <div class="row mb-1">
+                <div class="col-lg-6">
+                <label >Sender ID Qualifier<sup  class="super-script">&nbsp;*</sup></label>
+                </div>
+                <div class="col-lg-6">
+                <select class="form-control" formControlName="SenderIDQualifier" [(ngModel)]="ClearH.senderIDQualifierLid" (ngModelChange)="checkpopup('SenderIDQualifierLid')">
+                <option [value]=i.Key *ngFor="let i of  senderidQualifier">{{i.Value}}</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="row mb-1">
+                <div class="col-lg-6">
+                <label >Receiver ID<sup  class="super-script">&nbsp;*</sup></label>
+                </div>
+                <div class="col-lg-6">
+                <input type="text" class="form-control" formControlName="ReceiverID" [(ngModel)]="ClearH.receiverId" (ngModelChange)="checkpopup('ReceiverID')">
+                </div>
+            </div>
+
+            <div class="row mb-1">
+                <div class="col-lg-6">
+                <label>Receiver ID Qualifier<sup  class="super-script">&nbsp;*</sup></label>
+                </div>
+                <div class="col-lg-6">
+                  <select class="form-control" formControlName="ReceiverIDQualifierLid" [(ngModel)]="ClearH.receiverIDQualifierLid" (ngModelChange)="checkpopup('ReceiverIDQualifierLid')">
+                  <option [value]=i.Key *ngFor="let i of  RecieveridQualifier">{{i.Value}}</option>
+                  </select>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-lg-6">
+                <label >File Name Format Type</label>
+                </div>
+                <div class="col-lg-2">
+                <input type="number" min="1" class="form-control" formControlName="FileNameFormatType" [(ngModel)]="ClearH.fileNameFormatType" (ngModelChange)="checkpopup('FileNameFormatType')">
+                </div>
+                <div class="col-lg-4"> <button data-toggle="modal" data-target="#Formatmodal" class="btn blue-btn btn-sm">Format
+                </button>
+                </div>
+            </div>
+            <h6 >Clearing House Payor ID
+            </h6>
+            <table class="table  table-hover table-bordered" style="margin-left:8px">
+                <thead class="table_header_Blue">
+                    <tr>
+                        <th>Payor Name
+                        </th>
+                        <th>Payor ID
+                        </th>
+                        <th>InActive
+                        </th>
+                        <th>
+                        <button type="button" class="btn btnclass btn_addDel_row" (click)="addFieldValue()">
+                        <i class="fa fa-plus-circle"></i>
+                        </button></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr formArrayName="ClearingHousePayorMapping"
+                    *ngFor="let creds of clearHouseForm.get('ClearingHousePayorMapping')['controls'];let i= index">
+                    <ng-container [formGroupName]="i">
+                    <td width="30%">
+                    <select class="form-control" formControlName="GroupPayor" (change)="setPayorId(i);checkpopup('GroupPayor')">
+                    <option [value]="payorvalue.id" *ngFor="let payorvalue of GroupPayorArray">{{payorvalue.payorName}}
+                    </option>
+                    </select>
+                    </td>
+                    <td><input type="text" class="form-control" formControlName="GroupPayorId" [attr.disabled]="true"></td>
+                    <td style="text-align: center">
+                    <input type="checkbox" class=" checkbox checkbox-primary styled" (change)="onStatusChange(i)"
+                    formControlName="Status"></td>
+                    <td>
+                     <button *ngIf="ModelType =='new'" type="button" class="btn btnclass" (click)="deleteFieldValue(i)">
+                    <i class="fa fa-times-circle"></i>
+                    </button>
+                    <button *ngIf="ModelType =='edit'" type="button" class="btn btnclass"
+                    (click)="deleteFieldValue_update(i)">
+                    <i class="fa fa-times-circle"></i>
+                    </button>
+                    </td>
+                    </ng-container>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn blue-btn btn-sm" [disabled]="!clearHouseForm.valid" (click)="SaveOrUpdateClearnhHouse()"><span *ngIf="ModelType =='new'"> Save &
+            Close</span> <span *ngIf="ModelType =='edit'">Update & Close</span> </button>
+        <button type="button" class="btn blue-btn btn-sm" (click)="CloseSaveMOdelConfirm()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<span id="openModal2" data-target="#Formatmodal" data-toggle="modal"></span>
+<div class="modal fade " id="Formatmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content FormatModel ml-1">
+    <div class="modal-header">
+      <span></span>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <h6 class="FormatLbl ml-1">0/Null=</h6>
+          <div class="row">
+
+            <div class="col">
+              <label class="FormatLbl">NPI(A306977100)</label>
+            </div>
+
+
+          </div>
+          <div class="row">
+
+            <div class="col">
+              <label class="FormatLbl">+file Type(837P)</label>
+            </div>
+
+
+          </div>
+          <div class="row">
+
+            <div class="col">
+              <label class="FormatLbl">+date(20190108)</label>
+            </div>
+
+
+          </div>
+          <div class="row">
+
+            <div class="col">
+              <label class="FormatLbl">+Counter(1)(Sothat when there are
+                <br>multiple files on a day
+                ,<br>we have a unique name)</label>
+            </div>
+
+
+          </div>
+          <div class="row">
+
+            <div class="col">
+              <label class="FormatLbl">+identifier for my code(CC)</label>
+            </div>
+
+
+          </div>
+          <div class="row">
+
+            <div class="col">
+              <label class="FormatLbl">+.dat</label>
+            </div>
+
+
+          </div>
+          <hr>
+          <h6 class="FormatLbl ml-1">1-</h6>
+          <div class="row">
+
+            <div class="col">
+              <label class="FormatLbl">+date(mmddyyyy)</label>
+            </div>
+
+
+          </div>
+          <div class="row">
+
+            <div class="col">
+              <label class="FormatLbl">+unique number(9 digits,leading
+                zero)</label>
+            </div>
+
+
+          </div>
+          <div class="row">
+
+            <div class="col">
+              <label class="FormatLbl">+transaction Type(I,P,D)</label>
+            </div>
+
+
+          </div>
+          <div class="row">
+
+            <div class="col">
+              <label class="FormatLbl">+.dat</label>
+            </div>
+
+
+          </div>
+          <div class="BTnDv">
+          <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal" data-target="#Formatmodal">Close</button>
+          </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===============================popup during deleting the payor mapping========================== -->
+<span id="openModal3" data-toggle="modal" data-target="#deleteModal"></span>
+<div class="modal fade primarymodal" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" >Delete Record</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+              Do you want to delete this record?
+            </div>
+            <div class="modal-footer">
+              <button class="btn blue-btn btn-sm" (click)="deleteClearingHousePayorMapping()">Delete</button>
+              <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal" data-target="#deleteModal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==============close without save modal================================= -->
+<span id="cancelmodal" data-toggle="modal" data-target="#CloseModal"></span>
+<div class="modal fade primarymodal" id="CloseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" >Close</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+              You want to close without save?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn blue-btn btn-sm" (click)="closeAddUpdateModal()">Yes</button>
+            <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

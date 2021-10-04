@@ -1,0 +1,24 @@
+[{
+    "id": 1,
+    "landmark": "Gandhipuram",
+    "address": "Coimbatore",
+    "status": false
+},
+{
+    "id": 2,
+    "landmark": "Ramanathapuram",
+    "address": "Coimbatore",
+    "status": true
+},
+{
+    "id": 3,
+    "landmark": "Hopes",
+    "address": "Coimbatore",
+    "status": false
+},
+{
+    "id": 4,
+    "landmark": "Peelamedu",
+    "address": "Coimbatore",
+    "status": true
+}]

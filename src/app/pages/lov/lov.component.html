@@ -1,0 +1,311 @@
+<!-- ////////////////////////////////////////////////////////////////////////////// -->
+
+<div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted">
+          <h4 class="mb-0 font-header">Lov</h4>
+        </div>
+        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+            <div class="row d-lg-none">
+                <div class="col">
+                  <button type="button" [disabled]="ListSelected==false" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal" (click)="addOrEditLov('new')" *ngIf="fp.lovcreate" >Add
+                    Lov</button>
+                </div>
+                <div class="col text-right">
+                <button type="button" class="btn blue-btn btn-sm " (click)="Refresh()" [disabled]="ListSelected==false" >
+                    <i class="fa fa-repeat"> Refresh </i>
+                  </button>
+                </div>
+            </div>
+          <div class="row no-gutters ">
+            
+                <div class="col-lg-1 col-md-2 col-sm-2 col-xs-5 d-none d-lg-block  mt-1">
+                  <button type="button"  [disabled]="ListSelected==false" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal" (click)="addOrEditLov('new')" *ngIf="fp.lovcreate" >Add
+                    Lov</button>&nbsp;&nbsp;
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 ol-xs-12 mt-2 aligned_form d-none d-lg-flex" no-padding>
+                    <label>Select List</label>&nbsp;
+                    <select [(ngModel)]="list.value" class="form-control col-lg-6 col-md-6 col-sm-8 ol-xs-4" [disabled]="global.globalAgencyId == 0" (change)="getlistValue(list.value)">
+                        <option *ngFor="let item of LovSelectList " [ngValue]="item.Key"> {{item.Value}}</option>
+                     
+                                  
+                      </select>
+        
+                  </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 ol-xs-12 mt-2 aligned_form" no-padding>
+                  <label>Filter By </label>&nbsp;
+                  <select [disabled]="ListSelected==false" [(ngModel)]="SearchColumn" class="form-control col-lg-6 col-md-6 col-sm-8 ol-xs-4" (ngModelChange)="setDefaultValue()">
+                    <option *ngFor="let item of filterItems | keyvalue" [ngValue]="item"> {{item.value}}</option>
+                 
+                              
+                  </select>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 mt-2 aligned_form padding-0" *ngIf="SearchColumn.key!=''">
+                  <label>{{SearchColumn.value}}</label>&nbsp;
+                  <input (keydown)="onKeydown($event)" type="text" class="form-control col-lg-4 col-md-6 col-sm-8 ol-xs-6 "
+                    [(ngModel)]="SearchText" [disabled]="ListSelected==false" />&nbsp;&nbsp;
+                  <button type="button" class="btn blue-btn btn-sm" (click)="Search()"  [disabled]="ListSelected==false" >
+                    Apply
+                  </button>
+                
+                </div>
+                <div class="d-none d-lg-block col-lg-1  mt-1">
+                 
+                  <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()" [disabled]="ListSelected==false">
+                    <i class="fa fa-repeat"> </i>Refresh
+                  </button>
+                
+                </div>
+              
+              </div>
+         
+     
+
+
+
+         
+        </div>
+        <div class="card-footer transparent bg-white text-muted d-lg-none">
+            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+                <label><h5 class="mb-0 font-header">Select List</h5></label>&nbsp;
+                <select [(ngModel)]="list.value" class="form-control"  (change)="getlistValue(list.value)">
+                    <option *ngFor="let item of LovSelectList " [ngValue]="item.Key"> {{item.Value}}</option>
+                </select>
+    
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- ///////////////////////////////////////////////////////////////////////////// -->
+<div class="row mb-2">
+    <div class="col pl-0">
+  
+      <div widget class="card border-0 box-shadow">
+        <div class="card-body  widget-body pt-2">
+          <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+            <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+          </div>
+          <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' [allowSorting]='true'  *ngIf="global.globalAgencyId!=0" (resizeStop)="onResize($event)" 
+          [allowPaging]='true' [pageSettings]='initialPage' [filterSettings]='filterSettings' [allowFiltering]='true' (actionBegin)="onActionComplete($event)" 
+          [showColumnChooser]= 'true' (dataStateChange)= 'dataStateChange($event)' >
+            <e-columns>
+              <!-- <e-column field="id" headerText="ID"></e-column> -->
+              <e-column minWidth= 100 field="lovCode" headerText="LovCode"  type="string">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 field="lovName" headerText="LovName"  type="string">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 field="lovValue" headerText="LovValue" type="string">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 field="orderby" headerText="Orderby" type="number" ></e-column>
+            
+              <e-column minWidth= 100 headerText="Actions" [showInColumnChooser]='false'>
+                <ng-template #template let-data>
+                  <button class="btn btn-edit-table"  *ngIf="fp.lovupdate" data-toggle="modal" data-target="#modal"  (click)="addOrEditLov('edit');lovDetails(data)"
+                ><i 
+                      class="fa fa-edit"></i></button>&nbsp;
+                  <button class="btn btn-delete-table" data-toggle="modal"  *ngIf="fp.lovdelete" data-target="#deletemodal"(click)="lovDetails(data)"
+                   ><i 
+                      class="fa fa-trash"></i></button>
+                </ng-template>
+              </e-column>
+              <e-column width="50" [showInColumnChooser]='false'>
+                <ng-template #headerTemplate let-data>
+                  <div>
+                  <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                  </div>
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+    <!-- ///////////////////////////////////////////////////// -->
+    <span id="openModal1" data-target="#modal" data-toggle="modal"></span>
+    <div class="modal fade" id="modal" data-backdrop="static">
+  
+      <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title font-header" id="exampleModalLabel" ><span
+                *ngIf="ModelType =='new'"> Create Lov</span> <span *ngIf="ModelType =='edit'">Update Lov</span> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                 
+           
+    
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="lovForm">
+              <div class="row ml-3 mr-3 alert alert-warning roundbox" *ngIf="showErrorAlert==true">
+                <strong>{{error}}</strong>
+              </div>
+              <div class="row">
+              
+                <div class="col-lg-5">
+                  <label>LovCode<sup class="super-script">&nbsp; *</sup>
+                  </label>
+                </div>
+                <div class="col-lg-7">
+                  <input type="text" class="form-control" formControlName="lovCode" [(ngModel)]="lov.lovCode" (ngModelChange)="checkpopup('lovCode')"
+                  >
+                  <span class="help-block text-danger text-center"
+                *ngIf="!lovForm.get('lovCode').valid && lovForm.get('lovCode').touched ">
+                <p>Please Enter Code</p>
+              </span>
+                </div>
+              
+              
+            </div>
+            <div class="row">
+              <div class="col-lg-5">
+                <label>LovName<sup class="super-script">&nbsp; *</sup>
+                </label>
+              </div>
+              <div class="col-lg-7">
+                <input type="text" class="form-control" formControlName="lovName" id="myTextbox" name="lovName" [(ngModel)]="lov.lovName" (ngModelChange)="checkpopup('lovName')">
+                   
+                <span class="help-block text-danger text-center"
+                *ngIf="!lovForm.get('lovName').valid && lovForm.get('lovName').touched ">
+                <p>Please Enter Name</p>
+              </span>
+              </div>
+         
+          </div>
+          <div class="row">
+            <div class="col-lg-5">
+              <label>LovValue
+              </label>
+            </div>
+            <div class="col-lg-7">
+              <input type="text" class="form-control" formControlName="lovValue" [(ngModel)]="lov.lovValue" (ngModelChange)="checkpopup('lovValue')"
+              >
+            </div>
+        
+        </div>
+        <div class="row">
+          <div class="col-lg-5">
+            <label>Orderby<sup class="super-script">&nbsp; *</sup>
+            </label>
+          </div>
+          <div class="col-lg-7">
+            <input type="number" class="form-control" formControlName="orderby" [(ngModel)]="lov.orderby"  (ngModelChange)="checkpopup('orderby')"
+            >
+         
+            <span class="help-block text-danger text-center"
+            *ngIf="!lovForm.get('orderby').valid && lovForm.get('orderby').touched ">
+            <p>Please Enter Order</p>
+          </span>
+          </div>
+        
+      
+      </div>
+ 
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn blue-btn btn-sm" (click)="SaveOrUpdateLov()"
+              [disabled]="!lovForm.valid"><span *ngIf="ModelType =='new'"> Save &
+                Close</span> <span *ngIf="ModelType =='edit'">Update & Close</span> </button>
+            <button type="button" class="btn blue-btn btn-sm"  (click)="cancel()" >Close</button>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- ///////////////////////////////////////////////////// -->
+  <span id="openModal2" data-target="#deletemodal" data-toggle="modal"></span>
+  <div class="modal fade" id="deletemodal" data-backdrop="static">
+    <div class="modal-dialog delete-zip" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-header">Delete Record</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+           
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <label>Do you want to delete this record ?</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" >
+          <button type="button" class="btn blue-btn btn-sm"  (click)="deletelov();lovdelete(lov.id)">Delete</button>
+          <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ///////////////////////////////////////////////////// -->
+  <!-- <ng-template #mymodal let-modal class="close-modal">
+  <div class="">
+  <div class="modal bd-example-modal-sm " tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="cancelModel" >
+     <div class="modal-dialog box-shadow modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-primary">
+          <h5 class="modal-title font-header ">Close</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <label>You Want To Close Without Save?</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer text-primary">
+          <button type="button" class="btn blue-btn btn-sm"  (click)="cancelYes()" >Yes</button>
+          <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</ng-template> -->
+<span id="openModal3" data-target="#CloseModal" data-toggle="modal"></span>
+<div class="modal" id="CloseModal" data-backdrop="static">
+  <div class="modal-dialog modal-sm col-sm-6 col-xs-6">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Close</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+         
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        You want to close without save?
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn" (click)="cancelYes()">Yes</button>
+        <button type="button" class="btn blue-btn" data-dismiss="modal">No</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+  <!-- ///////////////////////////////////////////////////// -->
+  <ngx-ui-loader></ngx-ui-loader>
+

@@ -1,0 +1,576 @@
+
+<!-- =======================================Top Card=============================================== -->
+
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+        <h4 class="mb-0 font-header">User</h4>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <!-- <div class="row alert ml-3 mt-2 mr-3 alert-danger text-dark" *ngIf="deleteAlert==true">
+          <strong>{{deleteError}}</strong>
+        </div> -->
+        <div class="row d-lg-none">
+            <div class="col">
+              <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal"
+              (click)="UserCreateUpdate('new')" [disabled]="global.globalAgencyId == 0">Add
+              User</button>&nbsp;&nbsp;
+            </div>
+            <div class="col text-right">
+              <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()" [disabled]="global.globalAgencyId == 0">
+              <i class="fa fa-repeat"> </i>Refresh
+              </button>
+            </div>
+        </div>
+        <div class="row no-gutters">
+          <div class="col-lg-8 col-md-7 col-sm-7 col-xs-7 d-none d-lg-block">
+            <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal"
+            (click)="UserCreateUpdate('new')" [disabled]="global.globalAgencyId == 0">Add
+              User</button>&nbsp;&nbsp;
+          </div>
+          <div class="col-lg-2 col-md-8 col-sm-8 col-xs-8 aligned_form">
+            <input (keydown.enter)="Search()" [disabled]="global.globalAgencyId == 0" type="text" placeholder="User Name" class="form-control element_width"
+              [(ngModel)]="SearchText" />
+              <i class="fa fa-search mt-1 ml-1" aria-hidden="true" (click)="Search()"></i>
+          </div>
+          <div class="col-lg-2 mb-1 d-none d-lg-block text-right">
+            <button type="button" [disabled]="global.globalAgencyId == 0" class="btn blue-btn btn-sm" (click)="Refresh()">
+              <i class="fa fa-repeat"> </i>Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- =====================================Grid===================================================== -->
+<ngx-ui-loader></ngx-ui-loader>
+<div class="row mb-2">
+  <div class="col pl-0">
+
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+
+                <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+                    <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+                </div>
+
+        <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true' allowPaging='true' [allowFiltering]='true' (resizeStop)="onResize($event)"
+          [pageSettings]='initialPage'   (dataStateChange)= 'dataStateChange($event)' (actionBegin)="onActionComplete($event)" [filterSettings]='filterOptions' [showColumnChooser]= 'true'>
+          <e-columns>
+            <!-- <e-column headerText="Name">
+                <ng-template #template let-data>
+                    <label>{{data.lastName}},{{data.firstName}}</label>
+                </ng-template>
+            </e-column> -->
+            <e-column field="name" headerText="Name" minWidth= 100 type="string">
+            <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+            </e-column>
+            <e-column field="userRole" headerText="User Role" minWidth= 100 type="string">
+              <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+            </e-column>
+            <e-column field="statusLname" headerText="User Status" minWidth= 100 type="string">
+              <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+            </e-column>
+            <e-column field="phone1" headerText="Phone" minWidth= 100 type="string">
+              <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+            </e-column>
+            <e-column field="email" minWidth= 100 headerText="Email" type="string">
+              <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+            </e-column>
+            <e-column headerText="Actions" uid="action" textAlign="center" minWidth= 100 [showInColumnChooser]='false'>
+              <ng-template #template let-data>
+                <button class="btn btn-reset-table" data-toggle="modal"  ngbTooltip="Reset Password" data-target="#Reset_Confirmation" (click)="resetpassword(data.id);UserCreateUpdate('edit')"><i class="fa fa-key" aria-hidden="true"></i></button> &nbsp;
+                <!-- <button class="btn blue-btn" data-toggle="modal" data-target="#Reset_Confirmation" (click)="resetpassword(data.id);UserCreateUpdate('edit')">Reset Password</button> -->
+                <button class="btn btn-edit-table" data-toggle="modal" data-target="#UpdateUsermodal"
+                (click)="UserCreateUpdate('edit');selectUserdetails(data)">
+                <i class="fa fa-edit"></i></button>
+              </ng-template>
+            </e-column>
+            <!--------------------------------table header icon---------------->
+            <e-column width="50" [showInColumnChooser]='false'>
+              <ng-template #headerTemplate let-data>
+                <div>
+                <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                </div>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================================Add User Model================================================ -->
+<span id="OpenModal1" data-target="#modal" data-toggle="modal"></span>
+<div class="modal fade " id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog User-Add-Model" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel" >Create User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="userForm">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="row usrLbl ml-1">
+                <div>
+                  <b>General Info</b>
+                </div>
+              </div>
+              <hr class="mt-0">
+              <div class="row mb-0">
+                <div class="col-lg-4">
+                  <label>Status<span class="super-script">*</span></label>
+                </div>
+                <div class="col-lg-8">
+                  <select class="form-control" [(ngModel)]="User.statusLid" formControlName="Status" (change)="onvalChange()">
+                    <option *ngFor="let userStatusData of StatusDrop" [value]="userStatusData.Key">{{userStatusData.Value}}</option>
+                  </select>
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('Status').valid && userForm.get('Status').touched">
+                <p>Status is required</p>
+              </span>
+              <div class="row mb-0">
+                <div class="col-lg-4">
+                  <label>First Name<span class="super-script">*</span></label>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" formControlName="FirstName" [(ngModel)]="User.firstName" (change)="onvalChange()">
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('FirstName').valid && userForm.get('FirstName').touched">
+                <p>FirstName is required</p>
+              </span>
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>Middle Name</label>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" formControlName="MiddleName" [(ngModel)]="User.middleName" (change)="onvalChange()">
+                </div>
+              </div>
+              <div class="row mb-0">
+                <div class="col-lg-4">
+                  <label>Last Name<span class="super-script">*</span></label>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" formControlName="LastName" [(ngModel)]="User.lastName" (change)="onvalChange()">
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('LastName').valid && userForm.get('LastName').touched">
+                <p>LastName is required</p>
+              </span>
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>Role<span class="super-script">*</span></label>
+                </div>
+                <div class="col-lg-8">
+                  <ng-select [(ngModel)]="roleName" [multiple]="true" formControlName="Role" [searchable]="true" [clearable]="true" [items]="UserRole"
+                    bindLabel="label" bindValue="value" (change)="onvalChange()">
+                  </ng-select>
+                  <!-- <ng-multiselect-dropdown
+                  [placeholder]="'Select Roles'"
+                  [data]="UserRole"
+                  [settings]="dropdownSettings"
+                  [(ngModel)]="roleName"
+                  (onSelect)="onItemSelect($event)"
+                  (onSelectAll)="onSelectAll($event)"
+                  bindValue="value"
+                  (ngModelChange)="checkpopup('RoleId')"
+                  name="Role"
+                  formControlName="Role">
+                  </ng-multiselect-dropdown> -->
+                  <!-- <select class="form-control multidrp" formControlName="Role" [(ngModel)]="roleName" multiple (ngModelChange)="checkpopup('RoleId')">
+                    <option *ngFor="let userRoleData of UserRole" [value]="userRoleData.value">{{userRoleData.label}}</option>
+                  </select> -->
+                  <!-- <ng-select [items]="UserRole"
+                  [multiple]="true"
+                  formControlName="Role"
+                  placeholder="Select Roles"
+                  [(ngModel)]="roleName" (ngModelChange)="checkpopup('RoleId')">
+                  </ng-select> -->
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('Role').valid && userForm.get('Role').touched">
+                <p>Role is required</p>
+              </span>
+            </div>
+            <div class="col-lg-6">
+              <div class="row usrLbl ml-0">
+                <div>
+                  <b>Contact Info</b>
+                </div>
+              </div>
+              <hr class="mt-0">
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>Email<sup class="super-script">*</sup></label>
+                </div>
+                <div class="col-lg-8 ml-0">
+                  <input type="text" class="form-control" formControlName="Email" [(ngModel)]="User.email" (change)="onvalChange()">
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('Email').valid && userForm.get('Email').touched">
+                <p>Email is required</p>
+              </span>
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>Phone1</label>
+                </div>
+                <div class="col-lg-8 ml-0">
+                  <input type="text"  min="0" max="99999999999999" (keypress)="numberOnly($event)" maxlength="14" class="form-control" formControlName="Phone1" [(ngModel)]="User.phone1" (change)="DemographicPhoneFormat1();onvalChange()">
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>Phone2</label>
+                </div>
+                <div class="col-lg-8 ml-0">
+                  <input type="text"  min="0" max="99999999999999" (keypress)="numberOnly($event)" maxlength="14" class="form-control" formControlName="Phone2" [(ngModel)]="User.phone2" (change)="DemographicPhoneFormat2();onvalChange()">
+                </div>
+              </div>
+              <div class="row usrLbl ml-0">
+                <div>
+                  <b>Login Info</b>
+                </div>
+              </div>
+              <hr class="mt-0">
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>User Name<sup class="super-script">*</sup></label>
+                </div>
+                <div class="col-lg-8 ml-0">
+                  <input type="text" class="form-control" autocomplete="off" formControlName="UserName" [(ngModel)]="User.username" (change)="onvalChange()">
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('UserName').valid && userForm.get('UserName').touched">
+                <p>User Name is required</p>
+              </span>
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>Password<sup class="super-script">*</sup></label>
+                </div>
+                <div class="col-lg-8 ml-0">
+                  <input type="password" autocomplete="off" class="form-control" formControlName="Password" [(ngModel)]="User.password" (keyup)="passvalid($event)" (change)="onvalChange()">
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('Password').valid && userForm.get('Password').touched">
+                <p>Password is required</p>
+              </span>
+              <span class="help-block text-danger text-center"
+                *ngIf="passerror && resetPass.get('Password').valid">
+                <p>Enter valid password</p>
+              </span>
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <label class="ml-1 notealert"><i>Note:&nbsp;Password should contain atleast 8 characters/
+          digits includes 1 special character, 1 lower and uppercase characters
+          </i></label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn"  [disabled]="!userForm.valid ||passerror" (click)="SaveOrUpdateUser()">Save & Close</button>
+        <button type="button" class="btn blue-btn" (click)="openDialog()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- =========================================Update User Model============================================= -->
+<span id="OpenModal2" data-target="#UpdateUsermodal" data-toggle="modal"></span>
+<div class="modal fade " id="UpdateUsermodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog User-Add-Model" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel" >Update User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="UpdateForm">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="row usrLbl ml-1">
+                <div>
+                  <b>General Info</b>
+                </div>
+              </div>
+              <hr class="mt-0">
+              <div class="row mb-0">
+                <div class="col-lg-4">
+                  <label>Status<span class="super-script">*</span></label>
+                </div>
+                <div class="col-lg-8">
+                  <select class="form-control" [(ngModel)]="User.statusLid" formControlName="StatusUpdate" (change)="onvalChange()">
+                    <option *ngFor="let userStatusData of StatusDrop" [value]="userStatusData.Key">{{userStatusData.Value}}</option>
+                  </select>
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('Status').valid && userForm.get('Status').touched">
+                <p>Status is required</p>
+              </span>
+              <div class="row mb-0">
+                <div class="col-lg-4">
+                  <label>First Name<span class="super-script">*</span></label>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" formControlName="FirstNameUpdate" [(ngModel)]="User.firstName" (change)="onvalChange()">
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('FirstName').valid && userForm.get('FirstName').touched">
+                <p>First Name is required</p>
+              </span>
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>Middle Name</label>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" formControlName="MiddleNameUpdate" [(ngModel)]="User.middleName" (change)="onvalChange()">
+                </div>
+              </div>
+              <div class="row mb-0">
+                <div class="col-lg-4">
+                  <label>Last Name<span class="super-script">*</span></label>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" formControlName="LastNameUpdate" [(ngModel)]="User.lastName" (change)="onvalChange()">
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('LastName').valid && userForm.get('LastName').touched">
+                <p>Last Name is required</p>
+              </span>
+              <div class="row mb-0">
+                <div class="col-lg-4">
+                  <label>Role<span class="super-script">*</span></label>
+                </div>
+                <div class="col-lg-8">
+                  <ng-select [(ngModel)]="roleName" [multiple]="true" formControlName="RoleUpdate" [searchable]="true" [clearable]="true" [items]="UserRole"
+                    bindLabel="label" bindValue="value" (change)="onvalChange()">
+                  </ng-select>
+                  <!-- <ng-multiselect-dropdown
+                  [placeholder]="'Select Roles'"
+                  [data]="UserRole"
+                  [settings]="dropdownSettings"
+                  [(ngModel)]="roleName"
+                  (onSelect)="onItemSelect($event)"
+                  (onSelectAll)="onSelectAll($event)"
+                  (ngModelChange)="checkpopup('RoleId')"
+                  formControlName="RoleUpdate">
+                  </ng-multiselect-dropdown> -->
+                  <!-- <select class="form-control multidrp" formControlName="RoleUpdate" [(ngModel)]="roleName" multiple (ngModelChange)="checkpopup('RoleId')">
+                    <option *ngFor="let userRoleData of UserRole" [value]="userRoleData.value">{{userRoleData.label}}</option>
+                  </select> -->
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('Role').valid && userForm.get('Role').touched">
+                <p>Role is required</p>
+              </span>
+            </div>
+            <div class="col-lg-6">
+              <div class="row usrLbl ml-0">
+                <div>
+                  <b>Contact Info</b>
+                </div>
+              </div>
+              <hr class="mt-0">
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>Email<sup class="super-script">*</sup></label>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" formControlName="EmailUpdate" [(ngModel)]="User.email" (change)="onvalChange()">
+                </div>
+              </div>
+              <span class="help-block text-danger text-center"
+                *ngIf="!userForm.get('Email').valid && userForm.get('Email').touched">
+                <p>Email is required</p>
+              </span>
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>Phone1</label>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text"  min="0" max="99999999999999" (keypress)="numberOnly($event)" maxlength="14" class="form-control" formControlName="Phone1Update" [(ngModel)]="User.phone1" (ngModelChange)="DemographicPhoneFormat1()" (change)="onvalChange()">
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>Phone2</label>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text"  min="0" max="99999999999999" (keypress)="numberOnly($event)" maxlength="14" class="form-control" formControlName="Phone2Update" [(ngModel)]="User.phone2" (ngModelChange)="DemographicPhoneFormat2()" (change)="onvalChange()">
+                </div>
+              </div>
+              <div class="row usrLbl ml-0">
+                <div>
+                  <b>Login Info</b>
+                </div>
+              </div>
+              <hr class="mt-0">
+              <div class="row mb-1">
+                <div class="col-lg-4">
+                  <label>User Name<sup class="super-script">*</sup></label>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control"  formControlName="Username" [(ngModel)]="User.username" (change)="onvalChange()">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn" [disabled]="!UpdateForm.valid" (click)="SaveOrUpdateUser()">Update & Close</button>
+        <button type="button" class="btn blue-btn" (click)="openDialog1()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================Close confirmation================== -->
+<span id="cancelmodal" data-toggle="modal" data-target="#CloseModal"></span>
+<div class="modal fade primarymodal" id="CloseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" >Close</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+              You want to close without save?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn blue-btn btn-sm" (click)="closeAddUpdateModal()">Yes</button>
+            <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================Close confirmation================== -->
+<span id="cancelmodal1" data-toggle="modal" data-target="#CloseModal1"></span>
+<div class="modal fade primarymodal" id="CloseModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" >Close</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+              You want to close without save?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn blue-btn btn-sm" (click)="closeAddUpdateModal1()">Yes</button>
+            <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================Reset Password Confirmation Model========================================== -->
+<div class="modal fade " id="Reset_Confirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+      <h5 class="modal-title font-header" id="exampleModalLabel" >Reset Password</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+      </div>
+      <div class="modal-body">
+        Do you want to reset your password?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn" data-dismiss="modal" data-toggle="modal" data-target="#ResetPwdmodal">Yes</button>
+        <button type="button" class="btn blue-btn" data-dismiss="modal" data-target="#Reset_Confirmation">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================Reset Password Model========================================== -->
+<span data-toggle="modal" data-target="#ResetPwdmodal" id="resetmodal"></span>
+<div class="modal fade " id="ResetPwdmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+      <h5 class="modal-title font-header" id="exampleModalLabel" >Password Confirmation</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="resetPass">
+          <div class="row">
+            <div class="col-lg-2">
+              <label >Password<sup class="super-script">&nbsp;*</sup></label>
+            </div>
+            <div class="col-lg-5">
+              <input type="password" class="form-control" formControlName="Password" [(ngModel)]="ResetPassword" (keyup)="passvalid($event)" (ngModelChange)="checkpopup('Password')">
+              <span class="help-block text-danger text-center"
+                *ngIf="!resetPass.get('Password').valid && resetPass.get('Password').touched">
+                <p>Password is required</p>
+              </span>
+              <span class="help-block text-danger text-center"
+                *ngIf="passerror && resetPass.get('Password').valid">
+                <p>Enter valid password</p>
+              </span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+            <label ><i>Note:&nbsp;Password should contain atleast 8 characters/
+            digits includes 1 special character, 1 lower and uppercase characters
+            </i></label></div>
+          </div> 
+        </form> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn" [disabled]="!resetPass.valid ||passerror" (click)="ResetPasswrd('Success')">Save & Close</button>
+        <button type="button" class="btn blue-btn" data-dismiss="modal" data-target="#ResetPwdmodal">Close</button>
+      </div>
+    </div>
+</div>
+

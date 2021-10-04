@@ -1,0 +1,155 @@
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+
+        <div class="row">
+          <div class="col-lg-11">
+            <h4 class="mb-0 font-header">Employee Report</h4>
+          </div>
+          <div class="col-lg-1">
+            <button type="button" class="btn blue-btn" (click)="back()">Close</button>
+
+          </div>
+
+        </div>
+
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="row">
+              <div class="col-lg-5">
+                <label style="font-weight: 600">Filter By</label></div>
+              <div class="col-lg-7">
+                <select class="form-control" [(ngModel)]="status" (ngModelChange)="filterchange()">
+
+                  <option [value]="i.Key" *ngFor="let i of ReportstatusList">{{i.Value}}</option>
+                </select></div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="row">
+              <div class="col-lg-5">
+                <label style="font-weight: 600">Employee</label>
+              </div>
+              <div class="col-lg-7">
+
+                <ng-select [(ngModel)]="Employee" [searchable]="true" [clearable]="true" [items]="EmployeeDropdown"
+                  bindLabel="label" bindValue="value" [disabled]="this.global.globalAgencyId==0">
+
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3" *ngIf="enableExhours">
+            <div class="row">
+              <div class="col-lg-5">
+                <label style="font-weight: 600">Month</label>
+              </div>
+              <div class="col-lg-7">
+
+                <ng-select [(ngModel)]="month" [searchable]="true" [clearable]="true" [items]="monthList"
+                  bindLabel="label" bindValue="value" [disabled]="this.global.globalAgencyId==0">
+
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2" *ngIf="enableExhours">
+            <div class="row">
+              <div class="col-lg-4">
+                <label style="font-weight: 600">Year</label>
+              </div>
+              <div class="col-lg-7">
+
+                <input type="text" placeholder="YYYY" [(ngModel)]="year" class="form-control">
+
+
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-1">
+            <button type="button" class="btn blue-btn" (click)="getUMPI()">Apply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-2">
+  <div class="col pl-0">
+
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+        <div *ngIf="global.globalAgencyId==0 " class="center-text">
+          <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view details</label>
+        </div>
+        <div class="row">
+        <div class="col-lg-2 d-inline-flex">
+          <button type="button" class="btn blue-btn btn-sm butstyle" (click)="Refresh()"
+            [disabled]="global.globalAgencyId==0">
+            <i class="fa fa-repeat"> </i>Refresh
+          </button>
+          <button type="button" class="btn blue-btn btn-sm butstyle ml-1" data-target="#printalert" data-toggle="modal"
+          [disabled]="global.globalAgencyId==0||datalngth==0">
+          <i class="fa fa-print"> </i>Print
+        </button>
+        </div>
+      </div>
+        <div *ngIf="global.globalAgencyId!=0 " #printtable>
+          <div class="control-section" >
+            <ejs-grid #grid [dataSource]='data|async' [allowResizing]='true' [allowSorting]='true'
+            [allowPaging]='true' [allowFiltering]='true' (dataStateChange)='dataStateChange($event)' (actionBegin)="onActionComplete($event)"
+             [pageSettings]='initialPage' [filterSettings]='filterOptions'(resizeStop)="onResize($event)"  >
+              <e-columns>
+                <e-column minWidth= 100 field='name' headerText='Employee' textAlign='left'  type="string">
+                  <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+                </e-column>
+                <e-column minWidth= 100 field='month' headerText='Month' textAlign='left'  [allowFiltering]="false"> 
+                </e-column>
+                  <e-column minWidth= 100 field='exceededHours' headerText='Exceeded Hrs' textAlign='left' [allowFiltering]="false"> </e-column>
+                    <e-column minWidth= 100 field='totalhours' headerText='Total Hrs' textAlign='left' [allowFiltering]="false"> </e-column>
+                <e-column minWidth= 100 field='email' headerText='Email' textAlign='left'  type="string">
+                  <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+                </e-column>
+                <e-column minWidth= 100 field='phone1' headerText='Phone' textAlign='left' type="string">
+                  <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                  </ng-template>
+                </e-column>
+              </e-columns>
+            </ejs-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="printalert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Print confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              Do you want to print this record ?
+            </div>
+            <div class="modal-footer">
+             
+              <button  class="btn blue-btn btn-sm butstyle "  data-dismiss="modal" (click)="print()"
+              >Print
+              </button>
+              <button class="btn blue-btn btn-sm butstyle " data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

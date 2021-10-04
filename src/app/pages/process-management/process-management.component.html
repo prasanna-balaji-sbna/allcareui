@@ -1,0 +1,347 @@
+<!-- <p>process-management works!</p> -->
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+        <h4 class="mb-0 font-header">Intake Process Management</h4>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+          <div class="row d-lg-none">
+              <div class="col">
+                <button type="button" *ngIf="fp.processmanagementcreate" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal" [disabled]="global.globalAgencyId == 0" (click)="Createupdate('new')">Create</button>
+              </div>
+              <div class="col text-right">
+              <button type="button" class="btn blue-btn btn-sm " (click)="Refresh()" [disabled]="global.globalAgencyId == 0">
+                  <i class="fa fa-repeat"> Refresh </i>
+                </button>
+              </div>
+          </div>
+          <div class="row no-gutters mb-0">
+                <div class="col-lg-9">
+                  <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5">
+                      <div class="row">
+                        <div class="col-lg-2">
+                          <label>Type</label>
+                        </div>&nbsp;&nbsp;
+                      <!-- <ng-select class="mySelect" [(ngModel)]="Typename" [searchable]="true" [clearable]="true" [items]="LOVList"
+                        bindLabel="label" bindValue="value">
+                      </ng-select> -->
+                        <div class="col-lg-9">
+                          <select class="form-control" [(ngModel)]="Typename">
+                            <option [value]="0" [selected]="true"></option>
+                            <option [value]="Lov.value" *ngFor="let Lov of LOVList">{{Lov.label}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5">
+                      <div class="row">
+                        <div class="col-lg-2">
+                          <label>Role</label>
+                        </div>&nbsp;&nbsp;
+                      <!-- <ng-select class="mySelect" [(ngModel)]="Rolename" [searchable]="true" [clearable]="true" [items]="RoleData"
+                        bindLabel="label" bindValue="value">
+                      </ng-select> -->
+                        <div class="col-lg-9">
+                          <select class="form-control" [(ngModel)]="Rolename">
+                            <option [value]="0" [selected]="true"></option>
+                            <option [value]="role.value" *ngFor="let role of RoleData">{{role.label}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-5">
+                      <div class="row">
+                        <div class="col-lg-2">
+                          <label>User</label>
+                        </div>&nbsp;&nbsp;
+                      <!-- <ng-select class="mySelect" [(ngModel)]="Username" [searchable]="true" [clearable]="true" [items]="UserData"
+                        bindLabel="label" bindValue="value">
+                      </ng-select> -->
+                        <div class="col-lg-9">
+                          <select class="form-control" [(ngModel)]="Username">
+                            <option [value]="0" [selected]="true"></option>
+                            <option [value]="user.value" *ngFor="let user of UserData">{{user.label}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 d-none d-lg-block">
+                      <button *ngIf="fp.processmanagementcreate" type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal" [disabled]="global.globalAgencyId == 0" (click)="Createupdate('new')">Create</button>&nbsp;&nbsp;
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5">
+                      <button type="button" class="btn blue-btn btn-sm" (click)="ApplyFilter()" [disabled]="global.globalAgencyId == 0">
+                        Apply
+                      </button>&nbsp;&nbsp;
+                    </div>
+                    <div class="d-none d-lg-block col-lg-5">
+                      <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()" [disabled]="global.globalAgencyId == 0">
+                        <i class="fa fa-repeat"> </i>Refresh
+                      </button>&nbsp;&nbsp;
+                    </div>
+                  </div>
+                </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mb-2 mt-0">
+
+  <!-- <button  ej-button  > open Column Chooser </button> -->
+  <div class="col pl-0">
+
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+        <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+          <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+        </div>
+    <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true' allowPaging='true' [allowFiltering]='true'
+          [pageSettings]='initialPage' (headerCellInfo)='headerCellInfo($event)'(queryCellInfo)='tooltip($event)'  (resizeStop)="onResize($event)"  [filterSettings]='filterSettings' (dataStateChange)= 'dataStateChange($event)' (actionBegin)="onActionComplete($event)" [showColumnChooser]= 'true'>
+          <e-columns>
+            <e-column minWidth= 100 field="typeName" headerText="Type">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+            </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="rolename" headerText="Role">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+            </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="user" headerText="User">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+            </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="orderNumber" headerText="Order No" type="number"></e-column>
+            <e-column minWidth= 175 field="effectiveDate" headerText="Effective Date" type="date" [allowEditing]='false'
+               type='date' [format]='formatOptions'></e-column>
+            <e-column minWidth= 175 field="effectiveThroughDate" headerText="Effective Through Date" type="date"
+              [allowEditing]='false' type='date' [format]='formatOptions'></e-column>
+            <e-column minWidth= 100 headerText="Actions" uid="action"textAlign="center" [showInColumnChooser]='false'>
+              <ng-template #template let-data>
+                <button *ngIf="fp.processmanagementupdate" class="btn btn-edit-table" data-toggle="modal" data-target="#modal"
+                  (click)="Createupdate('edit');selectPMdetails(data)"><i 
+                    class="fa fa-edit"></i></button>&nbsp;
+                <button class="btn btn-delete-table" data-toggle="modal" data-target="#deletemodal"
+                  (click)="selectPMdetails(data)"><i 
+                    class="fa fa-trash"></i></button>
+              </ng-template>
+            </e-column>
+            <!--------------------------------table header icon---------------->
+            <e-column width="50" [showInColumnChooser]='false'>
+              <ng-template #headerTemplate let-data>
+                <div>
+                 <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                </div>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<span id="openModal" data-target="#modal" data-toggle="modal"></span>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog create-update-zip1" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel" ><span
+            *ngIf="ModelType =='new'"> Create Process</span> <span *ngIf="ModelType =='edit'">Update Process</span> </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        <!-- <h5 class="modal-title" id="exampleModalLabel"  *ngIf="!isCreate">Create Care Coordinator</h5> -->
+
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="PMForm">
+          <div class="row">
+            <div class="col-lg-5">
+              <label>Type<sup class="super-script">&nbsp; *</sup>
+              </label>
+            </div>
+            <div class="col-lg-7">
+              <!-- <ng-select formControlName="TypeLId" [(ngModel)]="Process.typeLid" [disabled]="isUpdate"
+                [searchable]="true" [clearable]="true" [items]="LOVList"
+                bindLabel="label" bindValue="value" (change)="CheckBool()">
+              </ng-select> -->
+              <div class="row">
+                <div class="col-lg-9" width="100%">
+                  <select formControlName="TypeLId" class="form-control" [(ngModel)]="Process.typeLid" (change)="CheckBool()">
+                    <option [value]="0" [selected]="true" [hidden]="true"></option>
+                    <option [disabled]="isUpdate" [value]="Lov.value" *ngFor="let Lov of LOVList">{{Lov.label}}</option>
+                  </select>
+                </div>
+                <div class="col-lg-2">
+                  <button class="btn blue-btn btn-sm" (click)="CreateLov()" data-toggle="modal" data-target="#LOVModal"><i class="fa fa-plus-circle"></i></button>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-lg-1">
+            </div> -->
+          </div>
+          <div class="row">
+            <div class="col-lg-5">
+              <label>Role<sup class="super-script">&nbsp; *</sup>
+              </label>
+            </div>
+            <div class="col-lg-6">
+              <!-- <ng-select [(ngModel)]="Process.loginRoleId" [searchable]="true" [clearable]="true" [disabled]="isUpdate"
+              [items]="RoleData" (change)="CheckBool()" formControlName="RoleId"
+                bindLabel="label" bindValue="value">
+              </ng-select> -->
+              <select formControlName="RoleId" class="form-control" [(ngModel)]="Process.loginRoleId" (change)="CheckBool()">
+                <option [value]="0" [selected]="true" [hidden]="true"></option>
+                <option [value]="role.value" [disabled]="isUpdate" *ngFor="let role of RoleData">{{role.label}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-5">
+              <label>User<sup class="super-script">&nbsp; *</sup>
+              </label>
+            </div>
+            <div class="col-lg-6">
+              <!-- <ng-select formControlName="UserId" [(ngModel)]="Process.userId" [disabled]="isUpdate"
+                [searchable]="true" [clearable]="true" [items]="UserData"
+                bindLabel="label" bindValue="value" (change)="CheckBool()">
+              </ng-select> -->
+              <select formControlName="UserId" class="form-control" [(ngModel)]="Process.userId" (change)="CheckBool()">
+                <option [value]="0" [selected]="true" [hidden]="true"></option>
+                <option [disabled]="isUpdate" [value]="user.value" *ngFor="let user of UserData">{{user.label}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-5">
+              <label>Effective Date<sup class="super-script">&nbsp; *</sup>
+              </label>
+            </div>
+            <div class="col-lg-6">
+              <my-date-picker [disabled]="isUpdate"  [selDate]="Process.effectiveDate" [options]="myDatePickerOptionsEFF"
+                placeholder="mm/dd/yyyy"  (inputFieldChanged)="newdates($event,'inputchage','effectivedate')" formControlName="EffectiveDateValue1"
+                (dateChanged)="newdates($event,'datechagned','effectivedate')" >
+              </my-date-picker>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-5">
+              <label>Effective Through Date</label>
+            </div>
+            <div class="col-lg-6">
+              <my-date-picker [selDate]="Process.effectiveThroughDate" [options]="myDatePickerOptionsEFF" formControlName="EffectiveThroughDateValue1"
+                placeholder="mm/dd/yyyy"  (inputFieldChanged)="newdates($event,'inputchage','effectivethroughdate')"
+                (dateChanged)="newdates($event,'datechagned','effectivethroughdate')" >
+              </my-date-picker>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-5">
+              <label>Order No.<sup class="super-script">&nbsp; *</sup></label>
+            </div>
+            <div class="col-lg-6">
+              <input type="number" class="form-control" [(ngModel)]="Process.orderNumber" formControlName="OrderNumber" [min]=1 (change)="CheckBool()"/>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn blue-btn btn-sm" (click)="SaveOrUpdate()"
+          [disabled]="!PMForm.valid"><span *ngIf="ModelType =='new'"> Save &
+            Close</span> <span *ngIf="ModelType =='edit'">Update & Close</span> </button>
+        <button type="button" class="btn blue-btn btn-sm" (click)="checkpop()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==============close without save modal================================= -->
+<span id="cancelmodal" data-toggle="modal" data-target="#CloseModal"></span>
+<div class="modal fade primarymodal" id="CloseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" >Close</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+             You want to close without save?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn blue-btn btn-sm" (click)="Closemodal()">Yes</button>
+            <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================LOV add modal================================================ -->
+<span id="lov" data-toggle="modal" data-target="#LOVModal"></span>
+<div class="modal fade primarymodal" id="LOVModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog create-update-zip" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title font-header" id="exampleModalLabel" >Create Type Name</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="lovForm">
+              <div class="row">
+                <div class="col-lg-4">
+                  <label>Name</label>
+                </div>
+                <div class="col-lg-6">
+                  <input type="text" class="form-control" formControlName="Name" [(ngModel)]="Lov.LovName">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn blue-btn btn-sm" (click)="SaveLOV(Lov)"
+              [disabled]="!lovForm.valid">Save & Close</button>
+            <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal" data-target="#LOVModal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- ====================================================Delete Modal====================================== -->
+<span id="deleteintakemodal" data-target="#deletemodal" data-toggle="modal"></span>
+<div class="modal fade" id="deletemodal" data-backdrop="static">
+  <div class="modal-dialog delete-zip" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <label>Do you want to delete this record ?</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" >
+        <button type="button" class="btn blue-btn btn-sm" (click)="deleteProcess()">Delete</button>
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

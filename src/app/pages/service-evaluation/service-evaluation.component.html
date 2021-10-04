@@ -1,0 +1,377 @@
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+<div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted">
+          <h4 class="mb-0 font-header">Service Verification</h4>
+        </div>
+        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+          <!-- <div class="row alert ml-3 mt-2 mr-3 alert-warning" *ngIf="deleteAlert==true">
+            <strong>{{deleteError}}</strong>
+          </div> -->
+            <div class="row d-lg-none">
+                <div class="col">
+                  <button type="button" class="btn blue-btn btn-sm"  data-toggle="modal" data-target="#newEvaluationModal" (click)="CreateServiceEvaluation('')" [disabled]="global.globalAgencyId==0" > Add New Verification</button>
+                </div>
+                <div class="col text-right">
+
+                <button type="button" class="btn blue-btn btn-sm " (click)="Refresh()" [disabled]="global.globalAgencyId==0" >
+                    <i class="fa fa-repeat"> Refresh </i>
+                  </button>
+                </div>
+            </div>
+          <div class="row no-gutters ">
+            
+                <!-- <div class="col-lg-2 col-md-2 col-sm-2 col-xs-5 d-none d-lg-block  mt-1"> -->
+                  <!-- <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal">New Evaluation</button>&nbsp;&nbsp;
+                </div> -->
+              
+                <div class="col-lg-3 col-md-6 col-sm-6 ol-xs-12 mt-2 aligned_form">
+                  <label>Client &nbsp;</label>&nbsp;
+                  <select  [disabled]="global.globalAgencyId==0"  class="form-control col-lg-9 col-md-6 col-sm-6 ol-xs-12"  [(ngModel)]="cliName" (ngModelChange)="ClientSelect()" [disabled]="global.globalAgencyId == 0">
+                    <option></option>
+                    <option *ngFor="let item of clientarrayDropDown " [ngValue]="item.Key"> {{item.Value}}</option>     
+                  </select>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mt-2 aligned_form">
+                   
+                  <label>Period &nbsp;</label>&nbsp;
+                  <select [disabled]="global.globalAgencyId==0"  class="form-control col-lg-9 col-md-6 col-sm-6 ol-xs-12" [(ngModel)]="period" (ngModelChange)="SelectPeriod(period)">
+                    <option value="Adam"></option>
+                    <option value="30">Next 30 days</option>
+                    <option value="60">Next 60 days</option>
+                    <option value="90">Next 90 days</option>
+                    <option value="120">Next 120 days</option>  
+                  </select>
+                 
+                
+                </div>
+                <div class="col-lg-1 mt-1">
+                 
+                    <button type="button" class="btn blue-btn btn-sm"  (click)="onSearch()" [disabled]="global.globalAgencyId==0"  >
+                     Apply
+                    </button>&nbsp;&nbsp;
+                   
+                   
+                </div>
+                <div class="d-none d-lg-block col-lg-3 mt-1">
+                 
+                  <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" [disabled]="global.globalAgencyId==0"  *ngIf="fp.serviceevaluationcreate" [disabled]="global.globalAgencyId==0"  (click)="CreateServiceEvaluation('')" data-target="#newEvaluationModal">
+                    Add New Verification
+                  </button>&nbsp;&nbsp;
+                 
+                 
+              </div>
+              <div class="d-none d-lg-block col-lg-1 mt-1">
+                 
+                <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId==0"  (click)="Refresh()">
+                  <i class="fa fa-repeat"> </i>Refresh
+                </button>&nbsp;&nbsp;
+               
+               
+            </div>
+              <div class="col-lg-1 mt-1">
+                 
+                <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" [disabled]="global.globalAgencyId==0||datalength==0"  data-target="#printModal">
+                  <i class="fa fa-print"></i> Print
+                </button>&nbsp;&nbsp;
+               
+               
+            </div>
+              
+
+        </div>
+        <div class="row">
+          <label class="text-primary ml-2"><i><i class="fa fa-info-circle fa-lg"></i>&nbsp;&nbsp;Search to
+              view particular client details</i></label>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- ////////////////////////////////////////////////////////////////////////////// -->
+<!-- ///////////////////////////////////////////////////////////////////////////// -->
+<div class="row mb-2">
+  <div class="col pl-0">
+
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2" id="table_service">
+        <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+          <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+        </div>
+        <ejs-grid #grid [dataSource]='data | async' [allowSorting]='true'  *ngIf="global.globalAgencyId!=0" [allowResizing]='true'
+        [allowPaging]='true' [pageSettings]='initialPage' [filterSettings]='filterSettings' [allowFiltering]='true' (actionBegin)="onActionComplete($event)"  (resizeStop)="onResize($event)"
+        [showColumnChooser]= 'true' (dataStateChange)= 'dataStateChange($event)'  >
+          <e-columns>
+        
+           <e-column minWidth= 100 field="firstName" headerText="Client name" type="string">
+            <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+            </ng-template>
+           </e-column>
+           <e-column minWidth= 100 field="phone" headerText="Phone" type="string">
+            <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+            </ng-template>
+           </e-column>
+           <e-column minWidth= 100 field="ages" headerText="Age(in days)" type="number"></e-column>
+           <e-column minWidth= 100 field="callDate" headerText="Last call date" [format]='formatOptions' type='date'></e-column>
+           <e-column minWidth= 100 field="isAnsweredCall" headerText="Last call status" type="string">
+            <!-- <e-column minWidth= 100 field="isPCAPresent" headerText="PCA Employee Present" type="string"> -->
+            <!-- <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+            </ng-template> -->
+            <ng-template #filterTemplate let-data>
+              <ejs-dropdownlist id='dropdown'placeholder='Select a Status' [dataSource]='dropdata'
+               [popupHeight]='height' ></ejs-dropdownlist>
+         </ng-template>
+           </e-column> 
+           <e-column minWidth= 100 field="isPCAPresent" headerText="PCA Employee Present" type="string">
+          
+            <ng-template #filterTemplate let-data>
+              <ejs-dropdownlist id='dropdown1'placeholder='Select a Status' [dataSource]='dropdata'
+               [popupHeight]='height' ></ejs-dropdownlist>
+         </ng-template>
+             </e-column>
+           <e-column minWidth= 100 field="reviewDate" headerText="Last reviewed date" [format]='formatOptions' type='date'></e-column>
+           <e-column minWidth= 100 field="reviewedBy" headerText="Last reviewed by"  type="string">
+            <ng-template #filterTemplate let-data>
+              <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+          </ng-template>
+           </e-column>
+
+          <e-column minWidth= 100 headerText='Actions'
+            [disableHtmlEncode]='false' uid="action" [showInColumnChooser]='false'>
+              <ng-template #template let-data>
+                <button class="btn btn-primary" *ngIf="!isClientSearch && fp.serviceevaluationnotes" data-toggle="modal" data-target="#newEvaluationModal" (click)="EditServiceEvaluation(data)"><i 
+                    class="fa fa-plus"></i></button>&nbsp;
+                <button class="btn btn-primary" *ngIf="!isClientSearch && fp.serviceevaluationview" data-toggle="modal" data-target="#viewsmodal" (click)="ShowPreviousCli(data)"><i  class="fa fa-eye"></i></button>
+                <button class="btn btn-primary" *ngIf="isClientSearch && fp.serviceevaluationview" data-toggle="modal" data-target="#notesmodal"  (click)="notesParticularCLi(data)" ><i  class="fa fa-eye"></i></button>
+
+              </ng-template>
+            </e-column>
+           
+            <e-column width="50" [showInColumnChooser]='false'>
+              <ng-template #headerTemplate let-data>
+                <div>
+                <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                </div>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+
+    </div>
+  </div>
+</div>
+  <!-- //////////////////////////////// new Evaluation /////////////////////////////////////////// --><!-- ======================================Service Add and update Modal===================================== -->
+  <span id="OpenModal1" data-target="#newEvaluationModal" data-toggle="modal"></span>
+<div class="modal fade" id="newEvaluationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="row alert ml-3 mt-2 mr-3 alert-warning" *ngIf="SaveErr != '' ">
+          <strong>{{SaveErr}}</strong>
+        </div>
+        <!-- <nb-alert status="danger"  *ngIf="SaveErr != '' "  closable (close)="SaveErr=''" >{{SaveErr}}</nb-alert> -->
+          <div class="modal-header">
+              <h5 class="modal-title font-header" id="exampleModalLabel" ><span>
+                  Service Evaluation</span></h5>
+                  <button type="button" class="close" (click)="Close()">&times;</button>
+          </div>
+          <div class="modal-body">
+              <form [formGroup]="newEvaluationForm">
+                  <div class="row">
+                      <div class="col-lg-12 aligned_form">
+                          <label>Client <span class="super-script">*</span></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          <select  class="form-control col-lg-3 col-md-6 col-sm-6 ol-xs-12"   [(ngModel)]="ServiceEvaluation.clientId" formControlName="clientId">
+                            <option></option>
+                            <option *ngFor="let item of clientarrayDropDown " [ngValue]="item.Key"> {{item.Value}}</option>     
+                          </select>
+                      </div>
+                      <!-- <span class="help-block text-danger text-center"
+                      *ngIf="!newEvaluationForm.get('clientId').valid && newEvaluationForm.get('clientId').touched">
+                      <p>Please Enter Client</p>
+                      </span> -->
+                  </div>
+                
+                  <div class="row">
+                      <div class="col-lg-6 aligned_form">
+                          <label >Review Date <span class="super-script">*</span></label>
+                          <my-date-picker class="col-lg-8"  [options]="myDatePickerOptions" [selDate]="ServiceEvaluation.reviewDate"  
+                          placeholder="mm/dd/yyyy"  formControlName="reviewDate"
+                          (inputFieldChanged)="newdates($event,'inputchage')"
+                            (dateChanged)="newdates($event,'datechagned')">
+                        </my-date-picker>
+                        <!-- <span class="help-block text-danger text-center"
+                        *ngIf="!newEvaluationForm.get('reviewDate').valid && newEvaluationForm.get('reviewDate').touched">
+                        <p>Please Enter Review date</p>
+                        </span> -->
+                      </div>
+                      <div class="col-lg-6 aligned_form">
+                        <label >Call Date<span class="super-script">*</span></label>
+                        <my-date-picker class="col-lg-7" [options]="myDatePickerOptions" [selDate]="ServiceEvaluation.callDate"  
+                                placeholder="mm/dd/yyyy"  formControlName="callDate"
+                                (inputFieldChanged)="newdates1($event,'inputchage')"
+                                  (dateChanged)="newdates1($event,'datechagned')">
+                              </my-date-picker>
+                              <!-- <span class="help-block text-danger text-center"
+                              *ngIf="!newEvaluationForm.get('callDate').valid && newEvaluationForm.get('callDate').touched">
+                              <p>Please Enter Call date</p>
+                              </span> -->
+                        </div>
+                      
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-6 aligned_form">
+                      <label>Answer Call&nbsp; &nbsp;&nbsp;</label>
+                        <div *ngFor="let i of YESORNOList">
+                          <input  type="radio" formControlName="isAnsweredCall"
+                            name="isAnsweredCall" [(ngModel)]="ServiceEvaluation.isAnsweredCall" [value]="i.Key" />
+                           {{i.Value}}&nbsp;&nbsp;
+                        </div>
+                   
+                  </div>
+                  <div class="col-lg-6 aligned_form">
+                    <label>PCA Present&nbsp; &nbsp;&nbsp;</label>
+                      <div *ngFor="let i of YESORNOList">
+                        <input  type="radio" formControlName="isPCAPresent"
+                          name="isPCAPresent" [(ngModel)]="ServiceEvaluation.isPCAPresent" [value]="i.Key" />
+                         {{i.Value}}&nbsp;&nbsp;
+                      </div>
+                 
+                </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                         <label class="label">Notes/Comments</label>                     
+                        <input  type="text" formControlName="notes" class="form-control"
+                          name="notes" [(ngModel)]="ServiceEvaluation.notes">
+                         
+                </div>
+              </div>
+                
+                
+                
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button class="btn blue-btn btn-sm" [disabled]="!newEvaluationForm.valid" (click)="SaveOrUpdateService()"><span > Save &
+                  Close</span></button>
+              <button type="button" class="btn blue-btn btn-sm" (click)="Close()">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<span id="OpenModal2" data-target="#notesmodal" data-toggle="modal"></span>
+<div class="modal" id="notesmodal" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Notes</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <label class="label">Client Notes&nbsp;</label>
+          <textarea class="form-control" [disabled]="true">{{clientNotes}}</textarea>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn blue-btn">Yes</button> -->
+        <button type="button" class="btn blue-btn" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<span id="OpenModal3" data-target="#viewsmodal" data-toggle="modal"></span>
+<div class="modal" id="viewsmodal" data-backdrop="static">
+ 
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title text-primary">Notes</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div *ngIf="ClientChild.length ==  0" class="text-center text-dark" >
+          <label >No data available!</label>
+        </div>
+        <ejs-grid #grid [dataSource]='ClientChild'  *ngIf="ClientChild.length != 0" [allowResizing]='true' >
+          <e-columns>
+            
+           <!-- <e-column field="name" headerText="Client Name"></e-column> -->
+           <!-- <e-column field="phone" headerText="phone"></e-column> -->
+           <e-column minWidth= 100 field="ages" headerText="Age(in days)"></e-column>
+           <e-column minWidth= 100 field="callDate" headerText="Last Call Date"></e-column>
+           <e-column minWidth= 100 field="isAnsweredCall" headerText="Last Call Status"></e-column> 
+           <e-column minWidth= 100 field="isPCAPresent" headerText="PCA Employee Present"></e-column>
+           <e-column minWidth= 100 field="reviewDate" headerText="Last Reviewed Date"></e-column>
+           <e-column minWidth= 100 field="reviewedBy" headerText="Last Reviewed By"></e-column>
+           <e-column minWidth= 100 field="notes" headerText="Notes"></e-column>
+
+
+          </e-columns>
+        </ejs-grid>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn blue-btn">Yes</button> -->
+        <button type="button" class="btn blue-btn" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<span id="OpenModal4" data-target="#printModal" data-toggle="modal"></span>
+<div class="modal" id="printModal" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Print confirmation</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <label class="label">Do you want to print this record ?&nbsp;</label>
+    
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn"  printSectionId="table_service"   [useExistingCss]="true" ngxPrint>Print
+      </button>
+        <button type="button" class="btn blue-btn" data-dismiss="modal">Cancel</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>
+<!-- <ng-http-loader
+[backdrop]="true"
+    [backgroundColor]="'blue'"
+    [debounceDelay]="100"
+    [extraDuration]="300"
+    [minDuration]="300"
+    [opacity]=".6"
+    [spinner]="spinkit.skSpinnerPulse"></ng-http-loader> -->

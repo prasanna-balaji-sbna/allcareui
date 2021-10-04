@@ -1,0 +1,60 @@
+<div class="card-body  widget-body pb-0 pt-2 mb-4">
+    <div class="row">
+        <div class="offset-lg-10 col-lg-2 text-right">
+            <button type="button" class="btn btn-primary btn-sm" (click)="AddAuthorization('new',0)" *ngIf="fp.authorizationcreate">
+                Add Authorization
+            </button>
+        </div>
+    </div>
+    <ejs-grid #grid [dataSource]='data|async'  [allowResizing]='true'
+    allowPaging='true' [allowFiltering]='true' [pageSettings]='initialPage' [filterSettings]='filterOptions'
+            (actionBegin)="onActionComplete($event)" (dataStateChange)='dataStateChange($event)'>
+        <e-columns>
+            <e-column minWidth= 100 field="startDate" headerText="Start Date" type='date' [format]='formatOptions'></e-column>
+            <e-column minWidth= 100 field="endDate" headerText="End Date" type='date' [format]='formatOptions'></e-column>
+            <e-column minWidth= 100 field="companyName" headerText="Company Name" type='string'>
+                <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="payorName" headerText="Payor Name" type='string'>
+                <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="insuranceNo" headerText="Insurance Number" type='string'>
+                <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="serviceAgreementNo" headerText="Service Agreement#" type='string'>
+                <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="serviceCode" headerText="Service Code" type='string'>
+                <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="serviceDescription" headerText="Description" type='string'>
+                <ng-template #filterTemplate let-data>
+                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="totalUnits" headerText="Total units" type='number'></e-column>
+            <e-column minWidth= 100 field="unitsUsed" headerText="Units Used" type='number'></e-column>
+            <e-column minWidth= 100 field="unitsRemaining" headerText="Units Remaining" type='number'></e-column>
+            <e-column minWidth= 100 uid="action" headerText="Actions">
+                <ng-template #template let-data>
+                    <button class="btn btn-edit-table" (click)="AddAuthorization('edit',data)" *ngIf="fp.authorizationupdate"><i
+                            class="fa fa-edit"></i></button>&nbsp;
+                    <button class=" btn btn-delete-table" (click)="AddAuthorization('delete',data)" *ngIf="fp.authorizationdelete">
+                        <i class="fa fa-trash fa-lg" ></i></button>
+                </ng-template>
+            </e-column>
+        </e-columns>
+    </ejs-grid>
+</div>
+
+<ngx-ui-loader></ngx-ui-loader>

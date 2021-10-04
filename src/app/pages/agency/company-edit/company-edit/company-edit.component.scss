@@ -1,0 +1,105 @@
+.width100{
+    display: initial;
+    width: 100px;
+    // margin:5px;
+}
+
+.width128{
+    width:128px;
+    // margin-left:5px;
+    border-color:#ced4da;
+}
+
+.label{
+  
+    // margin-left: 2px;margin-right:3px;
+    // margin-top:5px;
+    font-size: 12px;
+}
+
+.lablestyle{
+    padding-right: 0px;
+        padding-left: 10px;
+}
+.width100{
+    display: initial;
+    width:128px;
+    // margin-left:5px;
+    border-color:#ced4da;
+}
+.width200{
+  display: initial;
+  width:200px;
+  // margin-left:5px;
+  border-color:#ced4da;
+}
+.text_right{
+    float: right;
+}
+.left{
+    text-align: left !important;
+    border-bottom: 0px;
+}
+
+.heinfo{
+    background: white;
+      color: #565656;
+      text-align: center;
+  }
+
+  .cliInfo{
+    padding: 0px;
+    text-align:left;
+    border-bottom: 0px ;
+    font-size: 1rem;
+    background-color: white;
+  }
+  .td
+  {
+    border-top: 0px;padding:0.25rem
+  }
+  .width{
+    display: initial;
+    width:100%;
+    // margin-left:5px;
+    border-color:#ced4da;
+}
+table { 
+    width: 100%; 
+    text-align:center;
+    border-collapse: collapse; 
+    border: none
+  }
+  /* Zebra striping */
+  tr:nth-of-type(odd) { 
+    background:#F5F5F5 ; 
+  }
+  table tr:hover { 
+    background:#E1F5FE ; 
+  }
+  
+  
+   td {
+    padding: 7px;
+    text-align:left;
+    //  border-bottom: 2px solid #ddd;
+    font-size: 11px;
+    color: black;
+  }
+  th { 
+    background:rgba(0,66,144,1.00);
+   font-size:12px;
+   text-align:left;
+   padding: 5px;
+   padding-left:3px;
+   padding-right:3px;
+   color:white;
+   border-bottom: 2px solid #ddd;
+  }
+
+  .th_sample{
+    border-top: 0px;padding:0.25rem;
+  }
+  .color{
+    color: red;
+  }

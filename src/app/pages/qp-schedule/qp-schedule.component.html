@@ -1,0 +1,166 @@
+<div >
+ <div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted">
+          <div class="row">
+            <div class="col-lg-6">
+                 <h4 class="mb-0 font-header">Add QP timesheets</h4>
+             </div>
+          </div>
+        </div>
+         <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        
+
+        <div class="row">
+          <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+          <label class="font-header">Quality Professionals</label>
+          <ng-select  [searchable]="true" [clearable]="true"  [(ngModel)]="qpadd.qpProfessionals"
+          [items]="QPEmployeeDropDown" bindLabel="Value"
+           class="tdropdown" bindValue="Key"></ng-select>
+      <!-- <p class="text-danger" *ngIf="qpadd.qpProfessionals ==''" [hidden]="qpadd.qpProfessionals!=''">Please select QP</p> -->
+      </div>
+        </div>
+        <hr>
+        <div class="alert alert-warning1 alert-dismissible fade show" *ngIf="saveQPErr!=''" role="alert">
+          <p>{{saveQPErr}}</p>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+              (click)="saveQPErr=''">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>  
+        <div class="row d-none d-lg-flex">
+            
+                    
+          <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+             <label class="manualentry-label">Client<sup class="super-script"> *</sup></label>
+           
+         </div>
+
+         <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+           <label class="manualentry-label">Services<sup class="super-script"> *</sup></label>
+           
+         </div>
+         <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+           <label class="manualentry-label">Date<sup class="super-script"> *</sup></label>
+           
+
+         </div>
+         <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+           <label class="manualentry-label">Hours<sup class="super-script"> *</sup></label>
+           
+         </div>
+     
+         </div>
+            <div class="row d-none d-lg-flex " *ngFor="let qpadd of qpadd;let i=index">
+            
+                 
+                         <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <!-- <label class="manualentry-label">Client<sup class="super-script"> *</sup></label> -->
+                            <ng-select  [searchable]="true" [clearable]="true"  [(ngModel)]="qpadd.client"
+                            [items]="ClinetDropDown"  bindLabel="names"
+                            bindValue="id" class="tdropdown" ></ng-select>
+                        <!-- <p class="text-danger" *ngIf="qpadd.qpProfessionals ==''" [hidden]="qpadd.qpProfessionals!=''">Please select QP</p> -->
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                          <!-- <label class="manualentry-label">Services<sup class="super-script"> *</sup></label> -->
+                          <ng-select [searchable]="true" [clearable]="true"  [(ngModel)]="qpadd.services"
+                          [items]="QPserviceList" bindLabel="Value"
+                           class="tdropdown" bindValue="Key"></ng-select>
+                           <!-- <p class="text-danger" *ngIf="qpadd.services ==''"  [hidden]="qpadd.services!=''">Please select Service</p> -->
+
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                          <!-- <label class="manualentry-label">Date<sup class="super-script"> *</sup></label> -->
+                          <my-date-picker [options]="myDatePickerOptions" [selDate]="qpadd.date"
+                          placeholder="mm/dd/yyyy"
+                           (inputFieldChanged)="newdates($event,'inputchage','Create');"
+                          (dateChanged)="newdates($event,'datechagned','Create');" [disabled]="this.global.globalAgencyId==0">
+                          </my-date-picker>
+                          <!-- <p class="text-danger" *ngIf="qpadd.isDate"  [hidden]="qpadd.date!=''">Please Enter Date</p> -->
+
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                          <!-- <label class="manualentry-label">Hours<sup class="super-script"> *</sup></label> -->
+                          <input type="text"   (keypress)="numberonly($event,'create')" class="form-control"  [(ngModel)]="qpadd.hours" >
+                          <!-- <p class="text-danger" *ngIf="qpadd.isHours"  [hidden]="qpadd.hours!=''">Please Enter Hours</p> -->
+
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                       
+                          <button class="btn btn-sm blue-btn" (click)="addQP(i)"    *ngIf="qpadd.isAddQP">&nbsp;&nbsp;<i class="fa fa-plus"></i>&nbsp;&nbsp;</button>
+                          <button class="btn btn-sm btn-danger" (click)="removeList(i)" *ngIf="!qpadd.isAddQP">&nbsp;&nbsp;<i class="fa fa-times"></i>&nbsp;&nbsp;</button>
+                        
+                        </div>
+              </div>
+
+
+<div class="">
+ <div class="row d-lg-none" *ngFor="let qpadd of qpadd;let i=index">
+            
+                    
+                <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                   <label class="manualentry-label">Client<sup class="super-script"> *</sup></label>
+                   <ng-select  [searchable]="true" [clearable]="true"  [(ngModel)]="qpadd.client"
+                   [items]="ClinetDropDown"  bindLabel="names"
+                   bindValue="id" class="tdropdown" ></ng-select>
+               <!-- <p class="text-danger" *ngIf="qpadd.qpProfessionals ==''" [hidden]="qpadd.qpProfessionals!=''">Please select QP</p> -->
+
+               </div>
+
+               <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                 <label class="manualentry-label">Services<sup class="super-script"> *</sup></label>
+                 <ng-select [searchable]="true" [clearable]="true"  [(ngModel)]="qpadd.services"
+                 [items]="QPserviceList" bindLabel="Value"
+                  class="tdropdown" bindValue="Key"></ng-select>
+                  <!-- <p class="text-danger" *ngIf="qpadd.services ==''"  [hidden]="qpadd.services!=''">Please select Service</p> -->
+
+               </div>
+               <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                 <label class="manualentry-label">Date<sup class="super-script"> *</sup></label>
+                 <my-date-picker [options]="myDatePickerOptions"  [selDate]="qpadd.date"
+                 placeholder="mm/dd/yyyy"
+                  (inputFieldChanged)="newdates($event,'inputchage','Create');"
+                 (dateChanged)="newdates($event,'datechagned','Create');"  [disabled]="this.global.globalAgencyId==0">
+                 </my-date-picker>
+                 <!-- <p class="text-danger" *ngIf="qpadd.isDate"  [hidden]="qpadd.date!=''">Please Enter Date</p> -->
+
+               </div>
+               <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                 <label class="manualentry-label">Hours<sup class="super-script"> *</sup></label>
+                 <input type="text" (keypress)="numberonly($event,'create')" class="form-control"  [(ngModel)]="qpadd.hours">
+                 <!-- <p class="text-danger" *ngIf="qpadd.isHours"  [hidden]="qpadd.hours!=''">Please Enter Hours</p> -->
+
+               </div>
+               <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12 mt-3 p-1">
+                 <label></label>
+                 <button class="btn btn-sm blue-btn mt-3" (click)="addQP(i)"    *ngIf="qpadd.isAddQP">&nbsp;&nbsp;<i class="fa fa-plus"></i>&nbsp;&nbsp;</button>
+                 <button class="btn btn-sm btn-danger mt-3" (click)="removeList(i)" *ngIf="!qpadd.isAddQP">&nbsp;&nbsp;<i class="fa fa-times"></i>&nbsp;&nbsp;</button>
+               
+               </div>
+     </div>
+    </div>
+
+              <hr>
+                 <div class="row">
+                  <div class="col-lg-6"></div>
+                   <div class="col-lg-6 text-right">
+                    <!-- <button class="btn btn-sm blue-btn" (click)="checkValidation(qpadd)" [disabled]="qpadd[0].client == null ||
+                    qpadd[0].services == null || qpadd[0].date == null ||  qpadd[0].hours == null || qpadd[0].client == '' || 
+                    qpadd[0].services == '' || qpadd[0].date == '' ||  qpadd[0].hours == '' " >Save & Close</button>&nbsp;&nbsp; -->
+
+                    <button class="btn btn-sm blue-btn" (click)="checkValidation(qpadd)">Save & Close</button>&nbsp;&nbsp;
+                    <button class="btn btn-sm blue-btn" (click)="closeQp()">Close</button>
+                   </div>
+                 </div>
+                
+            </div>
+           
+         </div>  
+        </div>
+     </div>
+  </div>
+
+

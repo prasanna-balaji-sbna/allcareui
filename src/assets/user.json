@@ -1,0 +1,37 @@
+[{
+    "id": 1,
+    "name": "user1",
+    "mobileNumber": 9963258787,
+    "email": "user1@dk.in",
+    "active": true,
+    "userRole": "Field Supervisor"
+    
+},
+{
+    "id": 2,
+    "name": "user2",
+    "mobileNumber": 9964258787,
+    "email": "user2@dk.in",
+    "active": false,
+    "userRole": "DK Admin"
+    
+},
+{
+    "id": 1,
+    "name": "user3",
+    "mobileNumber": 9575258787,
+    "email": "user3@dk.in",
+    "active": false,
+    "userRole": "DK Admin"
+
+},
+{
+    "id": 4,
+    "name": "user4",
+    "mobileNumber": 9963254823,
+    "email": "user4@dk.in",
+    "active": true,
+    "userRole": "Field Supervisor"
+    
+}
+]

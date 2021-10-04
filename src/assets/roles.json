@@ -1,0 +1,196 @@
+[  {
+    
+    "title":"Dashboard",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+    
+  {"title":"Agent Onboarding",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  }, 
+  {
+    "heading":"Agent Add",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+  {
+      
+    "heading":"Agent Edit",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Agent Delete",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Agent View",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+
+  {
+    "title":"Customer Onboarding", 
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Customer Add",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Customer Edit",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Customer Delete",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Customer View",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "title":"Customer Service Point Onboarding",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+  {
+ 
+    "heading":"Customer Service Point  Add",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Customer Service Point Edit",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Customer Service Point Delete",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Customer Service Point View",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Mapping Agents to Customer Service Point",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":false,
+    "SubAgentRole":false
+  },
+  {
+    "title":"Asset Onboarding",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+   "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+
+    "heading":"Asset Add",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+   "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Asset Edit",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+   "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Asset Delete",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+   "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Asset View",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+   "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "title":"Banking Services",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+   "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Account open",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+   "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Cash in",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+   "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Cash out",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+   "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  },
+  {
+    "heading":"Fund Transfer",
+    "AdminRole":true,
+    "FieldSupervisor":true,
+    "MasterFranchiseAgent":true,
+    "SubAgentRole":false
+  }
+  
+]

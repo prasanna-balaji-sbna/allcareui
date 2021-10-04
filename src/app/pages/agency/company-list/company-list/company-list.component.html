@@ -1,0 +1,143 @@
+<!-- //////////////////////// Company Edit///////////////////////////// -->
+<div class="container">
+  <div class="row mb-2">
+    <div class="col pl-0">
+      <!-- <div widget class="card border-0 box-shadow ml-4"> -->
+      <div class="card-header row">
+        <div class="row d-lg-none">
+          <label class="font-header col">Company Information</label>
+
+          <div class="col text-right">
+
+            <label class="font-header">Show company&nbsp;</label>
+            <select [(ngModel)]="CompanyFilter" class="form-control width100" (ngModelChange)="getCompany()">
+              <option [value]=cofl.Key *ngFor="let cofl of StatusListCompany">{{cofl.Value}}</option>
+            </select>
+
+          </div>
+        </div>
+
+        <label class="font-header col-lg-4  d-none d-lg-block ">Company Information</label>
+        <div class="col-lg-1"></div>
+        <!-- <div class="col-lg-5 "> -->
+        <div class="col-lg-4   d-none d-lg-block text-right">
+          <label class="font-header">Show company&nbsp;</label>
+          <select [(ngModel)]="CompanyFilter" class="form-control width100" (ngModelChange)="filterchange()">
+            <option [value]=cofl.Key *ngFor="let cofl of StatusListCompany">{{cofl.Value}}</option>
+          </select>
+        </div>
+      
+        <button class=" col-lg-2 col-sm-2  col-md-3 col-xs-1  font-header btn blue-btn btn-sm mr-2 p-8 text_right "
+          (click)="AddandeditCompany('new')">New Company</button>
+      </div>
+
+      <div class="card-body  widget-body pb-0 pt-2 mb-4  ml-4">
+        <div class="row d-lg-none">
+          <div class="col">
+            <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()">
+              <i class="fa fa-repeat"> </i>Refresh
+            </button>
+          </div>
+          <div class="col text-right">
+            <input type="text" placeholder="Company name" (keyup.enter)="filterchange()" class="form-control"
+              [(ngModel)]="SearchText" />
+            <i class="fa fa-search text_icon" (click)="filterchange()"></i>
+          </div>
+        </div>
+        <div class="row no-gutters">
+
+
+
+          <div class="col ml-0  d-none d-lg-block ">
+            <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()">
+              <i class="fa fa-repeat"> </i>Refresh
+            </button>
+            <!-- (click)="Refresh()" -->
+          </div>
+
+          <div class="row col-lg-2 offset-lg-6  d-none d-lg-block ">
+            <input type="text" placeholder="Company name" (keyup.enter)="filterchange()" class="form-control"
+              [(ngModel)]="SearchText" />
+            <i class="fa fa-search text_icon" (click)="filterchange()"></i>
+          </div>
+        </div>
+
+
+        <div class="row mb-2">
+          <div class="col pl-0">
+
+            <div widget class="card border-0 box-shadow">
+              <div class="card-body  widget-body pt-2">
+
+                <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' [allowSorting]='true' allowPaging='true' 
+                  [allowFiltering]='true' [pageSettings]='initialPage'  (resizeStop)="onResize($event)" [filterSettings]='filterSettings' (dataStateChange)= 'dataStateChange($event)'[showColumnChooser]='true' (actionBegin)="onActionComplete($event)" >
+                  <e-columns>
+                    <e-column field="companyName" minWidth= 130 headerText="Company Name"type='string'>
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column field="providerNo" minWidth= 120 headerText="Provider Number" type='string'>
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column field="billto_Name" minWidth= 120 headerText="BillTo/PayTo Company Name" type='string'>
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column field="billto_Street" minWidth= 120 headerText="Street" type='string'>
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column field="billto_City" minWidth= 120 headerText="City" type='string'>
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column field="billto_State" minWidth= 100 headerText="State" type='string'>
+                      <ng-template #filterTemplate let-data>
+                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                      </ng-template>
+                    </e-column>
+                    <e-column field="billto_zipcode" minWidth= 100 headerText="Zip Code" type='number'></e-column>
+                      <e-column field="statusValue" minWidth= 100 headerText="Status" type='number'>
+                      <ng-template #filterTemplate let-data>
+                        <ejs-dropdownlist id='dropdown' placeholder='Select a Status' [dataSource]='dropdata'
+                         [popupHeight]='height' ></ejs-dropdownlist>
+                   </ng-template>
+                  </e-column>
+                    <e-column headerText="Action" uid="action"  minWidth= 100 [showInColumnChooser]='false'>
+                      <ng-template #template let-data>
+                        <button class="btn btn-edit-table" 
+                          (click)="AddandeditCompany(data)"><i class="fa fa-edit"></i></button>&nbsp;
+                        <!-- (click)="AgencyCreateupdate('edit');selectAgencydetails(data)" -->
+                        <!-- <button class="btn btn-delete-table" data-toggle="modal" data-target="#deletemodal"
+                              (click)="selectAgencydetails(data)"><i 
+                                class="fa fa-trash"></i></button> -->
+                      </ng-template>
+                    </e-column>
+
+                    <!--------------------------------table header icon---------------->
+                    <e-column width="50" [showInColumnChooser]='false'>
+                      <ng-template #headerTemplate let-data>
+                        <div>
+                          <span id='show' (click)='show()'><i class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                        </div>
+                      </ng-template>
+                    </e-column>
+                  </e-columns>
+                </ejs-grid>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</div>

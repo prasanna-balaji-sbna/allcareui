@@ -1,0 +1,238 @@
+<div class="row">
+    <div class="col pl-0">
+        <div widget class="card border-0 box-shadow">
+          <div class="card-header transparent  text-muted">
+            <h4 class="mb-0 font-header">Agency Settings</h4>
+            <button type="button" class="btn blue-btn float-right" (click)="SaveOrUpdate()" [disabled]="setting==undefined || setting.weekStartLid == 0||setting.weekStartLid == undefined|| setting.weekEndLid == 0|| setting.weekEndLid == undefined
+            || setting.timeSheetGenerationConfigLCode==null|| setting.timeSheetGenerationConfigLCode==undefined || setting.clientSignatureConfigLCode==null|| setting.clientSignatureConfigLCode==undefined
+            || setting.sessionLogoutConfigLCode==null||setting.sessionLogoutConfigLCode==undefined ||
+            setting.qP_VisitFrequencyConfigLCode==null||setting.qP_VisitFrequencyConfigLCode==undefined ">
+                Save
+            </button>
+            <!-- || setting.timeSheetGenerationConfigLCode!=null|| setting.timeSheetGenerationConfigLCode!=undefined || setting.clientSignatureConfigLCode!=null|| setting.clientSignatureConfigLCode!=undefined
+            || setting.sessionLogoutConfigLCode!=null||setting.sessionLogoutConfigLCode!=undefined ||
+            setting.qP_VisitFrequencyConfigLCode!=null||setting.qP_VisitFrequencyConfigLCode!=undefined -->
+            <!-- [disabled]="!((setting!=undefined)&&(setting.timeSheetGenerationConfigLCode!=null||setting.timeSheetGenerationConfigLCode!=undefined)&& 
+            (setting.clientSignatureConfigLCode!=null||setting.clientSignatureConfigLCode!=undefined)
+            &&(setting.sessionLogoutConfigLCode!=null||setting.sessionLogoutConfigLCode!=undefined)&&
+            (setting.qP_VisitFrequencyConfigLCode!=null||setting.qP_VisitFrequencyConfigLCode!=undefined)
+            &&(setting.weekStartLid != null||setting.weekStartLid!=undefined)&&(setting.weekEndLid!=null||setting.weekEndLid!=undefined))"-->
+          </div>
+          <div class="card-body  widget-body pb-0 pt-2 mb-4">
+            <div class="row">
+                <div class="col-lg-6">
+                    <label class="usrLbl"><b>Client onboarding configuration</b></label>
+                    <hr class="mt-0">
+                        <div class="row ml-1">
+                            <div class="col-8">
+                                <input id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled" type="checkbox" [(ngModel)]="setting.coB_Config_IntakeProcess">&nbsp;
+                                <label for="Client">Intake process</label>
+                            </div>
+                        </div>
+                        <div class="row ml-1">
+                            <div class="col-8">
+                                <input id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled" type="checkbox" [(ngModel)]="setting.coB_Config_AddNew">&nbsp;
+                                <label for="Client">Add New</label>
+                            </div>
+                        </div>
+                        <div class="row ml-1">
+                            <div class="col-8">
+                                <input id="Emplyoee"(ngModelChange)="change()" class="checkbox checkbox-primary styled" type="checkbox" [(ngModel)]="setting.coB_Config_CSVImport">&nbsp;
+                                <label for="Client">CSV import</label>
+                            </div>
+                        </div>
+                    <label class="usrLbl"><b>Employee onboarding configuration</b></label>
+                    <hr class="mt-0">
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled" type="checkbox" [(ngModel)]="setting.eoB_AddNew">&nbsp;
+                            <label for="Client">Add New</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled" type="checkbox" [(ngModel)]="setting.eoB_OnboardCheckList">&nbsp;
+                            <label for="Client">Onboard Checklist</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled" type="checkbox" [(ngModel)]="setting.eoB_CSVImport">&nbsp;
+                            <label for="Client">CSV import</label>
+                        </div>
+                    </div>
+                    <label class="usrLbl"><b>QP visit frequency configuration</b></label>
+                    <hr class="mt-0">
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="QP" value="WEEKLY" [disabled]="true" [(ngModel)]="setting.qP_VisitFrequencyConfigLCode">&nbsp;
+                            <label for="Client">Weekly</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="QP" value="BIWEEKLY" [disabled]="true" [(ngModel)]="setting.qP_VisitFrequencyConfigLCode">&nbsp;
+                            <label for="Client">Bi-Weekly</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="QP" value="MONTHLY" [disabled]="true" [(ngModel)]="setting.qP_VisitFrequencyConfigLCode">&nbsp;
+                            <label for="Client">Monthly</label>
+                        </div>
+                    </div>
+                    <label class="usrLbl"><b>Session logout configuration</b></label>
+                    <hr class="mt-0">
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="radiogroup3" value="LOGOUTAFTER15MINUTESOFINACTIVITY" [disabled]="true" [(ngModel)]="setting.sessionLogoutConfigLCode">&nbsp;
+                            <label for="Client">Logout after 15 minutes of inactivity</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="radiogroup3" value="LOGOUTAFTER30MINUTESOFINACTIVITY" [disabled]="true" [(ngModel)]="setting.sessionLogoutConfigLCode">&nbsp;
+                            <label for="Client">Logout after 30 minutes of inactivity</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="radiogroup3" value="LOGOUTAFTERANHOURSOFINACTIVITY" [disabled]="true" [(ngModel)]="setting.sessionLogoutConfigLCode">&nbsp;
+                            <label for="Client">Logout after an hour of inactivity</label>
+                        </div>
+                    </div>
+                    <label class="usrLbl"><b>Schedule configuration</b></label>
+                    <hr class="mt-0">
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled" type="checkbox" [disabled]="true" [(ngModel)]="setting.sheduleConfig_QPSchedule">&nbsp;
+                            <label for="Client">QP schedule</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled" type="checkbox" [disabled]="true" [(ngModel)]="setting.scheduleConfig_PCAEmployeeSchdule">&nbsp;
+                            <label for="Client">PCA employee schedule</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="usrLbl"><b>Timesheet generation configuration</b></label>
+                    <hr class="mt-0">
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="Timesheet" value="EVERYVISIT" [disabled]="true" [(ngModel)]="setting.timeSheetGenerationConfigLCode">&nbsp;
+                            <label for="Client">Every visit</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="Timesheet" value="WEEKLY" [disabled]="true" [(ngModel)]="setting.timeSheetGenerationConfigLCode">&nbsp;
+                            <label for="Client">Weekly</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="Timesheet" value="BIWEEKLY" [disabled]="true" [(ngModel)]="setting.timeSheetGenerationConfigLCode">&nbsp;
+                            <label for="Client">Bi-Weekly</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="Timesheet" value="BASEDONBILLINGPERIOD" [disabled]="true" [(ngModel)]="setting.timeSheetGenerationConfigLCode">&nbsp;
+                            <label for="Client">Based on biling period</label>
+                        </div>
+                    </div>
+                    <label class="usrLbl"><b>Client signature configuration</b></label>
+                    <hr class="mt-0">
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="ClientSignature" value="EVERYVISIT" [disabled]="true" [(ngModel)]="setting.clientSignatureConfigLCode">&nbsp;
+                            <label for="Client">Every visit</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" (ngModelChange)="change()" name="ClientSignature" value="BASEDONBILLINGPERIOD" [disabled]="true" [(ngModel)]="setting.clientSignatureConfigLCode">&nbsp;
+                            <label for="Client">Based on biling period</label>
+                        </div>
+                    </div>
+                    <label class="usrLbl"><b>Verification setup configuration</b></label>
+                    <hr class="mt-0">
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input  type="radio" id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled"  [value]=false    [disabled]="true" [(ngModel)]="setting.verificationSetupConfig_TabletOrMobileUsingRFIDOrQRCode">&nbsp;
+                            <label for="Client">Tablet or mobile using RFID OR QR</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input type="radio" id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled"  [value]=true   [(ngModel)]="setting.verificationSetupConfig_GPSLocation">&nbsp;
+                            <label for="Client">GPS Location</label>
+                        </div>
+                    </div>
+                    <label class="usrLbl"><b>Manual timesheet payroll period configuration</b></label>
+                    <hr class="mt-0">
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled" type="checkbox" [(ngModel)]="setting.manualTImesheetPayrollPeridConfig_Weekly">&nbsp;
+                            <label for="Client">Weekly</label>
+                        </div>
+                    </div>
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <input id="Emplyoee" (ngModelChange)="change()" class="checkbox checkbox-primary styled" type="checkbox" [(ngModel)]="setting.manualTImesheetPayrollPeridConfig_BiWeekly">&nbsp;
+                            <label for="Client">Bi-Weekly</label>
+                        </div>
+                    </div>
+
+
+                    <label class="usrLbl"><b>Weekly timesheet period </b></label>
+                    <hr class="mt-0">
+                    <div class="row ml-1">
+                        <div class="col-8">
+                            <div class="row">
+                            <label for="Client" class="col-lg-4">Week Start&nbsp;<sup class="super-script">&nbsp;*</sup></label>
+                            <select class="form-control styled col-lg-8" [(ngModel)]="setting.weekStartLid"
+                             (ngModelChange)="change()" 
+                           >
+                            <option [value]=0></option>
+                            <option [value]=st.id *ngFor="let st of DaysLov">{{st.lovName}}</option>
+                          </select>
+                           
+                           </div>
+                        </div>
+                    </div>
+                    <div class="row ml-1 mt-1">
+                        <div class="col-8"> 
+                            <div class="row">
+                                <label for="Client" class="col-lg-4">Week End&nbsp;<sup class="super-script">&nbsp;*</sup></label>
+                                <select class="form-control styled col-lg-8" [(ngModel)]="setting.weekEndLid"
+                                (ngModelChange)="change()" 
+                              >
+                               <option [value]=0></option>
+                               <option [value]=st.id *ngFor="let st of DaysLov">{{st.lovName}}</option>
+                             </select>
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <label class="usrLbl"><b>OverallFixedHrs</b></label>
+                    <hr class="mt-0">
+                    <div class="row ml-1 mt-1">
+                        <div class="col-8"> 
+                            <div class="row">
+                                <label for="Client" class="col-lg-6">Over All Fixed Hours&nbsp;<sup class="super-script">&nbsp;*</sup></label>
+                                <input class="form-control styled col-lg-6" type="text" [(ngModel)]="setting.overallFixedHrs"  (keypress)="keyPress($event)" (ngModelChange)="change()" >
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>
+

@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-lg-3 offset-lg-9 addpayorinfo" >
+      <button  class="btn blue-btn btn-sm" (click)="editPayorRequiredId('new',0)"  *ngIf="fp.payorrequiredcreate " >Add Payor
+        Info</button>
+    </div>
+  </div>
+  <div class="row">
+    <label class="payratelabel  pl-3">
+      <b class="payratenotes">Note:</b> Payor ID’s are used when submitting claims to particular payers. Some
+      mechanism to track the submission and retrieval of those numbers would be ideal
+    </label>
+  </div>
+  <ejs-grid #grid [dataSource]='data |async' [allowResizing]='true' [allowSorting]='true' allowPaging='true' [allowFiltering]='true'
+            [pageSettings]='initialPage' (dataStateChange)='dataStateChange($event)' (actionBegin)="onActionComplete($event)" [filterSettings]='filterOptions'(resizeStop)="onResize($event)" (headerCellInfo)='headerCellInfo($event)'(queryCellInfo)='tooltip($event)'>
+            <e-columns>
+              <e-column minWidth= 100 field="payorName" headerText="Payors">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 field="billingPayorRequiredID" headerText="ID Number" type="number"></e-column>
+              <e-column minWidth= 100 field="startDate" headerText="Start Date" type="date"[format]='formatOptions' ></e-column>
+              <e-column minWidth= 100 field="endDate" headerText="End Date" type="date" [format]='formatOptions'></e-column>
+              <e-column minWidth= 100 field="faxDate" headerText="Fax Date" type="date" [format]='formatOptions'></e-column>
+              <e-column minWidth= 100 field="received" headerText="Received">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 headerText="Actions" textAlign='center'>
+                <ng-template #template let-data>
+                  <button class="btn btn-edit-table"  ><i 
+                      class="fa fa-edit" (click)="editPayorRequiredId('edit',data)" *ngIf="fp.payorrequiredupdate"></i></button>
+                      <button data-target="#deletepayor" data-toggle="modal"
+                      class=" btn btn-delete-table deletebtnpad" (click)="editPayorRequiredId('delete',data)" *ngIf="fp.payorrequireddelete">
+                      <i class="fa fa-trash fa-lg"></i></button>
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+
+          <ngx-ui-loader></ngx-ui-loader>

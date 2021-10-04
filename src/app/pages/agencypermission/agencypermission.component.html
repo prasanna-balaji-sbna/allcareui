@@ -1,0 +1,107 @@
+
+<div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted row">
+          <h4 class="mb-0 font-header "> Agency Level Roles and Responsibilities</h4>
+        </div>
+  <div class="row mt-1">
+      <div class="col ml-1">
+        <div  >
+            <input type="checkbox"  [(ngModel)]="rolePermisssionList.isSelectAllEnabled" (change)="SaveAllMenuRoles(rolePermisssionList.isSelectAllEnabled)"/>&nbsp;
+              <label for="radio-1"  class="textcolor"><b>Select All</b></label>      
+            </div>
+      </div>
+    <div class="col text-right">
+        <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#roleadd" (click)="Addrole()">New Role</button>
+    </div>
+  </div>
+   
+<!-- </div> -->
+
+<div class="row mt-1 ml-1">
+    <!-- <div class="card border-0 box-shadow mt-1">
+        <div class="card-body"> -->
+
+
+
+    <!-- ======================= Roles and responsibilities checkbox ======================== -->
+
+            <div class="table-responsive border-0 table-sm tableoverflow" >
+                <table class="table table-fixed"  mdbTable>
+                    <thead class="text-primary ">
+                        <tr class="table-borderless text-center">
+                            <th></th>
+                            <th *ngFor="let s of rolePermisssionList.roleMenu; let id = index" class="text-center textcolor">{{s.roleHeading}}&nbsp;       
+                                <input type="checkbox" [(ngModel)]="s.isRoleEnabled"   class="checkbox checkbox-primary styled" 
+                                (change)="SaveRoleBasedMenu(s)"/>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class=" overflow-y">
+                      <tr class="table-borderless" *ngFor="let item of rolePermisssionList.rolePermissiondata;let i=index" style="border-bottom: 1px solid gray;">
+                          <td>
+                              <span *ngIf="!item.isSubMenu && !item.isFunctionMenu" class="textcolor"><b>{{item.menuName}}</b></span>
+                              <span *ngIf="item.isSubMenu && !item.isFunctionMenu"><b>{{item.menuName}}</b></span>
+                              <span *ngIf="!item.isSubMenu && item.isFunctionMenu">-&nbsp;&nbsp;{{item.menuName}}</span>
+                          </td>
+                           <td *ngFor="let i of item.rolePermissionMappingData;" class="text-center">
+                                <input type="checkbox" [(ngModel)]="i.isEnabled" (change)="saveRoleandPermissions(i)">
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+    <!-- ======================= Roles and responsibilities checkbox ========================= -->
+
+        <!-- </div>
+    </div> -->
+</div>
+
+</div>
+</div>
+</div>
+
+<span id="openModal1" data-target="#roleadd" data-toggle="modal"></span>
+<div class="modal fade" id="roleadd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-header" id="exampleModalLabel">New Role</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          <!-- <h5 class="modal-title" id="exampleModalLabel"  *ngIf="!isCreate">Create Care Coordinator</h5> -->
+  
+        </div>
+  
+        <div class="modal-body">
+
+      <div class="row" >
+  <div class="col-lg-4">
+
+    <label >Role Name </label>
+  </div>
+  <div class="col-lg-8">
+
+        <input type="text" name="role" id="role"class="form-control"
+          [(ngModel)]="headerName" />
+      </div>
+      </div>
+    </div>
+  
+    <div class="modal-footer">
+        <div class="row  text_right">
+          <button class="btn blue-btn btn-sm mr-1" type="button"
+            (click)="addroles(headerName);">Save & Close</button>
+          <button class="btn blue-btn btn-sm" type="button"
+            data-dismiss="modal">Close</button>
+  
+        </div>
+    </div>
+    </div>
+</div>
+</div>

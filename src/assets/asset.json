@@ -1,0 +1,104 @@
+[{
+    "id": 1,
+    "type": "Finger print device",
+    "deviceId": "A001",
+    "display": " ",
+    "status": true,
+    "assetCode": "B002"
+    
+    
+},
+{
+    "id": 2,
+    "type": "Laptop",
+    "deviceId": "A002",
+    "display": "Laptop",
+    "status": false,
+    "assetCode": "C002"
+},
+{
+    "id": 3,
+    "type": "Tablet",
+    "deviceId":"A003",
+    "display": "tablet",
+    "status": false,
+    "assetCode": "C101"
+},
+{
+    "id": 4,
+    "type": "Mobile",
+    "deviceId": "A004",
+    "display": "Mobile",
+    "status": true,
+    "assetCode": "B001"
+
+},
+{
+    "id": 5,
+    "type": "Printer",
+    "deviceId": "A005",
+    "display": "Sheet",
+    "status": true,
+    "assetCode": "C003"
+    
+},
+{
+    "id": 6,
+    "type": "Card Swipe Machine",
+    "deviceId": "A006",
+    "display": " ",
+    "status": false,
+    "assetCode": "B002"
+},
+{
+    "id": 7,
+    "type": "Scanners",
+    "deviceId":" A007",
+    "display": "monitor",
+    "status": false,
+    "assetCode": "C004"
+},
+{
+    "id": 8,
+    "type": "Money counting machine",
+    "deviceId": "A008",
+    "display": " ",
+    "status": true,
+    "assetCode": "B003"
+
+},
+{
+    "id": 9,
+    "type": "Money validating machine",
+    "deviceId": "A009",
+    "display": " ",
+    "status": true,
+    "assetCode": "B004"
+    
+},
+{
+    "id": 10,
+    "type": "PIN PAD for Rupay card",
+    "deviceId": "A010",
+    "display": " ",
+    "status": false,
+    "assetCode": "C102"
+},
+{
+    "id": 11,
+    "type": "IRIS scanner",
+    "deviceId": "A011",
+    "display": " ",
+    "status": false,
+    "assetCode": "B005"
+},
+{
+    "id": 12,
+    "type": "Fake Note detector",
+    "deviceId": "A012",
+    "display": " ",
+    "status": true,
+    "assetCode": "B006"
+    
+}
+]

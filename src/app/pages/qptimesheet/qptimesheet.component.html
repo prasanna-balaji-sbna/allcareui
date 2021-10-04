@@ -1,0 +1,472 @@
+<!--------------------------------------Header----------------------------------------------------------------------------->
+
+<div class="row mb-2" *ngIf="!manualEntry">
+    <div class="col pl-0">
+        <div widget class="card border-0 box-shadow">
+            <div class="card-header transparent  text-muted">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4 class="mb-0 font-header">QP-Timesheet</h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                     <button class="btn blue-btn float-right mr-0" (click)="openQP()" [disabled]="this.global.globalAgencyId==0">Add QP Entry</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                <div class="row">
+                    <div class="col-lg-2  ">
+                        <div class="row">
+                            <div class="col-lg-5 buttonpanddinglr">
+                                <span>Start date</span>
+                            </div>
+                            <div class="col-lg-7  buttonpanddinglr">
+                                <my-date-picker [options]="myDatePickerOptions" [selDate]="filters.filterStartDate"
+                                    placeholder="mm/dd/yyyy"
+                                    (inputFieldChanged)="newdates($event,'inputchage','filterstart',0)"
+                                    (dateChanged)="newdates($event,'datechagned','filterstart',0)"
+                                    [disabled]="this.global.globalAgencyId==0">
+                                </my-date-picker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2  buttonpanddingr">
+                        <div class="row">
+                            <div class="col-lg-5 buttonpanddinglr">
+                                <span>End date</span>
+                            </div>
+                            <div class="col-lg-7  buttonpanddinglr">
+                                <my-date-picker [options]="myDatePickerOptions" [selDate]="filters.filterEndDate"
+                                    placeholder="mm/dd/yyyy"
+                                    (inputFieldChanged)="newdates($event,'inputchage','filterend',0)"
+                                    (dateChanged)="newdates($event,'datechagned','filterend',0)"
+                                    [disabled]="this.global.globalAgencyId==0">
+                                </my-date-picker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class=row>
+                            <div class="col-lg-10 ">
+                                <div class=row>
+                                    <div class="col-lg-6  buttonpanddingr">
+                                        <div class="row">
+                                            <div class="col-lg-4 buttonpanddingr">
+                                                <span>Employee</span>
+                                            </div>
+                                            <div class="col-lg-8 buttonpanddinglr">
+                                                <ng-select [(ngModel)]="filters.filterEmployee"  [searchable]="true"
+                                                    [clearable]="true" [items]="EmployeeDropDown" bindLabel="Value"
+                                                    bindValue="Key" [disabled]="this.global.globalAgencyId==0" >
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6  buttonpanddingr">
+                                        <div class="row">
+                                            <div class="col-lg-4 buttonpanddingr">
+                                                <span>Client</span>
+                                            </div>
+                                            <div class="col-lg-8 buttonpanddinglr">
+                                                <ng-select [(ngModel)]="filters.filterClient" [searchable]="true"
+                                                    [clearable]="true" [items]="ClinetDropDown" bindLabel="names"
+                                                    bindValue="id" [disabled]="this.global.globalAgencyId==0">
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 ">
+                                <div>
+                                    <button type="button" class="btn blue-btn" [disabled]="this.global.globalAgencyId==0||
+                                    (filters.filterStartDate==null||filters.filterStartDate==''||filters.filterStartDate==undefined)&&(filters.filterClient==null||filters.filterClient==undefined)&&
+                                    (filters.filterEmployee==null||filters.filterEmployee==undefined)&&(filters.filterEndDate==null||filters.filterEndDate==''||filters.filterEndDate==undefined)" (click)="timesheetfilter()">Apply
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!---------------------------------------Hirarical Binding------------------------------------------------------------------------>
+<div *ngIf="!manualEntry">
+    <div class="row mb-2">
+        <div class="col pl-0">
+            <div widget class="card border-0 box-shadow">
+                <div class="card-body  widget-body pt-2">
+                    <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+                        <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view
+                            details</label>
+                    </div>
+                    <button class="btn blue-btn" (click)="Refresh()" [disabled]="this.global.globalAgencyId==0"><i
+                            _ngcontent-lep-c69="" class="fa fa-repeat">&nbsp;</i>Refresh</button>
+                    <div class="control-section">
+                        <ejs-grid #grid [dataSource]='data | async' *ngIf="global.globalAgencyId!=0" [allowResizing]='true'
+                            (queryCellInfo)='validatebutton($event)' [allowSorting]='true' (resizeStop)="onResize($event)"
+                            allowPaging='true' [allowFiltering]='true' (dataStateChange)='dataStateChange($event)'
+                            [pageSettings]='initialPage' [filterSettings]='filterOptions' [showColumnChooser]= 'true'
+                            (actionComplete)="onActionComplete($event)"  >
+                            <e-columns>
+                                <e-column minWidth= 120 field='clientName' headerText='Client' textAlign='left' [allowEditing]='false'
+                                     type='string'>
+                                     <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                    </ng-template>
+                                </e-column>
+                                <e-column field='employeeName' minWidth= 120 headerText='Employee' textAlign='left'
+                                    [allowEditing]='false' type='string'>
+                                    <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                    </ng-template>
+                                </e-column>
+                                <e-column field='masterCode' minWidth= 100 headerText='Service' textAlign='left' width=100
+                                [allowEditing]='false' type="string">
+                                <ng-template #filterTemplate let-data>
+                                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                </ng-template>
+                                </e-column>
+                                <e-column field='totalHours' minWidth= 100 headerText='Total Hours' textAlign='left' width=100
+                                [allowEditing]='false' type="number">
+                                </e-column>
+                                <e-column field='timesheet' uid='action' headerText="Actions" minWidth= 100 textAlign='center'
+                                    [allowEditing]='false' [allowFiltering]="false">
+                                    <ng-template #template let-data>
+                                        <button class="btn btn-edit-table Ationsubbtn" id="enableedit"
+                                            data-target="#updateTimesheet" data-toggle="modal"
+                                            (click)="edittimesheet(data)"><i class="fa fa-edit"></i></button>
+                                        <button data-target="#deleteTimesheet" data-toggle="modal"
+                                            class=" btn btn-delete-table" (click)="deleteList.timesheet_id=data.id">
+                                            <i class="fa fa-trash fa-lg"></i></button>
+                                    </ng-template>
+                                </e-column>
+                            </e-columns>
+                        </ejs-grid>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-----------------------------------------Add Manual Entry---------------------------------------------------------------->
+
+<div *ngIf="manualEntry">
+
+    <div >
+        <div class="row mb-2">
+            <div class="col pl-0">
+                <div widget class="card border-0 box-shadow">
+                    <div class="card-header transparent  text-muted">
+                        <div class="row">
+                            <div class="col-lg-6">
+                            <h4 class="mb-0 font-header">Add QP timesheets</h4>
+                            </div>
+                        </div>
+                    </div>
+                <div class="card-body  widget-body pb-0 pt-2 mb-4">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <label class="font-header">Quality Professionals <sup class="super-script"> *</sup></label>
+                            <ng-select  [searchable]="true" [clearable]="true"  [(ngModel)]="qpadd.employeeId"
+                            [items]="EmployeeDropDown" bindLabel="Value"
+                            class="tdropdown" bindValue="Key"></ng-select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="alert alert-warning1 alert-dismissible fade show" *ngIf="saveQPErr!=''" role="alert">
+                        <p>{{saveQPErr}}</p>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                        (click)="saveQPErr=''">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>  
+                    <div class="row d-none d-lg-flex">
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                        <label class="manualentry-label">Client<sup class="super-script"> *</sup></label>
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                        <label class="manualentry-label">Services<sup class="super-script"> *</sup></label>
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                        <label class="manualentry-label">Date<sup class="super-script"> *</sup></label>
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                        <label class="manualentry-label">Hours<sup class="super-script"> *</sup></label>
+                        </div>
+                    </div>
+                    <div class="row d-none d-lg-flex " *ngFor="let qpadd of qpadd;let i=index">
+                    <!-- <div class="row d-none d-lg-flex "> -->
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <!-- <label class="manualentry-label">Client<sup class="super-script"> *</sup></label> -->
+                            <ng-select  [searchable]="true" [clearable]="true"  [(ngModel)]="qpadd.clientId"
+                            [items]="ClinetDropDown"  bindLabel="names"
+                            bindValue="id" class="tdropdown" ></ng-select>
+                            <!-- <p class="text-danger" *ngIf="qpadd.qpProfessionals ==''" [hidden]="qpadd.qpProfessionals!=''">Please select QP</p> -->
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <!-- <label class="manualentry-label">Services<sup class="super-script"> *</sup></label> -->
+                            <ng-select [searchable]="true" [clearable]="true"  [(ngModel)]="qpadd.masterServiceId"
+                            [items]="QPserviceList" bindLabel="Value"
+                            class="tdropdown" bindValue="Key"></ng-select>
+                            <!-- <p class="text-danger" *ngIf="qpadd.services ==''"  [hidden]="qpadd.services!=''">Please select Service</p> -->
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <!-- <label class="manualentry-label">Date<sup class="super-script"> *</sup></label> -->
+                            <my-date-picker [options]="myDatePickerOptions"  [selDate]="qpadd.timesheetDate"
+                            placeholder="mm/dd/yyyy"
+                            [disabled]="this.global.globalAgencyId==0"  (inputFieldChanged)="newdates($event,'inputchage','Create',i);"
+                            (dateChanged)="setindex(i);newdates($event,'datechagned','Create',i)">
+                            </my-date-picker>
+                            <!-- <p class="text-danger" *ngIf="qpadd.isDate"  [hidden]="qpadd.date!=''">Please Enter Date</p> -->
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <!-- <label class="manualentry-label">Hours<sup class="super-script"> *</sup></label> -->
+                            <input type="text"   (keypress)="numberonly($event,'create')" class="form-control"  [(ngModel)]="qpadd.totalHours" >
+                            <!-- <p class="text-danger" *ngIf="qpadd.isHours"  [hidden]="qpadd.hours!=''">Please Enter Hours</p> -->
+                        </div>
+                        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <button class="btn btn-sm blue-btn" (click)="addQP(i)" *ngIf="qpadd.isAddQP">&nbsp;&nbsp;<i class="fa fa-plus"></i>&nbsp;&nbsp;</button>
+                            <button class="btn btn-sm btn-danger" (click)="removeList(i)" *ngIf="!qpadd.isAddQP">&nbsp;&nbsp;<i class="fa fa-times"></i>&nbsp;&nbsp;</button>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="row d-lg-none" *ngFor="let qpadd of qpadd;let i=index">
+                        <!-- <div class="row d-lg-none"> -->
+                            <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <label class="manualentry-label">Client<sup class="super-script"> *</sup></label>
+                            <ng-select  [searchable]="true" [clearable]="true"  [(ngModel)]="qpadd.clientId"
+                            [items]="ClinetDropDown"  bindLabel="names"
+                            bindValue="id" class="tdropdown" ></ng-select>
+                            <!-- <p class="text-danger" *ngIf="qpadd.qpProfessionals ==''" [hidden]="qpadd.qpProfessionals!=''">Please select QP</p> -->
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <label class="manualentry-label">Services<sup class="super-script"> *</sup></label>
+                            <ng-select [searchable]="true" [clearable]="true"  [(ngModel)]="qpadd.masterServiceId"
+                            [items]="QPserviceList" bindLabel="Value"
+                            class="tdropdown" bindValue="Key"></ng-select>
+                            <!-- <p class="text-danger" *ngIf="qpadd.services ==''"  [hidden]="qpadd.services!=''">Please select Service</p> -->
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <label class="manualentry-label">Date<sup class="super-script"> *</sup></label>
+                            <my-date-picker [options]="myDatePickerOptions" [selDate]="qpadd.timesheetDate"
+                            placeholder="mm/dd/yyyy"
+                            [disabled]="this.global.globalAgencyId==0"  (inputFieldChanged)="newdates($event,'inputchage','Create',i);"
+                            (dateChanged)="newdates($event,'datechagned','Create',i);">
+                            </my-date-picker>
+                            <!-- <p class="text-danger" *ngIf="qpadd.isDate"  [hidden]="qpadd.date!=''">Please Enter Date</p> -->
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+                            <label class="manualentry-label">Hours<sup class="super-script"> *</sup></label>
+                            <input type="text" (keypress)="numberonly($event,'create')" class="form-control"  [(ngModel)]="qpadd.totalHours">
+                            <!-- <p class="text-danger" *ngIf="qpadd.isHours"  [hidden]="qpadd.hours!=''">Please Enter Hours</p> -->
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12 mt-3 p-1">
+                            <label></label>
+                            <button class="btn btn-sm blue-btn mt-3" (click)="addQP(i)" *ngIf="qpadd.isAddQP">&nbsp;&nbsp;<i class="fa fa-plus"></i>&nbsp;&nbsp;</button>
+                            <button class="btn btn-sm btn-danger mt-3" (click)="removeList(i)" *ngIf="!qpadd.isAddQP">&nbsp;&nbsp;<i class="fa fa-times"></i>&nbsp;&nbsp;</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-6"></div>
+                            <div class="col-lg-6 text-right">
+                            <button class="btn btn-sm blue-btn" (click)="checkValidation(qpadd)">Save & Close</button>&nbsp;&nbsp;
+                            <button class="btn btn-sm blue-btn" (click)="closeQp()">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-----------------------------------------update timesheet--------------------------------------------------------------------->
+<span data-target="#updateTimesheet" data-toggle="modal" id="update"></span>
+<div class="modal fade " id="updateTimesheet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Update Timesheet</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">Employee
+                                Name</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control" [(ngModel)]="QPTImeshet.employeeName" [disabled]="true">
+
+
+                        </div>
+
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">Client
+                                Name</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control" [(ngModel)]="QPTImeshet.clientName" [disabled]="true">
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">TimeSheet
+                                Date</label>
+                        </div>
+                        <div class="col-lg-12">
+
+                            <my-date-picker [options]="myDatePickerOptions" [selDate]="QPTImeshet.timesheetDate"
+                                placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','editdate',0)"
+                                (dateChanged)="newdates($event,'datechagned','editdate',0)">
+                            </my-date-picker>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">Service</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control" [(ngModel)]="QPTImeshet.masterCode" [disabled]="true">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">Work
+                                Hour</label>
+                        </div>
+                        <div class="col-lg-12">
+
+                            <input type="text" class="form-control" [(ngModel)]="QPTImeshet.totalHours"
+                                (keypress)="numberonly($event,'update')">
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="col-lg-12">
+                            <label class="manualentry-label mr-0 ml-3">Notes</label>
+                        </div>
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control" [(ngModel)]="QPTImeshet.timesheetNotes">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <p class="notealert ml-0">Date,work Hours & note field only
+                            editable</p>
+                    </div>
+                    <div class="col-lg-5">
+                        <button class="btn blue-btn" (click)="update(QPTImeshet);">
+                            Update&Close
+                        </button>
+                        <button class="btn blue-btn" data-dismiss="modal" data-target="#updateTimesheet">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------Spinner -------------------------------------------------------------->
+<div class="spinnermodal" *ngIf="loading">
+
+    <span class="myspinner"></span>
+
+</div>
+
+<!----------------------------delete individual timesheet----------------------------------------------------->
+<span data-target="#deleteTimesheet" data-toggle="modal" id="delete"></span>
+<div class="modal fade " id="deleteTimesheet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel">Edit Timesheet</h5>
+            </div>
+            <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr!=''" role="alert">
+                <p>{{saveErr}}</p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="saveErr=''">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="resetPass">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <label style="font-weight: 600;margin-top:6px;">Password<sup style="color:red; font-size: 1.35em;
+                          top: 0em;">&nbsp;*</sup></label>
+                        </div>
+                        <div class="col-lg-5">
+                            <input type="password" class="form-control" formControlName="Password"
+                                [(ngModel)]="deleteList.admin_Password" (keyup)="passvalid($event)">
+                            <div *ngIf="resetPass.controls['Password'].invalid && (resetPass.controls['Password'].dirty || resetPass.controls['Password'].touched) "
+                                class="alert alert-danger" style="height: 30px; margin-top: 10px;">
+                                <div *ngIf="resetPass.controls['Password'].errors.required">
+                                    Password is required.
+                                </div>
+                            </div>
+                            <div *ngIf="passerror && resetPass.controls['Password'].valid  " class="alert alert-danger">
+                                <div>
+                                    Enter Valid Password
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="passwordnote mt-5"><i>Note:&nbsp;Password should
+                                    contain atleast 8
+                                    characters/
+                                    digits includes 1 special character, 1 lower and uppercase characters
+                                </i></label>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue-btn" [disabled]="!resetPass.valid ||passerror"
+                    (click)="deleteTimesheet(deleteList)">Delete</button>
+                <button type="button" class="btn blue-btn" data-dismiss="modal" data-target="#modal"
+                    (click)="CancelDelete()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-ui-loader  *ngIf="loading==true"></ngx-ui-loader>

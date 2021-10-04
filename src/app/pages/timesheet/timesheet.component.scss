@@ -1,0 +1,99 @@
+
+
+.notealert{
+    font-style: italic;
+    color: red;
+    float: right;
+}
+
+
+  .e-detailcell .e-grid .e-headercontent .e-headercell,.e-detailcell .e-grid .e-detailheadercell {
+    background-color: green;
+}
+.e-grid .e-headercell,.e-grid .e-detailheadercell  {
+    background-color: rgba(0,66,144,1.00);
+}
+
+
+
+.btnclass 
+{
+  background-color: rgba(0,66,144,1.00);
+  text-transform: none;
+  font-size:13px;
+}
+
+.below-30
+{
+  
+  background-color:   #EC7063;
+  
+}
+.disablecheckbox { 
+  pointer-events: none; 
+  opacity: 0.01; 
+ } 
+ .disableedit
+ {
+  pointer-events: none;
+  opacity: 0.5;
+ }
+ .Ationsubbtn
+ {
+    margin-right: 10px !important;
+ }
+ .Actionbtn
+{
+    margin-left: 40px !important;
+}
+.buttonpanddinglr{
+    padding-left: 1px;
+    padding-right: 1px;
+    }
+    .buttonpanddingl
+    {
+        padding-left: 1px;
+    }
+    .buttonpanddingr
+    {
+        padding-right: 1px;
+    }
+.ttablehead
+{
+  background-color: white;
+  color: black;
+}
+.timesheet-footer
+{
+  float:right;
+  padding-bottom: 3%;
+}
+.manualentry-label
+{
+  margin-top: 5px;
+    font-weight: 600;
+}
+  
+.total-hours{
+  padding-left: 30px;
+}
+.modalbackgrod
+{
+    background-color: rgba(0, 0, 0, 0.3) !important;
+}
+.pdfviewmodal{
+  max-width: 80% !important;
+  
+}
+
+.tdropdown
+{
+ display: flex;
+}
+.subtablelabel
+{
+  font-weight: bolder;color:#004290;
+}
+.passwordnote{
+  font-weight: 500;color:red;font-style: italic;
+}

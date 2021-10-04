@@ -1,0 +1,121 @@
+<nav class="navbar box-shadow app-header" [class.fixed-top]="settings.theme" [class.logo-visible]="showInfoContent">
+    <div class="d-flex flex-column w-100"> 
+        <div class="d-flex justify-content-start align-items-center top-navbar">  
+                           
+            <a class="logo" routerLink="/" (click)="closeSubMenus()">
+                <!-- <img src="/assets/img/logo.jpg" width="30px"> -->
+            <!-- <span class="start">D</span><span class="ng">K</span> -->
+            <b class="d-none d-lg-block" _ngcontent-skc-c4=""><span _ngcontent-skc-c4="" style="color:#0D47A1;font-weight: bold">All</span><span _ngcontent-skc-c4="" style="color:#689F38;font-weight: bold">Care </span><span _ngcontent-skc-c4="" style="color:#689F38">Software</span></b>
+            <b class="d-lg-none "><span style="color:#0D47A1;font-weight: bold;font-size: 15px;">All</span><span style="color:#689F38;font-weight: bold;font-size: 15px;">Care </span><span style="color:#689F38;font-size: 15px;">Software</span></b>
+
+            </a>
+
+            <span class="navbar-text menu-icon transition ml-3 mr-3" [ngClass]="{'open': settings.theme.showMenu}"
+                (click)="settings.theme.showMenu = !settings.theme.showMenu" placement="right" [ngbTooltip]="(settings.theme.showMenu) ? 'Close' : 'Menu'">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </span>
+
+            <app-favorites class="d-none d-lg-inline-block"></app-favorites>
+
+            <div class="top-rigth-icons ml-auto" style="display: flex;
+            align-items: center;">
+              <span class="d-none d-sm-inline-block ">
+                 <img src="/assets/img/logo.png" alt="Avatar" class="avatar" *ngIf="global.agencyLogo==null" >
+                 <img [src]="global.agencyLogo" alt="Avatar" class="avatar" *ngIf="global.agencyLogo!=null">
+              </span>
+              <span class="d-none d-sm-inline-block pl-2 ">
+                <label *ngIf="global.agencyName!=null"  >{{global.agencyName}} </label> 
+              </span>
+              <span class="d-none d-sm-inline-block pl-2 pr-2" *ngIf="global.globalAgencyDropDown.length != 0 &&  this.userSelectedRole=='SUPERADMIN'">
+                <label  >Agency</label>
+              </span>
+              <span class="d-none d-sm-inline-block text-right" *ngIf="global.globalAgencyDropDown.length != 0 &&  this.userSelectedRole=='SUPERADMIN'">
+                <select class="form-control" [(ngModel)]="global.globalAgencyId" (change)="refreshPage()"  >
+                  <option></option>  
+                  <option [value]=ag.id  *ngFor="let ag of global.globalAgencyDropDown" >{{ag.agencyName}}</option>
+                </select>
+              </span>
+              <span class="d-none d-sm-inline-block pl-2 pr-2" *ngIf="global.userRoleDropDown.length > 1">
+                <label  >Role</label>
+              </span>
+              <span class="d-none d-sm-inline-block text-right" *ngIf="global.userRoleDropDown.length > 1">
+                <select class="form-control" [(ngModel)]="global.userSelectedRole" (change)="rolechange()"  >
+                  <!-- <option></option>   -->
+                  <option [value]=ag.Key  *ngFor="let ag of global.userRoleDropDown" >{{ag.Value}}</option>
+                </select>
+              </span>
+            </div> 
+
+                <span class="d-none d-sm-inline-block">
+                    <app-fullscreen></app-fullscreen>
+                </span> 
+                <!-- <span class="d-none d-sm-inline-block">
+                    <app-user-menu></app-user-menu>
+                </span>  -->
+                <span class="pl-2 pr-2"  >
+                  <a href="#"  data-toggle="modal" data-target="#myModal"> <i class="fa fa-sign-out" aria-hidden="true">Logout</i></a>                     
+                </span> 
+                
+            
+        </div>
+
+        <div class="horizontal-menu-outer" *ngIf="settings.theme.menu == 'horizontal'">                   
+            <app-horizontal-menu *ngIf="showHorizontalMenu"  [menuItems]="menuItems"></app-horizontal-menu>        
+            <app-vertical-menu *ngIf="!showHorizontalMenu"  [menuItems]="menuItems"></app-vertical-menu>
+        </div>
+
+    </div>
+</nav>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Log Out</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            Are you sure you want to log-out?
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn blue-btn" (click)="logout()" data-dismiss="modal">Yes</button>
+          <button type="button" class="btn blue-btn" data-dismiss="modal">No</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Role change</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            Are you sure you want to Chnage your role?
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn blue-btn" (click)="rolechange()" data-dismiss="modal">Yes</button>
+          <button type="button" class="btn blue-btn" data-dismiss="modal" (click)="cancelrole()">No</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>

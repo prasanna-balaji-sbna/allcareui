@@ -1,0 +1,631 @@
+
+<div class="row mb-2"  *ngIf="!Addgrpser&&!updategrpser">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+        <h4 class="mb-0 font-header">Group Payor Service</h4>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="row alert ml-3 mr-3 alert-warning" *ngIf="deleteAlert==true">
+          <strong>{{deleteError}}</strong>
+        </div>
+          <div class="row d-lg-none">
+              <div class="col">
+                <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal" [disabled]="global.globalAgencyId == 0" *ngIf="fp.grouppayorservicecreate" (click)="GrpCreateupdate('new')">Add
+                  Group Payor Service</button>
+              </div>
+              <div class="col text-right">
+              <button type="button" class="btn blue-btn btn-sm " [disabled]="global.globalAgencyId == 0" (click)="Refresh()" >
+                  <i class="fa fa-repeat"> Refresh </i>
+                </button>
+              </div>
+          </div>
+        <div class="row no-gutters ">
+          
+              <div class="col-lg-2 col-md-3 col-sm-2 col-xs-5 d-none d-lg-block  mt-2">
+                <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal" [disabled]="global.globalAgencyId == 0" *ngIf="fp.grouppayorservicecreate" (click)="GrpCreateupdate('new')">Add
+                  Group Payor Service</button>&nbsp;&nbsp;
+              </div>
+            
+              <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 mt-2 aligned_form padding-0" >
+                <label>Filter By</label>&nbsp;
+               
+                <select [(ngModel)]="filterSelect" class="form-control col-lg-6 col-md-8" (change)="selected_filter(filterSelect)" [disabled]="global.globalAgencyId == 0" >
+                  <option value="groupName">Group</option>
+                  <option value="payorName">Payor</option>
+                  <option value="serviceName">Service</option>
+                  <option value="name">Facility Name</option>
+                  <option value="facilityID">Facility</option>
+                   <option value="billingUnit">Billing Unit</option>
+               
+        
+                </select>
+              </div>
+           
+              <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12 mt-2 aligned_form padding-0"
+              [hidden]="filterSelect=='payorName'||filterSelect=='serviceName'||filterSelect=='billingUnit'||filterSelect=='name'||filterSelect=='facilityID'">
+
+                <label>Group</label>&nbsp;
+                <select [(ngModel)]="Filter_Group" class="form-control col-lg-5 col-md-8 col-sm-12 col-xs-12"> 
+                  <option></option>                                   
+                  <option *ngFor="let i of groupLst" [disabled]="global.globalAgencyId == 0" >{{i.label}}</option>               
+                </select>&nbsp;&nbsp; 
+                <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId == 0" (click)="search(Filter_Group)">
+                  Apply
+                </button>
+               
+              </div>
+              
+              <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6 mt-2 aligned_form padding-0" *ngIf="filterSelect=='payorName'">
+
+                <label>Payor</label>&nbsp;
+                <select [(ngModel)]="Filter_Payor" [disabled]="global.globalAgencyId == 0" class="form-control col-lg-5 col-md-8 col-sm-12 col-xs-12">                                    
+                  <option></option>  
+                  <option *ngFor="let i of AllPayerLst"  >{{i.Value}}</option>                 
+                </select>&nbsp;&nbsp; 
+                <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId == 0" (click)="search(Filter_Payor)">
+                  Apply
+                </button>
+              </div>
+              <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6 mt-2 aligned_form padding-0" *ngIf="filterSelect=='serviceName'">
+
+                <label>Service</label>&nbsp;
+                <select [(ngModel)]="filter_service" [disabled]="global.globalAgencyId == 0" class="form-control col-lg-5 col-md-8 col-sm-12 col-xs-12">                                    
+                  <option></option>  
+                  <option  *ngFor="let i of Allservice"  >{{i.Value}}</option>                 
+                </select>&nbsp;&nbsp; 
+                <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId == 0" (click)="search(filter_service)">
+                  Apply
+                </button>
+              </div>
+             
+              <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6 mt-2 aligned_form padding-0" *ngIf="filterSelect=='billingUnit'">
+
+                <label>BillingUnit</label>&nbsp;
+                <select [(ngModel)]="filter_billingUnitLid" [disabled]="global.globalAgencyId == 0" class="form-control col-lg-5 col-md-8 col-sm-12 col-xs-12">                                    
+                  <option></option>  
+                  <option  *ngFor="let i of billingUnit"  >{{i.label}}</option>                 
+                </select>&nbsp;&nbsp; 
+                <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId == 0" (click)="search(filter_billingUnitLid)">
+                  Apply
+                </button>
+              </div>
+              <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6 mt-2 aligned_form padding-0" *ngIf="filterSelect=='name'">
+
+                <label>Facilityname</label>&nbsp;
+               
+                <input type="text" 
+                class="form-control col-lg-5 col-md-8 col-sm-12 col-xs-12" [disabled]="global.globalAgencyId == 0" [(ngModel)]="filter_name">&nbsp;&nbsp; 
+                <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId == 0" (click)="search(filter_name)">
+                  Apply
+                </button>
+              </div>
+
+              <div class="col-lg-5 col-md-6 col-sm-6 col-xs-6 mt-2 aligned_form padding-0" *ngIf="filterSelect=='facilityID'">
+
+                <label>FacilityId</label>&nbsp;
+               
+                <input type="text" 
+                class="form-control col-lg-5" [disabled]="global.globalAgencyId == 0" [(ngModel)]="filter_FacilityId">&nbsp;&nbsp; 
+                <button type="button" [disabled]="global.globalAgencyId == 0" class="btn blue-btn btn-sm" (click)="search(filter_FacilityId)">
+                  Apply
+                </button>
+              </div>
+
+          
+           
+          
+              <div class="d-none d-lg-block col-lg-1 col-md-1  mt-2">
+               
+                <button type="button" [disabled]="global.globalAgencyId == 0" class="btn blue-btn btn-sm" (click)="Refresh()">
+                  <i class="fa fa-repeat"> </i>Refresh
+                </button>
+            
+              </div>
+            
+            </div>
+       
+   
+
+
+
+       
+      </div>
+    
+    </div>
+  </div>
+</div>
+<!-- ////////////////////////////////////////////////////////////////////////////// -->
+
+<!-- ///////////////////////////////////////////////////////////////////////////// -->
+
+<div class="row mb-2"  *ngIf="!Addgrpser&&!updategrpser">
+    <div class="col pl-0">
+        <div widget class="card border-0 box-shadow">
+            <!-- <div class="card-header transparent  text-muted">
+                <h4 class="mb-0 font-header">ZipCode</h4>           
+            </div> -->
+            <div class="card-body  widget-body pt-2"> 
+                <!-- <div class="row">
+                    <div class="col-lg-2 mb-3">
+                      <button type="button" class="btn blue-btn" (click)="refresh()">
+                        <i class="fa fa-repeat">&nbsp;</i>Refresh
+                      </button>
+                    </div>
+        
+                </div> -->
+                <!-- <ngx-ui-loader></ngx-ui-loader> -->
+
+                  <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+                    <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+                  </div>
+                  <!-- Zip code table -->
+                  <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' [allowSorting]='true'  *ngIf="global.globalAgencyId!=0" 
+                  [allowPaging]='true' [pageSettings]='initialPage' [filterSettings]='filterSettings' [allowFiltering]='true' (actionBegin)="onActionComplete($event)" 
+                  [showColumnChooser]= 'true' (dataStateChange)= 'dataStateChange($event)'  (resizeStop)="onResize($event)" >
+                    <e-columns>
+                      <e-column minWidth= 100 field="groupName" headerText="Group">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 field="payorName" headerText="Payor">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 field="serviceName" headerText="Service" >
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 field="netRate" headerText="Net Rate" type="string">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 field="serviceLoc" headerText="Service Location">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 field="name" headerText="Facility Name" type="string">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 field="address1" headerText="Facility Address1" type="string">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 field="facilityID" headerText="Facility ID" type="string">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 field="billingUnit" headerText="Billing Unit">
+                        <ng-template #filterTemplate let-data>
+                          <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                        </ng-template>
+                      </e-column>
+                      <e-column minWidth= 100 headerText="Actions" [showInColumnChooser]='false' uid="Actions">
+                        <ng-template #template let-data>
+                          <button class="btn btn-edit-table" *ngIf="fp.grouppayorserviceupdate" (click)="GrpCreateupdate('edit');selectgrpdetails(data)"><i class="fa fa-edit"></i></button>&nbsp;
+                          <button class="btn btn-delete-table" data-toggle="modal" data-target="#deletemodal" *ngIf="fp.grouppayorservicedelete" (click)="selectgrpdetails(data)"><i class="fa fa-trash"></i></button>
+                        </ng-template>
+                      </e-column>
+                      <e-column width="50" [showInColumnChooser]='false'>
+                        <ng-template #headerTemplate let-data>
+                          <div>
+                          <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                          </div>
+                        </ng-template>
+                      </e-column>
+                    </e-columns>
+                  </ejs-grid>
+                  
+
+                  
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<div *ngIf="updategrpser==true||Addgrpser==true">
+      <div class="row mb-2">
+          <div class="col pl-0">
+              <div widget class="card border-0 box-shadow">
+                  <div class="card-header transparent  text-muted">
+                      <h4 class="mb-0 font-header">Group Payor Service</h4>
+                    
+                      <div class="save-close-btns">
+                         
+                         <button *ngIf="updategrpser"  class="btn blue-btn btn-sm" [disabled]="!groupPayerForm.valid" (click)="SaveOrUpdateGroupPayorService()">Update & Close</button>
+                         <button *ngIf="Addgrpser" class="btn blue-btn btn-sm" [disabled]="!groupPayerForm.valid"  (click)="SaveOrUpdateGroupPayorService()">Save & Close</button>
+
+                &nbsp;&nbsp;&nbsp;
+
+                          <button class="btn blue-btn btn-sm" id="openBtn" (click)="cancel()" >
+                              Close
+                          </button>
+
+                        </div>           
+                  </div>
+                 
+                  <div class="card-body  widget-body pt-2"> 
+                    <div class="row alert ml-3 mr-3 alert-warning" *ngIf="showErrorAlert==true">
+                      <strong>{{error}}</strong>
+                    </div>
+            
+                    <form [formGroup]="groupPayerForm">
+
+                      <div class="row pl-4">
+                          <div class="col-lg-12">
+
+                            <div class="row hr-line">
+                              <div class="col-lg-6 br-line">
+                                <div class="row">
+                                  <label class="font-header">General
+                                    Requirements</label>
+                                </div>
+                               
+                              
+                                <hr/>
+                                <div class="row mt-2">
+                                  <div class="col left-label">
+                                    <label class="label-bold">Group <sup class="super-script">&nbsp;*</sup></label>
+                                  </div>
+                                  <div class="col-md-5">
+                                    <select [(ngModel)]="GroupPayorService.groupId" (ngModelChange)="groupchange(GroupPayorService.groupId);checkpopup('Group');"  class="form-control"  formControlName="groupId">
+                                     <option></option>
+                                      
+                                      <option [value]="i.value" *ngFor="let i of groupLst" >{{i.label}}</option>
+                                      
+                                    </select>
+                                    <span class="help-block text-danger text-center"
+                                    *ngIf="!groupPayerForm.get('groupId').valid && groupPayerForm.get('groupId').touched ">
+                                    <p>Please Enter GroupName</p>
+                                  </span>
+                                  </div>
+                                </div>
+                                <div class="row mt-2">
+                                  <div class="col left-label">
+                                    <label class="label-bold">Payor<sup class="super-script">&nbsp;*</sup></label>
+                                  </div>
+                                  <div class="col-md-5 ">
+                                    <!-- <select class="form-control" formControlName="payorName">
+                                      <option   [value]=i.value   *ngFor="let i of payerLst"  >{{i.label}}</option>
+                                    </select> -->
+                                    <select class="form-control"  formControlName="groupPayorId"  [(ngModel)]="GroupPayorService.groupPayorId" (ngModelChange)="checkpopup('Payor')">
+                                     <option></option>
+                                      <option   [value]=i.value   *ngFor="let i of payerLst">{{i.label}}</option>
+                                    </select>
+                                  
+                                    <span class="help-block text-danger text-center"
+                                    *ngIf="!groupPayerForm.get('groupPayorId').valid && groupPayerForm.get('groupPayorId').touched ">
+                                    <p>Please Enter Payor Name</p>
+                                  </span>
+                                  </div>
+                                </div>
+              
+                                <div class="row mt-2">
+                                  <div class="col left-label">
+                                    <label class="label-bold">Service<sup class="super-script">&nbsp;*</sup></label>
+                                  </div>
+                                  <div class="col-md-5 ">
+                                    <select class="form-control" (change)="serviceChange(GroupPayorService.masterServiceId);checkpopup('Service')" [(ngModel)]="GroupPayorService.masterServiceId"  formControlName="masterServiceId" >
+                                      <option></option>
+                                   
+                                      <option   [value]="i.Key"  *ngFor="let i of Allservice"  >{{i.Value}}</option>
+                                     
+                                    </select>
+                                    <span class="help-block text-danger text-center"
+                                      *ngIf="!groupPayerForm.get('masterServiceId').valid && groupPayerForm.get('masterServiceId').touched ">
+                                      <p>Please Enter Service Name</p>
+                                    </span>
+                                  </div>
+                                </div>
+                                <div class="row mt-2">
+                                  <div class="col left-label">
+                                    <label class="label-bold">Description</label>
+                                  </div>
+                                  <div class="col-md-5 ">
+                                    <input type="text" class="form-control" disabled [(ngModel)]="GroupPayorService.serviceDescription" (ngModelChange)="checkpopup('Description')" formControlName="serviceDescription">
+                                  </div>
+                                </div>
+                                <div class="row mt-2">
+                                  <div class="col left-label">
+                                    <label class="label-bold">BillingUnit<sup class="super-script">&nbsp;*</sup></label>
+                                  </div>
+                                  <div class="col-md-5 ">
+                                  
+                                    <select class="form-control" formControlName="billingUnitLid"  [(ngModel)]="GroupPayorService.billingUnitLid" (ngModelChange)="checkpopup('billingUnit')">
+                                      <option></option>
+                                  
+                                      <option  [value]="i.value"   *ngFor="let i of billingUnit"  >{{i.label}}</option>
+                                    </select>
+                                    <span class="help-block text-danger text-center"
+                                    *ngIf="!groupPayerForm.get('billingUnitLid').valid && groupPayerForm.get('billingUnitLid').touched ">
+                                    <p>Please Enter Billing Unit</p>
+                                  </span>
+                                  </div>
+                                </div>
+                                <div class="row mt-2">
+                                  <div class="col left-label">
+                                    <label class="label-bold">Net Rate<sup class="super-script">&nbsp;*</sup></label>
+                                  </div>
+                                  <div class="col-md-5 ">
+                                    <input type="number" class="form-control" [(ngModel)]="GroupPayorService.netRate" formControlName="netRate"  (ngModelChange)="checkpopup('netRate')">
+                                    <span class="help-block text-danger text-center"
+                                    *ngIf="!groupPayerForm.get('netRate').valid && groupPayerForm.get('netRate').touched ">
+                                    <p>Please Enter Net Rate</p>
+                                  </span>
+                                  </div>
+                                </div>
+                                <div class="row mt-2">
+                                  <div class="col left-label">
+                                    <label class="label-bold">U/C Rate<sup class="super-script">&nbsp;*</sup></label>
+                                  </div>
+                                  <div class="col-md-5 ">
+                                    <input type="number" class="form-control"  [(ngModel)]="GroupPayorService.unitrate" formControlName="unitrate" (ngModelChange)="checkpopup('unitrate')" >
+
+                                    <span class="help-block text-danger text-center"
+                                    *ngIf="!groupPayerForm.get('unitrate').valid && groupPayerForm.get('unitrate').touched ">
+                                    <p>Please Enter Unit Rate</p>
+                                  </span>
+                                  </div>
+                                </div>
+                                <div class="row mt-2">
+                                  <div class="col">
+                                    <label class="font-header">For Medicare,rates are PER
+                                      VISIT no matter what Billing Unit is listed</label>
+                                  </div>
+                                 
+                                </div>
+                                <div class="row">
+                                    
+                                </div>
+                                <div class="row mt-2">
+                                  <div class="col left-label">
+                                    <label class="label-bold">HCPC Code</label>
+                                  </div>
+                                  <div class="col">
+                                    <input type="text" class="form-control" formControlName="hCPCCode" [(ngModel)]="GroupPayorService.hcpcCode" (ngModelChange)="checkpopup('hcpcCode')">
+                                  </div>
+                                  <div class="col">
+                                    <label class="font-header">Payor Tab Data</label>
+                                  </div>
+                                </div>
+                                <div class="row mt-2">
+                                  <div class="col">
+                                    <input type="checkbox" class="ipt-checkbox" id="billind" formControlName="billIndividually" [(ngModel)]="GroupPayorService.billIndividually" (ngModelChange)="checkpopup('billIndividually')">&nbsp;
+                                    <label for="billind" class="label-bold">Bill Individually</label>
+                                  </div>
+                                </div>
+                              
+                                <div class="row mt-2">
+                                  <div class="col left-label">
+                                    <label class="label-bold">Rev Code</label>
+                                  </div>
+                                  <div class="col-md-5 " >
+                                    <input type="text" class="form-control" [(ngModel)]="GroupPayorService.revCode" formControlName="revCode"  (ngModelChange)="checkpopup('revCode')">
+                                  </div>
+                                  <div class="col">
+                                    <label class="font-header">Institutional Claims
+                                      Only</label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-lg-6 ">
+                                <div class="row ">
+                                  <label class="font-header ml-1">Rendering Provider ID
+                                    Requirements</label>
+                                </div>
+                                <hr />
+                                <div class="row"  >
+                                  <div class="col render-right br-line">
+                                    <ng-container *ngFor="let val of providerList">
+                                    <div class="row ml-0">
+                                      <input type="radio"  [value]="val.value"  [(ngModel)]="GroupPayorService.providerLid" formControlName="providerLid"   class="mt-2 ml-0"(ngModelChange)="checkpopup('providerLid');test(GroupPayorService.providerLid)">
+                                        &nbsp;<label class="label-bold">{{val.label}}</label>
+                                    </div>
+                                  </ng-container>
+                                 
+                                   </div>
+                                  <div class="col">
+                                    <!-- <ng-container *ngFor="let val of providerList" >
+                                    <div class="row ml-1"  *ngIf="val.label=='Company Identifier'">
+                                      <input type="radio"  [(ngModel)]="GroupPayorService.companyIdentifier" formControlName="companyIdentifier" *ngIf="val.label=='Company Identifier'" class="mt-2"  value="{{val.value}}" >
+                                      <label class="label-bold" *ngIf="val.label=='Company Identifier'" >{{val.label}}</label>
+                                    </div></ng-container> -->
+                                    <div class="row ml-0">
+                                      <label class="label-bold col-md-4 col-sm-6 pl-0">G2 ID</label>
+                                      <input type="text"  [(ngModel)]="GroupPayorService.g2id" formControlName="g2id" class="form-control col-lg-4" (ngModelChange)="checkpopup('g2id')">
+                                    </div>
+                                    <div class="row  ml-0">
+                                      <label class="label-bold col-md-4 col-sm-6 pl-0">"None" or NPI</label>
+                                      <input type="text" formControlName="nPI"  [(ngModel)]="GroupPayorService.npi" class="form-control col-lg-4" (ngModelChange)="checkpopup('npi')" >
+                                    </div>
+                                    <div class="row  ml-0">
+                                      <label class="label-bold col-md-4 col-sm-6  pl-0">Comp Name</label>
+                                      <input type="text" formControlName="companyName"  [(ngModel)]="GroupPayorService.companyName" class="form-control col-lg-4" (ngModelChange)="checkpopup('companyName')">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row pl-3">
+                                  <label class="label-bold"> Facility Requirements(Leave Blank for Homecare)</label>
+                                </div>
+                                <div class="row">
+                                  <div class="col pl-3">
+                                    <div class="row mt-2">
+                                      <label class="pl-3  col-sm-4 label-bold">Name</label>
+                                      <input type="text" class="form-control col-md-8 max-290"formControlName="name"  [(ngModel)]="GroupPayorService.name" (ngModelChange)="checkpopup('name')">
+                                    </div>
+                                    <div class="row mt-2">
+                                      <label class="pl-3  col-sm-4 label-bold">Address</label>
+                                      <input type="text" class="form-control col-md-8 max-290" formControlName="address1"  [(ngModel)]="GroupPayorService.address1" (ngModelChange)="checkpopup('address1')" >
+                                    </div>
+                                    <div class="row mt-2">
+                                      <label class="pl-3  col-sm-4 pr-0 label-bold">Address 2</label>
+                                      <input type="text" class="form-control max-290" formControlName="address2"  [(ngModel)]="GroupPayorService.address2" (ngModelChange)="checkpopup('address2')">
+                                    </div>
+                                    <div class="row mt-2">
+                                      <label class="pl-3  col-sm-4 label-bold">City</label>
+                                      <input type="text" class="form-control max-290" formControlName="city" [(ngModel)]="GroupPayorService.city" (ngModelChange)="checkpopup('city')">
+                                    </div>
+                                    <div class="row mt-2">
+                                      
+                                      <label class="pl-3  col-sm-4 label-bold"> State</label>
+
+
+                                      <ng-select [items]="stateList"  [searchable]="true" [clearable]="true" class="max-290"
+                                      bindLabel="name" bindValue="abbreviation" formControlName="state"
+                                      [(ngModel)]="GroupPayorService.state"        (ngModelChange)="checkpopup('state')"     >
+                                    </ng-select>
+                                      <!-- <input type="text" class="form-control max-290" maxlength ="2" formControlName="state" [(ngModel)]="GroupPayorService.state" (ngModelChange)="checkpopup('state')"> -->
+                                    </div>
+                                    <div class="row mt-2">
+                                      <label class="pl-3  col-sm-4 label-bold">Zip</label>
+                                      <input type="text" class="form-control max-290 col-md-5"  maxlength="10" formControlName="zipCode" [(ngModel)]="GroupPayorService.zipCode"  (ngModelChange)="checkpopup('zipCode')">
+                                      <button class="btn blue-btn btn-sm btn-height" type="button"  (click)="getzipcode()">Get Zip</button>
+                                    </div>
+                                    <div class="row mt-2">
+                                      <label class="pl-3  col-sm-4 label-bold">ID</label>
+                                      <input type="text" class="form-control max-290" formControlName="facilityID"  [(ngModel)]="GroupPayorService.facilityID" (ngModelChange)="checkpopup('facilityID')">
+                                    </div>
+                                    <div class="row mt-2">
+                                      <label class="pl-3  col-sm-4 label-bold">ServiceLoc<sup class="super-script">&nbsp;*</sup></label>
+                                     
+                                      <input type="text" class="form-control max-290" formControlName="serviceLoc" [(ngModel)]="GroupPayorService.serviceLoc" (ngModelChange)="checkpopup('serviceLoc')">
+                                      <span class="help-block text-danger text-center"
+                                      *ngIf="!groupPayerForm.get('serviceLoc').valid && groupPayerForm.get('serviceLoc').touched ">
+                                      <p>Please Enter Location</p>
+                                    </span>
+                                    </div>
+                                  <div class="row">
+                                      <div class="col-lg-2 col-md-4 col-sm-6 col-xs-6 pl-0 pr-0 ml-3">
+                                        <input type="checkbox" id="pharm" formControlName="pharm" (ngModelChange)="checkpopup('pharm')" [(ngModel)]="GroupPayorService.pharm">&nbsp;
+                                        <label for="pharm" class="label-bold">Pharm</label></div>
+                                      <div class="col-lg-2 col-md-4 col-sm-6 col-xs-6 pl-0 pr-0 ml-3">
+                                        <input type="checkbox" id="hme" formControlName="homeVisit"  (ngModelChange)="checkpopup('homeVisit')" [(ngModel)]="GroupPayorService.homeVisit">&nbsp;
+                                        <label for="hme" class="label-bold">Home Visit</label>
+                                      </div>
+                                  </div>
+                                    
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mt-4">
+                            
+                              <div class="col-lg-2">
+                                <div class="row">
+                                  
+                                  <label class="label-bold ml-2 mb-2">Rate Change Date</label>
+                                 
+                                <my-date-picker class="col-lg-12" [options]="myDatePickerOptions" [selDate]="GroupPayorService.rateChangeDate"  
+                                placeholder="mm/dd/yyyy"  formControlName="rateChangeDate"
+                                (inputFieldChanged)="newdates($event,'inputchage')"
+                                  (dateChanged)="newdates($event,'datechagned')">
+                              </my-date-picker>
+                                </div>
+                              </div>
+                              <div class="col-lg-2  ml-2 mb-2">
+                                <div class="row  aligned_form">
+                                  <label class="label-bold">CallTypeID</label>
+                                  <input type="number" class="form-control"formControlName="callTypeID"  [(ngModel)]="GroupPayorService.callTypeID" (ngModelChange)="checkpopup('callTypeID')" >
+                                </div>
+                              </div>
+                              <div class="col-lg-2  ml-2  mb-2">
+                                <div class="row  aligned_form">
+                                  <label class="label-bold">Unit Multiplier</label>
+                                  <input type="number" class="form-control"formControlName="unitMultiplier"  [(ngModel)]="GroupPayorService.unitMultiplier" (ngModelChange)="checkpopup('unitMultiplier')"  >
+                                </div>
+                              </div>
+                            
+                              <div class="col-lg-2  ml-2 mb-2">
+                                <div class="row  aligned_form">
+                                  <label class="label-bold">Old U/C Rate</label>
+                                  <input type="number" class="form-control"formControlName="oldUCRate"  [(ngModel)]="GroupPayorService.oldUCRate"  (ngModelChange)="checkpopup('oldUCRate')" >
+                                </div>
+                              </div>
+                              <div class="col-lg-2  ml-2 mb-2">
+                                <div class="row  aligned_form">
+                                  <label class="label-bold">Old Net Rate</label>
+                                  <input type="number" class="form-control" formControlName="oldNetRate" [(ngModel)]="GroupPayorService.oldNetRate"  (ngModelChange)="checkpopup('oldNetRate')">
+                                </div>
+                              </div>
+                             
+                            </div>&nbsp;&nbsp;&nbsp;
+                           
+                            
+                          
+                          </div>
+                     
+                        </div>
+                      </form>
+                  </div>
+               
+              </div>
+          </div>
+      </div>
+ 
+</div>
+
+<!-- Close Modal -->
+<span id="openModal1" data-target="#CloseModal" data-toggle="modal"></span>
+<div class="modal" id="CloseModal" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Close</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+         
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        You want to close without save?
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn" (click)="cancelYes()">Yes</button>
+        <button type="button" class="btn blue-btn" data-dismiss="modal">No</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<span id="openModal1" data-target="#deletemodal" data-toggle="modal"></span>
+<div class="modal fade" id="deletemodal" data-backdrop="static">
+    <div class="modal-dialog delete-zip" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Delete Record</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <label>Do you want to delete this record ?</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal" (click)="deleteGroup();deleteDetails(GroupPayorService.id)">Delete</button>
+          <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

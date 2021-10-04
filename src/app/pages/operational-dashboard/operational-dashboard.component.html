@@ -1,0 +1,156 @@
+<div class="row">
+    <div class="col-12 mb-4">
+        <div widget class="card border-0 box-shadow widget">
+            <div class="card-header transparent border-0 text-muted">
+                <h5 class="mb-0 headertxt">Authorization Chart</h5>
+                <div class="widget-controls">
+                    <a (click)="expand()" *ngIf="EXPBOOL" class="transition"><i class="fa fa-chevron-down"></i></a>
+                    <a (click)="expand()" *ngIf="!EXPBOOL" class="transition"><i class="fa fa-chevron-up"></i></a>
+                </div>
+            </div>
+            <div class="card-body widget-body" *ngIf="!EXPBOOL">
+                <div class="w-100 h-300p">
+                    <ngx-charts-advanced-pie-chart
+                        class="mychart"
+                        [scheme]="colorScheme"
+                        [results]="single"
+                        [gradient]="gradient"
+                        (select)="onSelect($event)">
+                    </ngx-charts-advanced-pie-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 mb-4">
+        <div widget class="card border-0 box-shadow widget">
+            <div class="card-header transparent border-0 text-muted">
+                <h5 class="mb-0 headertxt">Coming Due Authorization Chart</h5>
+                <div class="widget-controls">
+                    <a (click)="expand2()" *ngIf="EXPBOOL2" class="transition"><i class="fa fa-chevron-down"></i></a>
+                    <a (click)="expand2()" *ngIf="!EXPBOOL2" class="transition"><i class="fa fa-chevron-up"></i></a>
+                </div>
+            </div>
+            <div class="card-body widget-body" *ngIf="!EXPBOOL2">
+                <div class="w-100 h-300p">
+                    <ngx-charts-advanced-pie-chart
+                        class="mychart"
+                        [scheme]="colorScheme"
+                        [results]="auth"
+                        [gradient]="gradient"
+                        (select)="onSelect($event)">
+                    </ngx-charts-advanced-pie-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 mb-4">
+        <div widget class="card border-0 box-shadow widget">
+            <div class="card-header transparent border-0 text-muted">
+                <div class="row mb-0">
+                    <div class="col-4 text-center headertxt">
+                        <h5>Pending UMPI Chart</h5>
+                    </div>
+                    <div class="col-8 text-center headertxt">
+                        <h5>Employee List</h5>
+                    </div>
+                </div>
+                <div class="widget-controls">
+                    <a (click)="expand1()" *ngIf="EXPBOOL1" class="transition"><i class="fa fa-chevron-down"></i></a>
+                    <a (click)="expand1()" *ngIf="!EXPBOOL1" class="transition"><i class="fa fa-chevron-up"></i></a>
+                </div>
+            </div>
+            <div class="card-body widget-body" *ngIf="!EXPBOOL1">
+                <div class="row">
+                    <div class="col-4 mychart">
+                        <div class="w-100 h-300p">
+                            <ngx-charts-pie-grid
+                                [scheme]="colorScheme1"
+                                [results]="multi"
+                                (select)="onSelect1($event)">
+                            </ngx-charts-pie-grid>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <!-- <div>
+                            
+                        </div> -->
+                        <div class="control-section" >
+                            <ejs-grid #grid [dataSource]='data|async' [allowSorting]='true' [allowResizing]='true'
+                                [allowPaging]='true' [allowFiltering]='true' (dataStateChange)='dataStateChange($event)' (actionBegin)="onActionComplete($event)"
+                                [pageSettings]='initialPage' [filterSettings]='filterOptions' (click)="gotoempDetails($event)" >
+                              <e-columns>
+                                <e-column minWidth= 100 field='name' [allowFiltering]="true" headerText='Employee' textAlign='left' width=100 type="string">
+                                    <ng-template #filterTemplate let-data>
+                                    <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                    </ng-template>
+                                </e-column>
+                                <e-column minWidth= 100 field='month' headerText='Month' textAlign='left' width=100 [allowFiltering]="false"> </e-column>
+                                  <e-column minWidth= 100 field='exceededHours' headerText='Exceeded Hrs' textAlign='left' width=100 [allowFiltering]="false"> </e-column>
+                                    <e-column minWidth= 100 field='totalhours' headerText='Total Hrs' textAlign='left' width=100 [allowFiltering]="false"> </e-column>
+                                <e-column minWidth= 100 field='email' headerText='Email' textAlign='left' width=100 type="string">
+                                    <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                    </ng-template>
+                                </e-column>
+                                <e-column minWidth= 100 field='phone1' headerText='Phone' textAlign='left' width=100 type="string">
+                                    <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                    </ng-template>
+                                </e-column>
+                              </e-columns>
+                            </ejs-grid>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 mb-4">
+        <div widget class="card border-0 box-shadow widget">
+            <div class="card-header transparent border-0 text-muted">
+                <h5 class="mb-0 headertxt">OIG Analysis</h5>
+                <div class="widget-controls">
+                    <a (click)="expand()" *ngIf="EXPBOOL" class="transition"><i class="fa fa-chevron-down"></i></a>
+                    <a (click)="expand()" *ngIf="!EXPBOOL" class="transition"><i class="fa fa-chevron-up"></i></a>
+                </div>
+            </div>
+            <div class="card-body widget-body" *ngIf="!EXPBOOL">
+               
+                    <div class="col">
+                        <!-- <div>
+                            
+                        </div> -->
+                        <div class="control-section" >
+                            <ejs-grid #grid [dataSource]='Oiglist' [allowSorting]='true'
+                                [allowPaging]='true' [allowFiltering]='true' (dataStateChange)='dataStateChange($event)' (actionBegin)="onActionComplete($event)"
+                                [pageSettings]='initialPage' [filterSettings]='filterOptions' >
+                              <e-columns>
+                                <e-column field="name" headerText="Name" type='string' width=140></e-column>
+                                <e-column field="dob" headerText="DOB" type='date' [format]='formatOptions' width=100></e-column>
+                                <e-column field="age" headerText="Age" type='number'></e-column>
+                                <e-column field="email" headerText="Email"  type='string'></e-column>
+                                <e-column field="phone1" headerText="Phone" type='string'></e-column>
+                                <e-column field="phone2" headerText="phone1" type='string'></e-column>
+                                <e-column field="street" headerText="Street" type='string'></e-column>
+                                <e-column field="zipcode" headerText="ZIP Code" type='number'></e-column>
+                                <e-column field="statusLidName" headerText="Status"  type='number'></e-column>
+                           
+                              </e-columns>
+                            </ejs-grid>
+                        </div>
+                    </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-ui-loader></ngx-ui-loader>

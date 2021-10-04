@@ -1,0 +1,369 @@
+<!-- ===================================Top Card================================ -->
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+        <div class="row">
+          <div class="col-lg-11">
+            <h4 class="mb-0 font-header">Menu</h4>
+          </div>
+
+
+          <div class="custom-control custom-switch col-lg-1">
+            <input type="checkbox" class="custom-control-input" id="customSwitch1" [(ngModel)]="SMsendBO.isEvv"
+              (change)="switchchange()" [ngModelOptions]="{standalone: true}">
+            <label class="custom-control-label" for="customSwitch1">Evv</label>
+          </div>
+        </div>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="row d-lg-none">
+          <div class="col">
+            <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal"
+              (click)="OpenCreateupdate('new')">Add Menu</button>&nbsp;&nbsp;
+          </div>
+          <div class="col text-right">
+            <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()">
+              <i class="fa fa-repeat"> </i>Refresh
+            </button>
+          </div>
+        </div>
+        <div class="row no-gutters">
+          <div class="col-lg-3 col-md-2 col-sm-2 col-xs-5  d-none d-lg-block ">
+            <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal"
+              (click)="OpenCreateupdate('new')">Add Menu</button>&nbsp;&nbsp;
+          </div>
+          <div class="col-lg-8 col-md-4 col-sm-4 col-xs-5 aligned_form">
+            <label>Select Menu</label>&nbsp;
+            <select [(ngModel)]="filterSelect" class="form-control col-lg-4" (change)="filter_select(filterSelect)">
+              <option value=" "></option>
+              <option [value]=st.id *ngFor="let st of MenuListDropDown">{{st.title}}</option>
+            </select>
+          </div>
+          <div class="col-lg-1 mb-1  d-none d-lg-block ">
+            <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()">
+              <i class="fa fa-repeat"> </i>Refresh
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================Grid=================================== -->
+<div class="row mb-2">
+  <div class="col pl-0">
+
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+
+        <!-- <div *ngIf="global.globalAgencyId==0" style="text-align: center;">
+              <label class="font-red"><i class="fa fa-info-circle fa-lg" ></i>&nbsp;Select agency to view details</label>
+          </div> -->
+
+        <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' [allowSorting]='true' allowPaging='true' [allowFiltering]='true'
+          [pageSettings]='initialPage' 
+          (actionBegin)="onActionComplete($event)" (dataStateChange)='dataStateChange($event)'
+          [filterSettings]='filterOptions' [showColumnChooser]='true'  (resizeStop)="onResize($event)">
+          <e-columns>
+            <e-column minWidth= 100 field="title" headerText="Title" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="icon" headerText="Icon" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="link" headerText="Link" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 headerText="Actions" textAlign="center" [showInColumnChooser]='false'>
+              <ng-template #template let-data>
+                <button class="btn btn-edit-table" data-toggle="modal" data-target="#modal"
+                  (click)="OpenCreateupdate('edit');selectMenuList(data)">
+                  <i class="fa fa-edit"></i></button>&nbsp;
+                <button class="btn btn-Menu-add-table" data-toggle="modal" data-target="#FunctionTablemodal"
+                  *ngIf="data.isFunctionRequired" (click)="selectMenuId(data)">
+                  <i class="fa fa-plus"></i></button>&nbsp;
+              </ng-template>
+            </e-column>
+            <!--------------------------------table header icon---------------->
+            <e-column width="50" [showInColumnChooser]='false'>
+              <ng-template #headerTemplate let-data>
+                <div>
+                  <span id='show' (click)='show()'><i class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                </div>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ====================================Add & Update modal=========================== -->
+<span id="openModal" data-target="#modal" data-toggle="modal"></span>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog create-update-zip" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel"><span *ngIf="ModelType =='new'"> Create Menu</span>
+          <span *ngIf="ModelType =='edit'">Update Menu</span> </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="MenuForm">
+          <div class="row" *ngIf="filterSelect!=''">
+            <div class="col-lg-5">
+              <label>Menu<sup *ngIf=" filterSelect == '' " class="super-script">*</sup></label>
+            </div>
+            <div class="col-lg-7">
+              <label>{{menuTitle}}</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-5">
+              <label>Title<sup class="super-script">*</sup>
+              </label>
+            </div>
+            <div class="col-lg-7">
+              <input type="text" class="form-control" formControlName="title" [(ngModel)]="Menus.title" name="title"
+                (ngModelChange)="checkpopup('title')">
+            </div>
+          </div>
+          <span class="help-block text-danger text-center"
+            *ngIf="!MenuForm.get('title').valid && MenuForm.get('title').touched">
+            <p>Please Enter Title</p>
+          </span>
+          <div class="row">
+            <div class="col-lg-5">
+              <label>Icon</label>
+            </div>
+            <div class="col-lg-7">
+              <input type="text" class="form-control" formControlName="icon" [(ngModel)]="Menus.icon" name="icon"
+                (ngModelChange)="checkpopup('icon')">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-5">
+              <label>Link</label>
+            </div>
+            <div class="col-lg-7">
+              <input type="text" class="form-control" formControlName="link" [(ngModel)]="Menus.link" name="link"
+                (ngModelChange)="checkpopup('link')">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-5">
+              <label>Menu Code<sup class="super-script">*</sup></label>
+            </div>
+            <div class="col-lg-7">
+              <input type="text" class="form-control" formControlName="menuCode" [(ngModel)]="Menus.menuCode" name="menuCode" (ngModelChange)="checkpopup('menuCode')">
+            </div>
+          </div>
+           <span class="help-block text-danger text-center"
+            *ngIf="!MenuForm.get('menuCode').valid && MenuForm.get('menuCode').touched">
+            <p>Please Enter Menu Code</p>
+           </span>
+          <div class="row">
+            <div class="col-lg-5">
+              <label>Order No<sup class="super-script">*</sup></label>
+            </div>
+            <div class="col-lg-7">
+              <input type="text" class="form-control" formControlName="ordernumber" [(ngModel)]="Menus.orderNumber" name="ordernumber" (ngModelChange)="checkpopup('ordernumber')">
+            </div>
+          </div>
+           <span class="help-block text-danger text-center"
+            *ngIf="!MenuForm.get('ordernumber').valid && MenuForm.get('ordernumber').touched">
+                <p>Please Enter Order Number</p>
+           </span>
+          <div class="row mt-1">
+            <div class="col-lg-5">
+              <label>Has Function ?</label>
+            </div>
+            <div class="col-lg-7">
+              <input type="checkbox" formControlName="isFunctionRequired" [(ngModel)]="Menus.isFunctionRequired"
+                name="isFunctionRequired" (ngModelChange)="checkpopup('isFunctionRequired')">
+            </div>
+          </div>
+        </form>
+      </div>
+
+   
+    <div class="modal-footer">
+      <button class="btn blue-btn btn-sm" data-dismiss="modal" (click)="SaveOrUpdateMenu();"
+        [disabled]="!MenuForm.valid"><span *ngIf="ModelType =='new'"> Save &
+          Close</span> <span *ngIf="ModelType =='edit'">Update & Close</span> </button>
+      <button type="button" class="btn blue-btn btn-sm" (click)="OnCancelClick()">Close</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ================================================Funtion Table Modal================================ -->
+<div class="modal fade" id="FunctionTablemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog Function-modal" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Menu Functionality</h5>
+        <span></span>&nbsp;&nbsp;&nbsp;
+        <button class="btn blue-btn" data-toggle="modal" data-target="#Functionmodal"
+          (click)="functionalityCreateUpdate('new')">Add Function</button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <ejs-grid #grid [dataSource]='data1 | async' [allowResizing]='true' [allowSorting]='true' allowPaging='true' [allowFiltering]='true'
+            [pageSettings]='initialPage' (actionBegin)="onActionComplete($event)"
+            (dataStateChange)='dataStateChange1($event)' [filterSettings]='filterOptions'>
+            <e-columns>
+              <e-column minWidth= 100 field="menuName" headerText="Menu Name">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 field="functionCode" headerText="Function Code">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 field="functionName" headerText="Function Name">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 headerText="Actions">
+                <ng-template #template let-data>
+                  <button class="btn btn-edit-table" data-toggle="modal" data-target="#Functionmodal"
+                    (click)="selectFunctionList(data);functionalityCreateUpdate('edit')">
+                    <i class="fa fa-edit"></i></button>&nbsp;
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =======================================Function Add update modal====================== -->
+<div class="modal fade primarymodal" id="Functionmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog create-update-zip" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel"><span *ngIf="FunctionModelType =='new'"> Create
+            Function</span> <span *ngIf="FunctionModelType =='edit'">Update Function</span> </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="FunctionForm">
+          <div class="row" *ngIf="filterSelect!=''">
+            <div class="col-lg-6">
+              <label>Menu</label>
+            </div>
+            <div class="col-lg-6">
+              <label>{{functionMenu}}</label>
+            </div>
+          </div>
+          <div class="row" *ngIf="filterSelect ==''">
+            <div class="col-lg-6">
+              <label>Menu</label>
+            </div>
+            <div class="col-lg-6">
+              <label>{{menuTitle}}</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <label>Function Code<sup class="super-script">*</sup></label>
+            </div>
+            <div class="col-lg-6">
+              <input type="text" class="form-control" formControlName="functionCode"
+                [(ngModel)]="FunctionArray.functionCode">
+            </div>
+          </div>
+          <span class="help-block text-danger text-center"
+            *ngIf="!FunctionForm.get('functionCode').valid && FunctionForm.get('functionCode').touched">
+            <p>Please Enter Function Code</p>
+          </span>
+          <div class="row">
+            <div class="col-lg-6">
+              <label>Function Name<sup class="super-script">*</sup></label>
+            </div>
+            <div class="col-lg-6">
+              <input type="text" class="form-control" formControlName="functionName"
+                [(ngModel)]="FunctionArray.functionName">
+            </div>
+          </div>
+          <span class="help-block text-danger text-center"
+            *ngIf="!FunctionForm.get('functionName').valid && FunctionForm.get('functionName').touched">
+            <p>Please Enter Function Name</p>
+          </span>
+          <div class="row">
+            <div class="col-lg-6">
+              <label>Order No.<sup class="super-script">*</sup></label>
+            </div>
+            <div class="col-lg-6">
+              <input type="number" class="form-control" formControlName="functionorderNumber"
+                [(ngModel)]="FunctionArray.orderNumber">
+            </div>
+          </div>
+          <span class="help-block text-danger text-center"
+            *ngIf="!FunctionForm.get('functionorderNumber').valid && FunctionForm.get('functionorderNumber').touched">
+            <p>Please Enter Order Number</p>
+          </span>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn blue-btn btn-sm" data-dismiss="modal" (click)="SaveOrUpdateFunction();"
+          [disabled]="!FunctionForm.valid"><span *ngIf="FunctionModelType =='new'"> Save &
+            Close</span> <span *ngIf="FunctionModelType =='edit'">Update & Close</span></button>
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================Close confirmation================== -->
+<span id="cancelmodal" data-toggle="modal" data-target="#CloseModal"></span>
+<div class="modal fade primarymodal" id="CloseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog create-update-zip" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Close</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        You want to close without save?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn btn-sm" (click)="closeAddUpdateModal()">Yes</button>
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

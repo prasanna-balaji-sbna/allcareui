@@ -1,0 +1,481 @@
+<div class="row mb-2" *ngIf="!isView">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+
+        <div class="row">
+          <div class="col-lg-10">
+            <h4 class="mb-0 font-header">Aide Report</h4>
+          </div>
+          <div class="col-lg-2">
+            <button class="btn blue-btn btn-sm butstyle float-right" (click)="back()">Back</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="alert alert-warning alert-dismissible fade show" *ngIf="Err!=''" role="alert">
+        <p>{{Err}}</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="Err=''">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="row">
+          <div class="col-lg-10">
+            <div class="row">
+              <div class="col-lg-3 d-inline-flex">
+                <label class="font-weight-bold">Status</label>
+                <select [(ngModel)]="SelectedStatus" class="w-75 form-control" [disabled]="global.globalAgencyId == 0">
+                  <option [ngValue]="item.value" *ngFor=" let item of StatusLst">{{item.label}}
+                  </option>
+
+                </select>
+              </div>
+              <div class="col-lg-3 d-inline-flex">
+                <label class="font-weight-bold w-50">Start Date</label>
+                <my-date-picker [options]="myDatePickerOptions" class="w-75" [selDate]="filters.start"
+                  placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','start')"
+                  (dateChanged)="newdates($event,'datechagned','start')" [disabled]="global.globalAgencyId == 0">
+                </my-date-picker>
+              </div>
+              <div class="col-lg-3 d-inline-flex">
+                <label class="font-weight-bold w-50">End Date</label>
+                <my-date-picker [options]="myDatePickerOptions" [selDate]="filters.end" placeholder="mm/dd/yyyy"
+                  class="w-75" (inputFieldChanged)="newdates($event,'inputchage','end')"
+                  (dateChanged)="newdates($event,'datechagned','end')" [disabled]="global.globalAgencyId == 0">
+                </my-date-picker>
+              </div>
+              <div class="col-lg-3 d-inline-flex">
+                <label class="font-weight-bold w-25">Client</label>
+                <ng-select class="w-75" [clearable]="true" [(ngModel)]="filters.client" [items]="clidropdown"
+                  bindValue="id" bindLabel="names" [disabled]="global.globalAgencyId == 0">
+                </ng-select>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-lg-2 d-inline-flex">
+            <button type="button" class="btn blue-btn btn-sm butstyle ml-2" (click)="aidfilters()"
+              [disabled]="global.globalAgencyId == 0">Apply</button>
+            <button type="button" class="btn blue-btn btn-sm butstyle ml-2" (click)="newaid()"
+              [disabled]="global.globalAgencyId == 0"> Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mb-2" *ngIf="!isView">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+        <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+          <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view details</label>
+        </div>
+        <button class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId == 0" (click)="Refresh()"> <i
+            class="fa fa-repeat"> </i>Refresh</button>
+        <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true'
+          allowPaging='true' [allowFiltering]='true' [pageSettings]='initialPage' [filterSettings]='filterOptions'
+          (dataStateChange)='dataStateChange($event)' (actionBegin)="onActionComplete($event)"  [showColumnChooser]='true'
+          (resizeStop)="onResize($event)" >
+          <e-columns>
+            <e-column field="clientName" minWidth= 100 headerText="Client Name" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="resopnsiplePartyName" minWidth= 100 headerText="RP Name" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="pcaEmployee" minWidth= 100 headerText="PCA Name" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="qpEmployee" minWidth= 100 headerText=" QP  Name" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="submissiontyepe" minWidth= 100 headerText="Submission Type" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-dropdownlist id='dropdown' placeholder='Select Submission Type' [dataSource]='submissiondrop'
+                  [popupHeight]='height'></ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+            <e-column field="reportedBy" minWidth= 100 headerText="Reported By"  type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="createdDate" minWidth= 100 headerText="Reported On"  type='date'
+              [format]='formatOptions'></e-column>
+            <e-column field="completedBy" minWidth= 100 headerText="Completed By"  type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="modifiedDate" minWidth= 100 headerText="Completed On"  type='date'
+              [format]='formatOptions'></e-column>
+            <e-column headerText="Actions" uid="action" minWidth= 100 textAlign="center" [showInColumnChooser]='false'>
+              <ng-template #template let-data >
+                <div *ngIf="data.reportstatus=='Pending'">
+                <button class="btn btn-edit-table " (click)="showAidData(data.id)"><i
+                    class="fa fa fa-edit"></i></button>&nbsp;
+                  </div>
+                  <div  *ngIf="data.reportstatus=='Completed'">
+                    <button class="btn btn-edit-table " (click)="showAidData(data.id)"><i
+                      class="fa fa fa-eye"></i></button>&nbsp;
+                  </div>
+              </ng-template>
+              
+            </e-column>
+
+            <e-column width="50" [showInColumnChooser]='false'>
+              <ng-template #headerTemplate let-data>
+                <div>
+                  <span id='show' (click)='show()'><i class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                </div>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mb-2" *ngIf="isView">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+
+        <div class="row">
+          <div class="col-lg-10">
+            <h4 class="mb-0 font-header">Aide Report Creation</h4>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="row">
+          <div class="col-4 aidline">
+            <div class="row">
+              <div class="col-5">
+                <label class="font-weight-bold">Client Name<sup class="super-script">*</sup></label>
+              </div>
+              <div class="col-7">
+                <ng-select class="w-100" [clearable]="true" [(ngModel)]="aidReport.clientId" [items]="clidropdown"
+                  bindValue="id" bindLabel="names" (ngModelChange)="getRP(aidReport.clientId);enableCLi()"
+                  (change)="aidvaluechangefunction()" [disabled]="isApproved">
+                </ng-select>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col-5">
+                <label class="font-weight-bold">RP Name</label>
+              </div>
+              <div class="col-7">
+                <ng-select class="w-100" [clearable]="true" [(ngModel)]="aidReport.responsiblePartyNameContactId"
+                  [items]="RPList" (ngModelChange)="isEmp=true" (change)="aidvaluechangefunction()"
+                  [disabled]="isApproved">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="col-8">
+            <div class="row">
+              <div class="col-lg-6" *ngIf="isCliInfo">
+                <label style="font-weight: bolder;color:#004290;margin-left: 8px;">Client Info</label>
+
+
+                <table class="table  table-hover table-bordered" style="margin-bottom: 3px;">
+                  <thead>
+                    <th class="pointer" style="background-color: white;color: black;">Member DOB
+                    </th>
+                    <th class="pointer" style="background-color: white;color: black;">Member MA#
+                    </th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        {{clientinfodetails.dob|date:"MM/dd/yyyy"}}
+                      </td>
+                      <td>
+                        {{clientinfodetails.medicaid}}
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+
+
+
+              </div>
+              <div class="col-lg-6" *ngIf="isEmp">
+                <label style="font-weight: bolder;color:#004290;margin-left: 8px;">RP Info</label>
+
+
+                <table class="table  table-hover table-bordered" style="margin-bottom: 3px;">
+                  <thead>
+                    <th class="pointer" style="background-color: white;color: black;">Email
+                    </th>
+                    <th class="pointer" style="background-color: white;color: black;">Phone
+                    </th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        {{RPdetailList.responsiblePartyEmail}}
+                      </td>
+                      <td>
+                        {{RPdetailList.responsiblePartyPhone}}
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-header transparent text-muted">
+        <div class="row">
+          <div class="col-lg-6">
+            <h5 class="mb-0 font-header">General Info</h5>
+          </div>
+          <div class="col-lg-6">
+          </div>
+        </div>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="row">
+          <div class="col-lg-3  d-inline-flex">
+            <label class="font-weight-bold w-50">PCA Employee</label>
+            <ng-select class="w-50" [clearable]="true" [(ngModel)]="aidReport.pcaEmployeeId" [items]="PCAlst"
+              bindLabel="label" bindValue="value" (change)="aidvaluechangefunction()" [disabled]="isApproved">
+            </ng-select>
+          </div>
+          <div class="col-lg-3  d-inline-flex">
+            <label class="font-weight-bold w-50">QP Name</label>
+            <ng-select class="w-50" [clearable]="true" [(ngModel)]="aidReport.qpEmployee" [items]="QpLst"
+              bindLabel="label" bindValue="value" (change)="aidvaluechangefunction()" [disabled]="isApproved">
+            </ng-select>
+          </div>
+          <div class="col-lg-3  d-inline-flex">
+            <label class="font-weight-bold">Review Date</label>
+            <my-date-picker [options]="myDatePickerOptions" class="w-50" [selDate]="aidReport.reviewDate"
+              placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','review')"
+              (dateChanged)="newdates($event,'datechagned','review')" [disabled]="isApproved">
+            </my-date-picker>
+          </div>
+          <div class="col-lg-3  d-inline-flex">
+            <label class="font-weight-bold">Report Date</label>
+            <my-date-picker [options]="myDatePickerOptions" class="w-50" [selDate]="aidReport.reportDate"
+              placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','report')"
+              (dateChanged)="newdates($event,'datechagned','report')" [disabled]="isApproved">
+            </my-date-picker>
+          </div>
+
+        </div>
+        <div class="row mt-1">
+          <div class="col-3  d-inline-flex">
+            <label class="font-weight-bold">Review start Time</label>
+            <input type="time" class="form-control" [(ngModel)]="aidReport.reviewStartTime"
+              (change)="aidvaluechangefunction()"
+              [disabled]="isApproved||aidReport.reviewDate==null||aidReport.reviewDate==undefined||aidReport.reviewDate==''">
+          </div>
+          <div class="col-3  d-inline-flex">
+            <label class="font-weight-bold">Review End Time</label>
+            <input type="time" class="form-control" [(ngModel)]="aidReport.reviewEndTime"
+              (change)="aidvaluechangefunction()"
+              [disabled]="isApproved||aidReport.reviewDate==null||aidReport.reviewDate==undefined||aidReport.reviewDate==''" />
+          </div>
+        </div>
+
+        <table class="table" style="margin-top: 5px;">
+          <thead class="aidthead">
+            <tr>
+              <th scope="col" class="pointer">Aide Information</th>
+              <th scope="col" class="pointer">Aide Rapport/Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="width: 30%">
+                <input id=" Inprogress20" [(ngModel)]="aidReport.isAideSupervision " (change)="aidvaluechangefunction()"
+                  type="checkbox" class="checkbox checkbox-primary styled" [disabled]="isApproved" />&nbsp;
+                <label for=" Inprogress20" style="padding-top:2px;font-weight: bolder;">Aide
+                  Supervision</label>&nbsp;&nbsp;
+                <br />
+                <input id=" Inprogress21" [(ngModel)]="aidReport.isAidePresent " (change)="aidvaluechangefunction()"
+                  type="checkbox" class="checkbox checkbox-primary styled" [disabled]="isApproved" />&nbsp;
+                <label for=" Inprogress21" style="padding-top:2px;font-weight: bolder;">Aide Present</label>&nbsp;&nbsp;
+                <br />
+                <label style="margin-left: 5px;margin-right:3px;margin-top:5px;font-weight: bolder">Submission Type
+                  :</label>&nbsp;&nbsp;
+                <span *ngFor="let val1 of SubmissionList;let i =index">
+                  <input type="radio" name="subbmission" id={{i}} value="{{val1.value}}"
+                    [(ngModel)]="aidReport.submissionTypeLid" (change)="aidvaluechangefunction()"
+                    class="checkbox checkbox-primary styled" style="margin-top:10px;" [disabled]="isApproved">
+                  <label class="font-weight-bold pt-2 pl-2 ">
+                    {{val1.label}}</label>&nbsp;&nbsp;</span>
+
+
+              </td>
+              <td>
+                <textarea class="form-control" style="height:100px" [(ngModel)]="aidReport.aideReportComment"
+                  (change)="aidvaluechangefunction()" [disabled]="isApproved"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table">
+          <thead class="aidthead">
+            <tr>
+              <th scope="col" class="pointer">Checklist</th>
+              <th scope="col" class="pointer">List changes/Updates</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="width: 30%">
+                <span *ngFor=" let val of checkList">
+                  <input type="checkbox" [(ngModel)]="val.isCheckValue" class="checkbox checkbox-primary styled"
+                    (change)="aidvaluechangefunction()" [disabled]="isApproved" />&nbsp;
+                  <label for=" Inprogress26" class="font-weight-bold pt-1">{{val.name}}</label>&nbsp;&nbsp;
+                  <br />
+                </span>
+
+              </td>
+              <td>
+                <textarea class="form-control" style="height:100px" [(ngModel)]="aidReport.listChangesComment"
+                  [disabled]="isApproved" (change)="aidvaluechangefunction()"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <label style="font-weight: bolder;color: #004290;font-size:15px;margin-top: 4px;">Service Results</label>
+            <hr style="margin-top: 0rem" />
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-lg-1" style="text-align: end;">
+            <label class="font-weight-bold">Service</label>
+          </div>
+          <div class="col-lg-3">
+            <ng-select class="w-75" [clearable]="true" [(ngModel)]="aidReport.servicelists"
+              (ngModelChange)="servicechange()" [items]="serviceList" [disabled]="isApproved" bindLabel="label"
+              bindValue="value" (change)="aidvaluechangefunction()">
+            </ng-select>
+          </div>
+          <div class="col-lg-6">
+          </div>
+        </div>
+        <table class="table  table-hover table-bordered" style="margin-top: 5px;">
+          <thead>
+            <th class="pointer" style="width: 20%;">Activities
+            </th>
+            <th class="pointer" style="width: 10%;">Client Satisfaction
+            </th>
+            <th class="pointer" style="width: 70%;">Comments
+            </th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of todo;let i=index">
+              <td style="width: 20%;">
+                {{item.activity}}
+              </td>
+              <td style="width: 10%;">
+                <input id=" i" [(ngModel)]="item.isCheckSatisfaction" type="checkbox"
+                  class="checkbox checkbox-primary styled" />
+
+              </td>
+              <td contenteditable="true" (focusout)="savecomment($event,i)" id="val{{i}}" style="width: 70%;">
+                {{item.comment}}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                Other Activities
+              </td>
+              <td>
+                <textarea class="form-control" style="height:100px" [(ngModel)]="aidReport.otherActivitiesComment"
+                  (change)="aidvaluechangefunction()" [disabled]="isApproved"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="row">
+          <div class=" offset-lg-4 col-lg-4" style="text-align: end;">
+            <label style="font-weight: bolder;color: #004290;font-size:15px;margin-top: 4px;">Return for supervisory
+              visit timeframe</label>
+          </div>
+          <div class="col-lg-4">
+            <input type="text" [(ngModel)]="aidReport.returnForSupervision" (change)="aidvaluechangefunction()"
+              class="form-control" style="width:100%;margin-left:5px" [disabled]="isApproved" />
+          </div>
+        </div>
+        <div class="card-header transparent"></div>
+        <div class="offset-lg-9 col-lg-3 mt-1">
+          <button class="btn btn-primary btn-sm" *ngIf="!isApproved"
+            [disabled]="aidReport.clientId==null||aidReport.clientId==undefined"
+            (click)="save('Pending',aidReport)">save</button>
+          <button class="btn btn-primary btn-sm float-right" *ngIf="isApproved"
+            (click)="close()">close</button>
+          <button class="btn btn-primary btn-sm ml-3" *ngIf="!isApproved" (click)="closealert()">Cancel</button>
+          <button class="btn btn-primary btn-sm ml-3" *ngIf="!isApproved" [disabled]="!complete"
+            (click)="save('Completed',aidReport)">Complete</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<span id="cancelmodal" data-toggle="modal" data-target="#CloseModal"></span>
+<div class="modal fade " id="CloseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog create-update-zip" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-header" id="exampleModalLabel" >Close</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              Do you really want to close without saving?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal" (click)="close()">Yes</button>
+            <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<span id="completealert" data-toggle="modal" data-target="#completeModal"></span>
+<div class="modal fade " id="completeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog create-update-zip" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title font-header" id="exampleModalLabel" >Close</h5>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            Do you really want to complete without saving?
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal" (click)="save('Completed',aidReport)">Yes</button>
+          <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">No</button>
+          </div>
+      </div>
+  </div>
+</div>

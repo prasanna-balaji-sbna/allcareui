@@ -1,0 +1,304 @@
+//  ------------------------------------------------for maintable hearder -------------------------------
+// .e-grid .e-gridheader tr:first-child th { 
+//     background-color: rgba(0,66,144,1.00);
+//     color:white;
+//     font-size:12px;
+//    text-align:left;
+//    padding: 5px;
+//    padding-left:3px;
+//    padding-right:3px;
+//    font-family: Exo
+// }
+// .e-grid .e-headercell,.e-grid .e-detailheadercell  {
+//     background-color: rgba(0,66,144,1.00);
+//     color:white;
+//     font-size:12px;
+//    text-align:left;
+//    padding: 5px;
+//    padding-left:3px;
+//    padding-right:3px;
+//    font-family: Exo
+// }
+// .e-grid .e-gridheader tr:first-child th { 
+//     background-color: rgba(0,66,144,1.00);
+//     color:white;
+//     font-size:12px;
+//    text-align:left;
+//    padding: 5px;
+//    padding-left:3px;
+//    padding-right:3px;
+//    font-family: Exo
+// }
+// .e-grid .e-headercell, .e-grid .e-detailheadercell {
+//     background-color: rgba(0,66,144,1.00);
+//     color:white;
+//     font-size:12px;
+//    text-align:left;
+//    padding: 5px;
+//    padding-left:3px;
+//    padding-right:3px;
+//    font-family: Exo
+// }
+// .e-grid .e-gridcontent tr:first-child td
+// {
+//   color:black 
+// }
+// .e-grid .e-icon-grightarrow::before, .e-grid-menu .e-icon-grightarrow::before
+// {
+//   color:black 
+// }
+// .e-grid .e-icon-gdownarrow::before, .e-grid-menu .e-icon-gdownarrow::before
+// {
+//   content: '\e83d';
+//   color: black;
+// }
+// .e-control, .e-control [class^='e-'], .e-control [class*=' e-']
+// {
+//   color:white
+// }
+
+// ---------------------------------------------------for normal table------------------------------------
+table { 
+  width: 100%; 
+  text-align:center;
+  border-collapse: collapse; 
+  overflow-x: scroll;
+  border: none
+}
+/* Zebra striping */
+tr:nth-of-type(odd) { 
+  background:#F5F5F5 ; 
+}
+table tr:hover { 
+  background:#E1F5FE ; 
+}
+
+
+td {
+  padding: 7px;
+  text-align:left;
+  border-bottom: 2px solid #ddd;
+  font-size: 13px;
+  font-weight: 600;
+}
+th{
+  background:green;
+  color:white;
+  font-size:13px;
+ text-align:left;
+ padding: 5px;
+ padding-left:3px;
+ padding-right:3px;
+//  color:white;
+
+}
+.below-30
+{
+  color:  red;
+}
+.editTable{
+  cursor: pointer;
+  color: #039BE5;
+  font-weight: 500;
+}
+.colr
+{
+  background:green
+}
+.table td, .table th
+{
+  padding: 5px;
+}
+// ---------------------------------------------for filtering-----------------------------------------------
+.e-grid .e-filtered::before
+{
+  color:white
+}
+.e-grid .e-icon-filter::before, .e-grid-menu .e-icon-filter::before
+{
+  content: '\e7ee';
+  color: white;
+}
+// ------------------------------------------------for pagination of the grid table---------------------------
+// .e-pager .e-currentitem
+// {
+//     background-color: rgba(0,66,144,1.00);  
+// }
+// .e-checkbox-wrapper:hover .e-frame.e-check, .e-css.e-checkbox-wrapper:hover .e-frame.e-check
+// {
+//     background-color: rgba(0,66,144,1.00); 
+// }
+// .e-pager .e-currentitem, .e-pager .e-currentitem:hover
+// {
+//   background-color: rgba(0,66,144,1.00); 
+// }
+// // ------------------------------------------------for syncfusion checkbox--------------------------------
+// .e-control, .e-control [class^='e-'], .e-control [class*=' e-']{
+//     box-sizing: border-box;
+//     font-size: 13px;
+//     font-weight: 600;
+// }
+.disablecheckbox { 
+  pointer-events: none; 
+  opacity: 0.5; 
+} 
+// --------------------------------------------------for grid headertext--------------------------------
+// e-headertext
+// {
+//     font-size: 13px;
+//     font-weight: 600;
+// }
+// ------------------------------------------------for button both normal and grid button----------------------
+.btnclass 
+{
+  background-color: rgba(0,66,144,1.00);
+  text-transform: none;
+  font-size:13px;
+}
+// e-focus
+//     {
+//         background-color: rgba(0,66,144,1.00);
+//         text-transform: none;
+//         font-size:13px;
+//       }
+//       .nb-theme-default .btn:not(:disabled):not(.disabled)
+//       {
+//         background-color: rgba(0,66,144,1.00);
+//         text-transform: none;
+//         font-size:13px;  
+//       }
+//       .e-grid.e-responsive .e-rowcell, .e-grid.e-responsive .e-headercelldiv
+//       {
+//         font-weight: 600;
+//       }
+// // ----------------------------------for tool bar-------------------------------
+//       .e-toolbar .e-tbar-btn-text, .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn-text
+//       {
+//         color: rgba(0,66,144,1.00);
+//         font-weight: 600;
+//         font-family: exo
+//       }
+//       .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn-text
+//       {
+//         color: rgba(0,66,144,1.00);
+//         font-weight: 600;
+//         font-family: exo
+//       }
+//       .e-grid .e-gridcontent tr.e-row:first-child .e-rowcell
+//       {
+//         font-weight: 600;
+//         font-family: exo  
+//       }
+//       .e-toolbar .e-tbar-btn .e-tbar-btn-text
+//       {
+//         line-height: inherit;
+//         vertical-align: middle;
+//         display: inline-block   ;
+//         color: rgba(0,66,144,1.00);
+//         font-weight: 600;
+//         font-family: exo
+//       }
+  
+      .e-btn.e-flat.e-primary,.e-css.e-btn.e-flat.e-primary {
+  background-color: transparent;
+  border-color: transparent;
+  color: rgba(0,66,144,1.00);
+}
+.e-btn.e-flat.e-primary:hover,
+.e-css.e-btn.e-flat.e-primary:hover {
+  background-color: rgba(227, 22, 91, 0.04);
+  border-color: transparent;
+  color: rgba(0,66,144,1.00);
+}
+.e-checkbox-wrapper .e-frame.e-check, .e-css.e-checkbox-wrapper .e-frame.e-check {
+    background-color: rgba(0,66,144,1.00);
+    border-color: transparent;
+    color: white;
+}
+.nb-theme-default nb-card-header
+{
+  padding:7px;
+}
+// --------------------------------------------------for icon for sorting-----------------------------
+// .e-grid .e-icon-ascending::before, .e-grid-menu .e-icon-ascending::before
+// {
+//   content: '\e840';
+//   color: white;
+// }
+// .e-grid .e-icon-descending::before, .e-grid-menu .e-icon-descending::before
+// {
+//   content: '\e83f';
+//   color: white;
+// }
+// -----------------------------------------for checkox------------------------------------------------
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+/*** custom checkboxes ***/
+
+
+input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+input[type=checkbox] { display:inline-flex; } /* to hide the checkbox itself */
+input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  background-color: rgba(0,66,144,1.00);
+  display: none;
+  color: white;
+  padding-bottom:100px;
+}
+
+input[type=checkbox] + label:before { content: "\f096"; } /* unchecked icon */
+input[type=checkbox] + label:before { letter-spacing: 10px;color: #1565C0 } /* space between checkbox and label */
+
+input[type=checkbox]:checked + label:before { content: "\f046"; } /* checked icon */
+input[type=checkbox]:checked + label:before { letter-spacing: 8px;color: #1565C0 } /* allow space for check mark */
+// ------------------------------------------for scroll-------------------------------------
+
+  .scrollthead,
+  .scrolltbody {
+    display: block;
+  }
+  
+  .scrolltbody {
+    overflow-y: scroll;
+    overflow-x: hidden;
+   // height: 400px;
+  }
+  .scrolltable {
+    border-collapse: collapse;
+    width: 400px;
+    overflow-x: none;
+    display: block;
+  }
+  .valid
+{
+  background-color:GREEN !important;;
+}
+.invalid{background-color:RED !important;;}
+.dodgerblue{
+  color: dodgerblue;
+}
+.font-weight{
+  font-weight: 600;
+}
+app-timesheetverification.row.row.col.card.card-body.control-section.scrolltbody.e-lib.e-lib.e-headercontent.e-table#content-gridcolGroup > col:nth-child(1){
+  width: 30px !important;
+}
+
+.agencywarn{
+  color:#ff0000;font-weight: bolder;
+}
+.notealert{
+    font-style: italic;
+    color: red;
+    float: right;
+}
+
+
+.e-detailcell .e-grid .e-headercontent .e-headercell,.e-detailcell .e-grid .e-detailheadercell {
+  background-color: green;
+}
+.e-grid .e-headercell,.e-grid .e-detailheadercell  {
+    background-color: rgba(0,66,144,1.00);
+}
+.warning{
+  background: red !important;
+}

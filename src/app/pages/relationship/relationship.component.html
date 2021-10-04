@@ -1,0 +1,116 @@
+<div class="row">
+  <div class="col-lg-2">
+<label class="labelpad" >Status</label>
+  </div>
+  <div class="col-lg-6">
+    <select class="form-control" [(ngModel)]="relationFilter" (ngModelChange)="changevalue()" >
+
+      <option [value]="i.Key" *ngFor="let i of StatusLst">{{i.Value}}</option>
+    
+    </select>
+  </div>
+</div>
+
+<div class="gridpadd" >
+<ejs-grid #grid [dataSource]='data| async' [allowSorting]='true' [allowFiltering]='true' [allowResizing]='true'
+  [filterSettings]='filterOptions'   [allowPaging]='true' [pageSettings]='initialPage' (resizeStop)="onResize($event)" (dataStateChange)= 'dataStateChange($event)'  (actionBegin)="onActionComplete($event)" >
+  <e-columns>
+    <e-column minWidth= 100 field="sNo" headerText="S.No" type="number" [allowFiltering]="false"></e-column>
+    <e-column minWidth= 100 field="clientName" headerText="Client" *ngIf="ClientEmployeeRelation.RelationType=='Employee'"  [allowFiltering]="false">
+      <ng-template #filterTemplate let-data>
+        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+    </ng-template>
+    </e-column>
+    <e-column minWidth= 100 field="employeeName" headerText="Employee" *ngIf="ClientEmployeeRelation.RelationType=='Client'"  [allowFiltering]="false">
+      <ng-template #filterTemplate let-data>
+        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+    </ng-template>
+    </e-column>
+    <e-column minWidth= 100 headerText="Actions" uid="action">
+      <ng-template #template let-data>
+        <button class="btn btn-edit-table"><i class="fa fa-edit" (click)="editRelationship(data)"></i></button>&nbsp;
+
+      </ng-template>
+    </e-column>
+  </e-columns>
+</ejs-grid>
+</div>
+<span id="openmodal" data-toggle="modal" data-target="#AddEditRelationship"></span>
+<!---------------------Employee Client Relationship Add and Update-------------------------------------------------------->
+<div class="modal fade modalbackgrod" id="AddEditRelationship" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static" >
+
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">Employee-Client Relationship</h5>
+        <button type="button" class="close" (click)="closemodel()" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="row">
+
+        <div class="col-lg-4">
+
+
+
+          <label class="labelpad" *ngIf="ClientEmployeeRelation.RelationType=='Employee'">
+            Client<sup class="super-script">&nbsp;*</sup>
+          </label>
+          <label class="labelpad" *ngIf="ClientEmployeeRelation.RelationType=='Client'">
+            Employee<sup class="super-script">&nbsp;*</sup>
+          </label>
+        </div>
+        <div class="col-lg-5">
+           <ng-select  [items] ="clientDropdown" bindValue="Key" bindLabel="Value"
+            [(ngModel)]="relation.clientId" *ngIf="ClientEmployeeRelation.RelationType=='Employee'">
+          </ng-select> 
+          <ng-select  [items] ="EmployeeDropdown" bindValue="Key" bindLabel="Value"
+            [(ngModel)]="relation.employeeId" *ngIf="ClientEmployeeRelation.RelationType=='Client'">
+          </ng-select> 
+          <!-- <select  class="form-control" [(ngModel)]="relation.clientId">
+
+            <option [value]="i.Key" *ngFor="let i of clientDropdown">{{i.Value}}</option>
+
+          </select> -->
+        </div>
+
+
+      </div>
+      <div class="row mt-2 btp10">
+
+        <div class="col-lg-4">
+
+          <label  class="labelpad">
+            Status<sup class="super-script ">&nbsp;*</sup>
+          </label>
+        </div>
+        <div class="col-lg-5">
+          <select  class="form-control" [(ngModel)]="relation.statusLid">
+
+            <option [value]="i.Key" *ngFor="let i of newstatusLst">{{i.Value}}</option>
+
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <ng-container *ngIf="ClientEmployeeRelation.RelationType=='Employee'">
+        <button type="button" class="btn blue-btn" *ngIf="relation.id==0" [disabled]="relation.statusLid==undefined||
+        relation.statusLid==null||relation.clientId==undefined||relation.clientId==null" (click)="saveRelation(relation)">save</button>
+        <button type="button" class="btn blue-btn" *ngIf="relation.id!=0" [disabled]="relation.statusLid==undefined||
+        relation.statusLid==null||relation.clientId==undefined||relation.clientId==null" (click)="saveRelation(relation)">Update&Close</button>
+        <button type="button" class="btn blue-btn" (click)="closefunc()">close</button>
+      </ng-container>
+      <ng-container *ngIf="ClientEmployeeRelation.RelationType=='Client'">
+        <button type="button" class="btn blue-btn" *ngIf="relation.id==0" [disabled]="relation.statusLid==undefined||
+        relation.statusLid==null||relation.employeeId==undefined||relation.employeeId==null" (click)="saveRelation(relation)">save</button>
+        <button type="button" class="btn blue-btn" *ngIf="relation.id!=0" [disabled]="relation.statusLid==undefined||
+        relation.statusLid==null||relation.employeeId==undefined||relation.employeeId==null" (click)="saveRelation(relation)">Update&Close</button>
+        <button type="button" class="btn blue-btn" (click)="closefunc()">close</button>
+      </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

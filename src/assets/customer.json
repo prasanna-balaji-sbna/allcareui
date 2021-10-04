@@ -1,0 +1,37 @@
+[{
+    "id": 1,
+    "name": "customer1",
+    "mobileNumber": 9963258787,
+    "email": "customer1@gmail.in",
+    "address": "Peelamedu , Coimbatore",
+    "aadhar": "720512652031",
+    "pan": "WD462455452"
+},
+{
+    "id": 2,
+    "name": "customer2",
+    "mobileNumber": 9971258787,
+    "email": "customer2@gmail.in",
+    "address": "Hopes , Coimbatore",
+    "aadhar": "720012452031",
+    "pan": "PE462WW5452"
+},
+{
+    "id": 1,
+    "name": "customer1",
+    "mobileNumber": 9968628787,
+    "email": "customer3@gmail.in",
+    "address": "Gandhipuram , Coimbatore",
+    "aadhar": "720012452031",
+    "pan": "LA462WW5452"
+},
+{
+    "id": 1,
+    "name": "customer1",
+    "mobileNumber": 9941258787,
+    "email": "customer4@gmail.in",
+    "address": "Ramanathapuram , Coimbatore",
+    "aadhar": "721235452031",
+    "pan": "PL462WW5452"
+}
+]

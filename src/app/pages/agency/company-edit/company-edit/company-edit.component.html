@@ -1,0 +1,383 @@
+<div class="row mb-2">
+  <div class="col pl-0">
+    <!-- <div widget class="card border-0 box-shadow ml-4"> -->
+      <div class="card-header">
+        <label class="font-header" *ngIf="editCompanyId==0" >New Company</label>
+        <label class="font-header" *ngIf="editCompanyId!=0">Update Company</label>
+        <button type="button" class="close"  aria-label="Close" (click)="back()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <!-- *ngIf="Type=='edit'" -->
+        <!-- <button  class="btn btnclass" (click)="companySer(Companyservice)" style="float: right;">Service</button> -->
+      </div>
+
+      <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr!=''" role="alert">
+        <p>{{saveErr}}</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+            (click)="saveErr=''">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+              <!-- <div class="row"> -->             
+                <!-- <nb-alert status="danger" *ngIf="CompanyErrList.length!=0" closable (close)="clearCompanyErr()">
+                  <div *ngFor="let err of CompanyErrList">
+                    {{err}}
+                  </div>                   
+                 </nb-alert> -->
+                <form [formGroup]="CompanyGroup">
+            <label class="font-header">Company info</label>
+            <hr class="mt-0"/>
+            <div class="row">
+               
+                 <div class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                  <label class="label col-lg-5">Status<sup class="super-script">&nbsp;*&nbsp;</sup></label>
+                
+                  <select 
+                    class="form-control width100 col-lg-7 lablestyle" [(ngModel)]="Company.statusLid"  formControlName="Status" (ngModelChange)="checkpopupCompany('Status')">
+                    <option [value]=st.Key *ngFor="let st of statusList">{{st.Value}}</option>                 
+                  </select>  
+                
+                 </div>
+                    
+                 <div class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                     
+                  <label  class="label col-lg-6 lablestyle">Company Name<sup class="super-script">&nbsp;*</sup></label>
+                  <input type="text"class="form-control width100 col-lg-5 lablestyle"  [(ngModel)]="Company.companyName" formControlName="Company_Name" (ngModelChange)="checkpopupCompany('Name')"/>
+                </div>
+              
+                   
+                 <div class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                  
+                      <label  class="label col-lg-6 lablestyle" >Provider Number#<sup class="super-script">&nbsp;*</sup></label>
+                      <input type="text" 
+                      class="form-control width100 col-lg-5 lablestyle"  [(ngModel)]="Company.providerNo" formControlName="Provider_No" maxlength="15" (ngModelChange)="checkpopupCompany('Provider_No')"/>
+                    </div>
+                
+                    <div class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                      <label class="label col-lg-6 lablestyle">Administrator(1st Init Last Name)</label>
+                      <input type="text"  class="form-control width100 col-lg-5 lablestyle"  [(ngModel)]="Company.admin_LastName" formControlName="Admin_LastName" (ngModelChange)="checkpopupCompany('Admin_LastName')" />
+                
+                      </div>
+                    </div>
+                       
+                 <div class="row">
+                 
+           
+         
+            
+                   
+                
+                  <div class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                   
+                      <label class="label col-lg-5">Full Name</label>
+                      <input type="text"   class="form-control width100 col-lg-7" [(ngModel)]="Company.admin_FirstName" formControlName="Admin_FirstName" (ngModelChange)="checkpopupCompany('Admin_FirstName')"/>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-md-6 col-xs-12">
+                      <label class="label col-lg-7">Submission Type(s) MA MC CC</label>
+                      <input type="text" class="form-control width100 col-lg-4" [(ngModel)]="Company.submissionType" formControlName="SubmissionType" (ngModelChange)="checkpopupCompany('SubmissionType')"/>
+                 
+                 
+                 </div>
+                </div>
+               
+        
+            <table class="mt-0" width="100%">
+                <tr>
+                  <th class="heinfo font-header" >Submitter info</th>
+                  <th class="heinfo">MA Provider Number</th>
+                  <th class="heinfo">Ins/Third Party/MC Provider Number</th>
+                </tr>
+                  <tr>
+                  <th class="heinfo left" >Submitter Company ID</th>
+                  <td class="cliInfo td"><input type="text"  class="form-control width text_right" [(ngModel)]="Company.subCom_MANo" formControlName="SubCom_MANo" maxlength="15" (ngModelChange)="checkpopupCompany('SubCom_MANo')"/></td>
+                  <td  class="cliInfo td"><input type="text"  class="form-control width text_right" [(ngModel)]="Company.subCom_MCNo" formControlName="SubCom_MCNo" maxlength="15" (ngModelChange)="checkpopupCompany('SubCom_MCNo')"/></td>
+                </tr>
+                  <tr>
+                  <th class="heinfo left" >Taxonomy Code</th>
+                  <td class="cliInfo td" ><input type="text"  class="form-control width text_right" [(ngModel)]="Company.taxCode_MANo" formControlName="TaxCode_MANo" maxlength="15" (ngModelChange)="checkpopupCompany('TaxCode_MANo')"/></td>
+                  <td class="cliInfo td"><input type="text"  class="form-control width text_right" [(ngModel)]="Company.taxCode_MCNo" formControlName="TaxCode_MCNo" maxlength="15" (ngModelChange)="checkpopupCompany('TaxCode_MCNo')"/></td>
+                </tr>
+                  <tr>
+                  <th class="heinfo left" >Company FEIN Required for MC</th>
+                  <td class="cliInfo td"></td>
+                  <td  class="cliInfo td"><input type="text"  class="form-control width text_right" [(ngModel)]="Company.feiN_MCNo" formControlName="FEIN_MCNo" (ngModelChange)="checkpopupCompany('FEIN_MCNo')"/></td>
+                </tr>
+              </table>
+              <!-- <label style="font-weight: bolder;color:#004290;margin-top: 7px"></label>
+              <hr style="margin-top: 0rem"/> -->
+              <table style="width:100%;margin-top: 5px">
+                  <tr>
+                    <th class="heinfo font-header">Billing Provider IDs</th>
+                    <th class="heinfo">MA Provider ID</th>
+                    <th class="heinfo">Ins/Third Party/MC Provider ID</th>
+                  </tr>
+                    <tr>
+                    <td class="heinfo th_sample" width="30%"></td>
+                    <td  class="cliInfo th_sample"  width="30%"><input type="text" class="form-control width text_right" [(ngModel)]="Company.bP_MANo" formControlName="BP_MANo"  (ngModelChange)="checkpopupCompany('BP_MANo')"/></td>
+                    <td  class="cliInfo   th_sample" width="30%"><input type="text"  class="form-control width text_right" [(ngModel)]="Company.bP_MCNo" formControlName="BP_MCNo"  (ngModelChange)="checkpopupCompany('BP_MCNo')"/></td>
+                  </tr>
+                  </table>
+                
+             <div>
+                <label class="font-header">BillTo PayTo Provider Address Information</label>
+                <label class="font-header text_right"><i>Note: Enter PayTo address only if different from BillTo</i></label>
+             </div>
+              <hr class="mt-0"/>
+              <div class="row" style="padding-top: 2px;">       
+                <div class="col-lg-6 col-sm-12  col-md-12 col-xs-12">
+                  <div class="row ml-3">
+                  <div class="col-lg-3 col-sm-12  col-md-12 col-xs-12 cliInfo td">
+                    <label  class="label">Full Company Name</label>
+                  </div>
+                  <div class="col-lg-9  col-sm-12  col-md-12 col-xs-12 cliInfo td">
+                    <input type="text" width="100%" class="form-control " [(ngModel)]="Company.billto_Name" formControlName="billto_Name" (ngModelChange)="checkpopupCompany('billto_Name')"/>
+
+                  </div>
+                </div>
+
+                <div class="row ml-3">
+                  <div class="col-lg-3 col-sm-12  col-md-12 col-xs-12 cliInfo td">
+                    <label class="label">BillTo Street</label>
+                  </div>
+                  <div class="col-lg-9 col-sm-12  col-md-12 col-xs-12 cliInfo td">
+                    <input type="text" width="100%" class="form-control " [(ngModel)]="Company.billto_Street" formControlName="billto_Street" (ngModelChange)="checkpopupCompany('billto_Street')"/>
+
+                  </div>
+                </div>
+                <div class="row ml-3">
+                  <div class="col-lg-3   col-sm-12  col-md-12 col-xs-12 cliInfo td">
+                    <label class="label">City State ZIP Code</label>
+                  </div>
+                  <div class="col-lg-2  col-sm-12  col-md-12 col-xs-12  cliInfo th_sample">
+                    <input type="text" class="form-control " [(ngModel)]="Company.billto_City" formControlName="billto_City" (ngModelChange)="checkpopupCompany('billto_City')"/>
+
+                  </div>
+                  <div class="col-lg-5  col-sm-12  col-md-12 col-xs-12  cliInfo th_sample">
+                    <!-- <input type="text"  class="form-control " [(ngModel)]="Company.billto_State" formControlName="billto_State" maxlength="2" (ngModelChange)="checkpopupCompany('billto_State')"/> -->
+
+                    <ng-select [items]="stateList"  [searchable]="true" formControlName="billto_State" [clearable]="true" bindLabel="name"
+                    bindValue="abbreviation"    [(ngModel)]="Company.billto_State" (ngModelChange)="checkpopupCompany('billto_State')">
+                  </ng-select>
+                  </div>
+                  <div class="col-lg-2  col-sm-12  col-md-12 col-xs-12  cliInfo th_sample">
+                    <input type="text" class="form-control " [(ngModel)]="Company.billto_zipcode" formControlName="billto_zipcode" maxlength="10" (keypress)="keyPress($event)"  (ngModelChange)="checkpopupCompany('billto_zipcode')"/>
+
+                  </div>
+                </div>
+                  <!-- <table>
+                    <tr>
+                      <td  class="cliInfo td " width="24%">
+                          <label  class="label">Full Company Name</label>
+                      </td>
+                      <td  class="cliInfo td">
+                          <input type="text" width="100%" class="form-control width200" [(ngModel)]="Company.billto_Name" formControlName="billto_Name" (ngModelChange)="checkpopupCompany('billto_Name')"/>
+                        </td>
+                    </tr>
+                        <tr>
+                          <td  class="cliInfo td" width="24%">
+                              <label class="label">BillTo Street</label>
+                          </td>
+                          <td class="cliInfo td">
+                              <input type="text" width="100%" class="form-control width200" [(ngModel)]="Company.billto_Street" formControlName="billto_Street" (ngModelChange)="checkpopupCompany('billto_Street')"/>
+                            </td>
+                        </tr>
+                  </table> -->
+                  <!-- <table>
+                      <tr>
+                        <td class="cliInfo td col-lg-2 col-sm-4  col-md-4 col-xs-4">
+                            <label class="label">City State ZIP Code</label>
+                        </td>
+                        <td class="cliInfo th_sample col-lg-3 col-sm-4  col-md-4 col-xs-5">
+                            <input type="text" class="form-control width100" [(ngModel)]="Company.billto_City" formControlName="billto_City" (ngModelChange)="checkpopupCompany('billto_City')"/>
+                          </td>
+                          <td  class="cliInfo th_sample col-lg-3 col-sm-4  col-md-4 col-xs-5" > 
+                              <input type="text"  class="form-control width100" [(ngModel)]="Company.billto_State" formControlName="billto_State" maxlength="2" (ngModelChange)="checkpopupCompany('billto_State')"/>
+                            </td>
+                            <td class="cliInfo th_sample col-lg-3 col-sm-4  col-md-4 col-xs-5">
+                                <input type="text" class="form-control width100" [(ngModel)]="Company.billto_zipcode" formControlName="billto_zipcode" maxlength="10" (keypress)="keyPress($event)"  (ngModelChange)="checkpopupCompany('billto_zipcode')"/>
+                              </td>
+                      </tr>
+
+                      </table> -->
+                </div>      
+
+                <div class="col-lg-6 col-sm-12  col-md-12 col-xs-12">
+                  <div class="row ml-3">
+                    <div class="col-lg-3  col-sm-12  col-md-12 col-xs-12 cliInfo th_sample">
+                      <label class="label">PayTo Street</label>
+                    </div>
+                    <div class="col-lg-7   col-sm-12  col-md-12 col-xs-12 cliInfo th_sample">
+                      <input type="text" width="100%" class="form-control " [(ngModel)]="Company.payTo_Street" formControlName="payTo_Street" (ngModelChange)="checkpopupCompany('payTo_Street')"/>
+  
+                    </div>
+                  </div>
+
+                  <div class="row ml-3">
+                    <div class="col-lg-3   col-sm-12  col-md-12 col-xs-12 cliInfo td">
+                      <label class="label">City State ZIP Code</label>
+                    </div>
+                    <div class="col-lg-2  col-sm-12  col-md-12 col-xs-12  cliInfo th_sample">
+                      <input type="text" class="form-control  " [(ngModel)]="Company.payTo_City" formControlName="PayTo_City" (ngModelChange)="checkpopupCompany('PayTo_City')"/>
+  
+                    </div>
+                    <div class="col-lg-5  col-sm-12  col-md-12 col-xs-12  cliInfo th_sample">
+                      <!-- <input type="text" class="form-control " [(ngModel)]="Company.payTo_State" formControlName="PayTo_State" maxlength="2"  (ngModelChange)="checkpopupCompany('PayTo_State')"/> -->
+
+
+
+
+                      <ng-select [items]="stateList"  [searchable]="true" formControlName="PayTo_State" [clearable]="true" bindLabel="name"
+                    bindValue="abbreviation"   [(ngModel)]="Company.payTo_State" (ngModelChange)="checkpopupCompany('PayTo_State')">
+                  </ng-select>
+                    </div>
+                    <div class="col-lg-2 col-sm-12  col-md-12 col-xs-12  cliInfo th_sample">
+                      <input type="text"class="form-control " [(ngModel)]="Company.payTo_zipcode" formControlName="PayTo_zipcode"  maxlength="10" (keypress)="keyPress($event)"  (ngModelChange)="checkpopupCompany('PayTo_zipcode')"/>
+  
+                    </div>
+                  </div>
+
+                  <div class="row ml-3">
+                    <div class="col-lg-3  col-sm-12  col-md-12 col-xs-12 cliInfo th_sample">
+                      <label  class="label">Phone</label>
+                    </div>
+                    <div class="col-lg-3 col-sm-12  col-md-12 col-xs-12 cliInfo th_sample">
+                      <input type="text"  class="form-control " [(ngModel)]="Company.phone"
+                       minlength="14" maxlength="14"   formControlName="Phone" (ngModelChange)="CompanyPhoneFormat();checkpopupCompany('Phone')" (keypress)="keyPress($event)"/>
+                      <div *ngIf="CompanyGroup.controls.Phone.invalid && (CompanyGroup.controls.Phone.dirty ||CompanyGroup.controls.Phone.touched)">
+                        <div class="color left" *ngIf="CompanyGroup.controls.Phone.errors">Enter valid 10 digit number</div>
+                        <!-- (ngModelChange)="CompanyPhoneFormat($event);checkpopupCompany('Phone')" -->
+                      </div>  
+                    </div>
+                    <div class="col-lg-1  col-sm-12  col-md-12 col-xs-12 cliInfo th_sample">
+                      <label  class="label">Fax</label>
+                    </div>
+                    <div class="col-lg-3 cliInfo th_sample">
+                    <input type="text"  class="form-control " [(ngModel)]="Company.fax" 
+                      min="0" max="99999999999999"  minlength="14" maxlength="14"  formControlName="Fax" (ngModelChange)="CompanyFaxFormat();checkpopupCompany('Fax')" (keypress)="keyPress($event)"/>
+                      <div *ngIf="CompanyGroup.controls.Fax.invalid && (CompanyGroup.controls.Fax.dirty ||CompanyGroup.controls.Fax.touched)">
+                        <div class="color left"  *ngIf="CompanyGroup.controls.Fax.errors">Enter valid 10 digit number</div>
+                        <!-- (ngModelChange)="CompanyFaxFormat($event);checkpopupCompany('Fax')" -->
+                      </div>
+                    </div>
+                  </div>
+                    <!-- <table>
+                      <tr>
+                        <td  class="cliInfo th_sample" width="24%">
+                            <label class="label">PayTo Street</label>
+                        </td>
+                        <td  class="cliInfo th_sample">
+                            <input type="text" width="100%" class="form-control width200" [(ngModel)]="Company.payTo_Street" formControlName="payTo_Street" (ngModelChange)="checkpopupCompany('payTo_Street')"/>
+                          </td>
+                      </tr>                           
+                    </table> -->
+                    <!-- <table>
+                        <tr>
+                          <td  class="cliInfo th_sample col-lg-3 col-sm-4  col-md-4 col-xs-5">
+                              <label class="label">City State ZIP Code</label>
+                          </td>
+                          <td  class="cliInfo th_sample col-lg-3 col-sm-4  col-md-4 col-xs-5" >
+                            <!-- <ng-select   style="width:158px" [(ngModel)]="Company.payTo_City"  (search)="enableEmp($event)">               
+                            </ng-select> -->
+                            <!-- [options]="employeelists" -->
+                              <!-- <input type="text" class="form-control width100 " [(ngModel)]="Company.payTo_City" formControlName="PayTo_City" (ngModelChange)="checkpopupCompany('PayTo_City')"/>
+                            </td>
+                            <td  class="cliInfo th_sample col-lg-3 col-sm-4  col-md-4 col-xs-5">
+                                <input type="text" class="form-control width100" [(ngModel)]="Company.payTo_State" formControlName="PayTo_State" maxlength="2"  (ngModelChange)="checkpopupCompany('PayTo_State')"/>
+                              </td>
+                              <td  class="cliInfo th_sample col-lg-3 col-sm-4  col-md-4 col-xs-5">
+                                  <input type="text"class="form-control width100" [(ngModel)]="Company.payTo_zipcode" formControlName="PayTo_zipcode"  maxlength="5" (keypress)="keyPress($event)"  (ngModelChange)="checkpopupCompany('PayTo_zipcode')"/>
+                                </td>
+                        </tr> -->
+                        <!-- <tr>
+                          <td  class="cliInfo th_sample col-lg-3 col-sm-4  col-md-4 col-xs-5">
+                            <label  class="label">Phone</label>
+                          
+                        </td>
+                        <td  class="cliInfo th_sample col-lg-3 col-sm-4  col-md-4 col-xs-5">
+                          <input type="text"  class="form-control width100" [(ngModel)]="Company.phone"
+                          min="0" max="99999999999999"  minlength="14" maxlength="14"   formControlName="Phone"/>
+                          <div *ngIf="CompanyGroup.controls.Phone.invalid && (CompanyGroup.controls.Phone.dirty ||CompanyGroup.controls.Phone.touched)">
+                            <div class="super-script left" *ngIf="CompanyGroup.controls.Phone.errors">Enter valid 10 digit number</div>
+                            <!-- (ngModelChange)="CompanyPhoneFormat($event);checkpopupCompany('Phone')" -->
+                          <!-- </div>
+                        </td>
+                        <td >
+                          <label   class="label  col-lg-3 col-sm-4  col-md-4 col-xs-5">Fax</label>
+                      </td> 
+                      <td  class=" th_sample col-lg-3 col-sm-4  col-md-4 col-xs-5">
+
+                      <input type="text"  class="form-control width100" [(ngModel)]="Company.fax" 
+                      min="0" max="99999999999999"  minlength="14" maxlength="14"  formControlName="Fax"/>
+                      <div *ngIf="CompanyGroup.controls.Fax.invalid && (CompanyGroup.controls.Fax.dirty ||CompanyGroup.controls.Fax.touched)">
+                        <div class="super-script left"  *ngIf="CompanyGroup.controls.Fax.errors">Enter valid 10 digit number</div> -->
+                        <!-- (ngModelChange)="CompanyFaxFormat($event);checkpopupCompany('Fax')" -->
+                      <!-- </div>
+                      </td> 
+                    </tr>
+                        </table> --> 
+                        <!-- <div class="row pt-4" >
+                           <div class="col-lg-1">
+                            <label  class="label">Phone</label>
+                           </div>
+                           <div class="col-lg-3">
+                           
+                           </div>
+                           <div class="col-lg-1">
+                            <label   class="label">Fax</label>
+                           </div>
+                           <div class="col-lg-3">
+                          <input type="text"  class="form-control width100" [(ngModel)]="Company.fax" 
+                          min="0" max="99999999999999"  minlength="14" maxlength="14" (ngModelChange)="CompanyFaxFormat($event);checkpopupCompany('Fax')" formControlName="Fax"/>
+                          <div *ngIf="CompanyGroup.controls.Fax.invalid && (CompanyGroup.controls.Fax.dirty ||CompanyGroup.controls.Fax.touched)">
+                            <div class="super-script left"  *ngIf="CompanyGroup.controls.Fax.errors">Enter valid 10 digit number</div>
+                          </div>
+                           </div>
+                        </div>                        -->
+                  </div>   
+</div>
+    
+</form>
+
+      </div>
+    <!-- <nb-card-footer> -->
+        <label class="mt-7  ml-3 color"><i>Note: * fields are mandatory</i></label>
+        <div class="modal-footer ml-3">
+        <!-- <button style="padding:2px;margin-right:10px;float: right;" class="btn btnclass" >Close</button> -->
+      <button   *ngIf="editCompanyId==0"   class="btn blue-btn btn-sm  p-2 mr-10 text_right" (click)="saveCompany()"
+         [disabled]="!CompanyGroup.valid">Save & Close
+      </button>
+      <button   (click)="saveCompany()"  *ngIf="editCompanyId!=0"class="btn blue-btn btn-sm  p-2 mr-10 text_right"
+      [disabled]="!CompanyGroup.valid">Update & Close
+    </button>
+    <button  class="btn blue-btn btn-sm p-2 mr-10 text_right" (click)="openDialogCompany()" >Close</button>
+
+     <!-- </nb-card-footer> -->
+      </div>
+    </div>
+    </div>
+
+    <span id="cancelmodalspan" data-toggle="modal" data-target="#closemodalcompany"></span>
+  <div class="modal fade" id="closemodalcompany" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" >
+      <div class="modal-dialog mdal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title font-header">Close Alert</h5>
+            <button type="button" class="close" (click)="closeNofun()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-12">
+                <label>You want to close without save?</label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn blue-btn btn-sm"  data-dismiss="modal" (click)="back()">Yes</button>
+            <button type="button" class="btn blue-btn btn-sm"  (click)="closeNofun()">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   

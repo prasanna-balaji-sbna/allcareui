@@ -1,0 +1,182 @@
+<!-- /////////////////////////////////Employee page Header///////////////////////////////////////////// -->
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+
+        <div class="row">
+          <div class="col-lg-6">
+            <h4 class="mb-0 font-header">Employee</h4>
+          </div>
+          <div class="col-lg-3">
+            <div class="row">
+              <div class="col-lg-7">
+                <span>Show employee&nbsp;</span></div>
+              <div class="col-lg-5"> <select class="d-inline-flex form-control"
+                  [(ngModel)]="employeeFilter.employeeStatus" (ngModelChange)="filterchange()"
+                  [disabled]="global.globalAgencyId==0">
+                  <option [value]=empStatus.Key *ngFor="let empStatus of EmployeestatusList">{{empStatus.Value}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+
+          </div>
+          <div class="col-lg-3">
+            <div class="row">
+              <div class="col-lg-6">
+                <span>Filter by type &nbsp;</span></div>
+              <div class="col-lg-6"> <select [(ngModel)]="employeeFilter.employeeType" class="form-control"
+                  (ngModelChange)="filterchange()" [disabled]="global.globalAgencyId==0">
+                  <option [value]=i.Key *ngFor="let i of EmployeeTypeList">{{i.Value}}</option>
+                </select></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="row">
+
+              <div class="col-lg-5 col-md-2 col-sm-2 col-xs-5">
+                <button type="button" class="btn blue-btn btn-sm butstyle"  data-toggle="modal" data-target="#modal"
+                  [disabled]="global.globalAgencyId==0" (click)="editEmployee('new')" *ngIf="fp.employeecreate && fp.EOB_AddNew">Add
+                  Employee</button>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-5 pl-0">
+                <button type="button" class="btn blue-btn btn-sm" (click)="viewReport()" 
+                  [disabled]="global.globalAgencyId==0">Report</button>
+              </div>
+              <div class="col-lg-5 col-md-1 col-sm-1 col-xs-3">
+                <button type="button" (click)="excelformatfunction()" [disabled]="global.globalAgencyId==0"
+                  class="btn blue-btn btn-sm butstyle" *ngIf="fp.EOB_CSVImport">Excel Template</button>
+              </div>
+            
+
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="row">
+
+              <div class="col-lg-7 col-md-2 col-sm-2 col-xs-5">
+                <div class="row">
+                  <div class="col-lg-10">
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="customFile" name="filename" #myInput
+                        accept=".xlsx" [disabled]="global.globalAgencyId==0"
+                        (change)=onFileChanged($event.target.files) *ngIf="fp.EOB_CSVImport" (click)="myInput.value = null">
+                      <label *ngIf="selected" class="custom-file-label" for="customFile">{{selectedFileName}}</label>
+                      <label *ngIf="!selected" class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+                  </div>
+                  <div class="col-lg-2">
+                    <button class="btn blue-btn btn-sm" 
+                      [disabled]="global.globalAgencyId==0 ||selectedFileName ==''||selectedFileName==null " *ngIf="fp.EOB_CSVImport" (click)="uploademployee()"><i
+                        class="fa fa-upload fa-lg" ></i></button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-2 col-sm-2 col-xs-5 d-inline-flex ">
+
+                <input type="text" placeholder="Employee name" [(ngModel)]="searchText" (keyup.enter)="filterchange()"
+                  [disabled]="global.globalAgencyId==0" class="form-control">
+
+                <i class="fa fa-search  mt-1" (click)="filterchange()" [ngClass]="{'disablesearch':global.globalAgencyId==0}"></i>
+              </div>
+              <div class="col-lg-2 col-md-1 col-sm-1 col-xs-2">
+                <button type="button" class="btn blue-btn btn-sm butstyle" (click)="Refresh()"
+                  [disabled]="global.globalAgencyId==0">
+                  <i class="fa fa-repeat"> </i>Refresh
+                </button>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--------------------------------------Employee Table------------------------------------------------------------>
+<div class="row mb-2">
+  <div class="col pl-0">
+
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+        <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+          <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view details</label>
+        </div>
+        <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true'
+         [allowPaging]='true' [allowFiltering]='true' (dataStateChange)='dataStateChange($event)' (actionBegin)="onActionComplete($event)"
+          [pageSettings]='initialPage' (resizeStop)="onResize($event)"  [filterSettings]='filterSettings' [showColumnChooser]='true'  >
+          <e-columns>
+            <e-column  minWidth= 140 field="name"  headerText="Name" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="dob" headerText="DOB" type='date' [format]='formatOptions'></e-column>
+            <e-column  minWidth=80 field="age"  headerText="Age" type='number'></e-column>
+            <e-column minWidth= 100 field="email" headerText="Email" type='string'  >
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="phone1" headerText="Phone" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="phone2" headerText="phone1"  type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="street" headerText="Street" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="zipcode" headerText="Zip Code" type='number'></e-column>
+            <e-column minWidth= 100 field="statusLidName" headerText="Status"  type='number'>
+       
+
+              <ng-template #filterTemplate let-data>
+                <ejs-dropdownlist id='dropdown'placeholder='Select a Status' [dataSource]='dropdata'
+                 [popupHeight]='height' ></ejs-dropdownlist>
+           </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="employeeTypeLidName" headerText="Employee Type" type='number'>
+              <ng-template #filterTemplate let-data>
+                <ejs-dropdownlist id='dropdata1'placeholder='Select a Type' [dataSource]='dropdata1'
+                 [popupHeight]='height' ></ejs-dropdownlist>
+           </ng-template>
+            </e-column>
+           
+            <e-column minWidth= 100 headerText="Actions" uid="action" textAlign="center" [showInColumnChooser]='false'>
+              <ng-template #template let-data>
+                <button class="btn btn-edit-table" *ngIf="fp.employeeupdate" (click)="editEmployee(data)"><i
+                    class="fa fa-edit" ></i></button>&nbsp;
+
+              </ng-template>
+            </e-column>
+            <!--------------------------------table header icon---------------->
+            <e-column minWidth="50" [showInColumnChooser]='false'>
+              <ng-template #headerTemplate let-data>
+                <div>
+                  <span id='show' (click)='show()'><i class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                </div>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+
+    </div>
+  </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

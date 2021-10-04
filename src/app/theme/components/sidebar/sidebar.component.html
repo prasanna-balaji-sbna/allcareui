@@ -1,0 +1,7 @@
+<div class="sidebar-outer">
+    <a class="logo d-flex align-items-center" routerLink="/" (click)="closeSubMenus()" *ngIf="settings.theme.sidebarIsFixed">
+        <!-- <img src="/assets/img/logo.jpg" width="30px"> &nbsp;<span class="start">D</span><span class="ng">K</span> -->
+        <b _ngcontent-skc-c4=""><span _ngcontent-skc-c4="" style="color:#0D47A1;font-weight: bold">All</span><span _ngcontent-skc-c4="" style="color:#689F38;font-weight: bold">Care </span><span _ngcontent-skc-c4="" style="color:#689F38">Software</span></b>
+    </a>
+    <app-vertical-menu [menuItems]="menuItems"></app-vertical-menu>    
+</div>

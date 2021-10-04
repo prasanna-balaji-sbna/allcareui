@@ -1,0 +1,45 @@
+.buttonpanddinglr{
+    padding-left: 1px;
+    padding-right: 1px;
+    }
+    .buttonpanddingl
+    {
+        padding-left: 1px;
+    }
+    .buttonpanddingr
+    {
+        padding-right: 1px;
+    } 
+    .text_right{
+        float: right;
+      }
+
+      .textred{
+        color:#ff0000;font-weight: bolder;
+      }
+      .textclorstyle{
+        padding-right: 20px;font-style: italic;
+      }
+      .label{
+        padding-top:9px;font-weight: 600;font-size: 13px;font-weight: bolder;
+      }.disablecheckbox { 
+        pointer-events: none; 
+        opacity: 0.5; 
+       } 
+       .disableedit { 
+        pointer-events: none; 
+        opacity: 0.5; 
+       } 
+       .p{
+        margin-left: 0px;margin-top: 10px;color: #ff0202;
+       }
+
+       .pdfsize
+       {
+         
+       max-width: 900px !important;
+       }
+       kendo-pdf-export {
+        font-family: "Exo", sans-serif;
+        font-size: 12px;
+      }

@@ -1,0 +1,492 @@
+<!-- ////////////////////////////////////////////////////////////////////////////// -->
+
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+        <h4 class="mb-0 font-header">Import</h4>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="alert alert-warning" *ngIf="onDOCFileChangedErr!= '' " closable (close)="onDOCFileChangedErr=''">
+          {{onDOCFileChangedErr}}
+        </div>
+
+        <div class="row no-gutters ">
+
+
+          <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12 mt-1">
+
+            <div class="custom-file ">
+              <input type="file" [disabled]="global.globalAgencyId==0" class="custom-file-input w-50" id="customFile" #myInput
+                name="filename" (change)="onFileChanged($event.target.files)" [(ngModel)]="filepath" (click)="myInput.value = null">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+            </div>&nbsp;&nbsp;
+
+
+
+
+
+          </div>
+          <div class="col-lg-5"> <button type="button" class="btn blue-btn ml-3" [disabled]="selectedFileName =='' "
+              (click)="onDOCFileChanged()"><i class="fa fa-upload fa-lg"></i></button><br> </div>
+
+
+
+          <div class=" col-lg-1 mt-1">
+            <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId==0" (click)="Refresh()">
+              <i class="fa fa-repeat"> </i>Refresh
+            </button>&nbsp;&nbsp;
+          </div>
+
+
+        </div>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <label class="text-primary">{{selectedFileName}}</label>
+          </div>
+        </div>
+
+
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- ////////////////////////////////////////////////////////////////////////////// -->
+<div class="row mb-2">
+  <div class="col pl-0">
+
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+        <div *ngIf="global.globalAgencyId==0" class="text-center font-red">
+          <label class="text-danger"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view details</label>
+        </div>
+        <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' [allowSorting]='true'
+          *ngIf="global.globalAgencyId!=0" (resizeStop)="onResize($event)" [allowPaging]='true'
+          [pageSettings]='initialPage' [filterSettings]='filterSettings' [allowFiltering]='true'
+          (actionBegin)="onActionComplete($event)" [showColumnChooser]='true'
+          (dataStateChange)='dataStateChange($event)'>
+          <e-columns>
+            <e-column minWidth=100 field="id" headerText="Import Id" type="number"></e-column>
+            <e-column minWidth=100 field="fileName" headerText="File Name" type="string">
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+
+            <e-column minWidth=100 uid="action" headerText="Action" [showInColumnChooser]='false'>
+              <ng-template #template let-data>
+                <!-- <button  class="btn btn-edit-table" (click)="downloadfile(data)"><i class="fa fa-download"></i></button>&nbsp;  -->
+                <button class="btn btn-edit-table text-center" (click)="viewFile(data)"><i
+                    class="fa fa-eye"></i></button>
+              </ng-template>
+            </e-column>
+            <e-column width="50" [showInColumnChooser]='false'>
+              <ng-template #headerTemplate let-data>
+                <div>
+                  <span id='show' (click)='show()'><i class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                </div>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+<span id="openModal1" data-target="#viewmodal" data-toggle="modal"></span>
+<div class="modal fade" id="viewmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-dialog1 modal-lg" role="document">
+
+    <div class="modal-content">
+
+      <div class="modal-header modal-header1 border-0">
+
+        <h5 class="modal-title text-left font-header">835 Record</h5>
+        <button class="text-right btn blue-btn btn-sm" (click)="kendopdfdownloadList()">
+          Download
+        </button>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body modal-body1">
+        <div class="row">
+          <div class="col-lg-12">
+            <kendo-pdf-export #pdflist paperSize="A4" >
+              <div style="width:700px">
+                <!-- <div class="row border border-dark rounded p-1 m-1">
+                    <div class="mx-auto">Remittance Report</div>
+                  </div><br> -->
+
+                <!-- <table class="table table-striped table-sm table-responsive" *ngIf="viewFiles">
+                    <tbody>
+                      <tr>
+                        <td colspan="12" class="text-sm-left">{{Report835.payorDetail.payorName}}</td>
+                      </tr>
+                      <tr >
+                        <td colspan="12">{{Report835.payorDetail.payorStreet}}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="12">{{Report835.payorDetail.payorCity}} &nbsp;,{{Report835.payorDetail.payorState}} &nbsp;,{{Report835.payorDetail.payorZiPCode}}</td>
+                      </tr>
+                      <tr>
+                        <td  colspan="12"  class="font-weight-bold">PayerID:{{Report835.payorDetail.payorId}}</td>
+                      </tr>
+                      <tr class="table-bordered">
+                        <td  >{{Report835.paymentDetail.companyName}}</td>
+                        <td  class="font-weight-bold">Payment Method:</td>
+                        <td colspan="2">{{Report835.paymentDetail.payment_Method}}</td>
+                        <td  class="font-weight-bold">Provider</td>
+                        <td colspan="3">{{Report835.paymentDetail.provider}}</td>
+
+                      </tr>
+                      
+                      <tr class="table-bordered">
+                        <td></td>
+                        <td class="font-weight-bold">Chk/EFT date:</td>
+                        <td colspan="2">{{Report835.paymentDetail.chk_EFT_date}}</td>
+                        <td class="font-weight-bold">Date:</td>
+                        <td colspan="3">{{Report835.paymentDetail.date}}</td>
+
+                      </tr>
+                      <tr class="table-bordered">
+                        <td></td>
+                        <td class="font-weight-bold">Remittance Amount:</td>
+                        <td colspan="2">{{Report835.paymentDetail.remittance_Amount}}</td>
+                        <td class="font-weight-bold">CheckEFTNBR:</td>
+                        <td  colspan="3">{{Report835.paymentDetail.check_EFT_NBR}}</td>
+
+                      </tr>
+                      
+                      <tr *ngFor="let val of Report835.patient_ClaimDetail">
+                      
+                        <td class="font-weight-bold">Patient:</td>
+                        <td colspan="3">{{val.patient}}</td>
+                        <td class="font-weight-bold">HIC:</td>
+                        <td colspan="3">{{val.hic}}</td>
+
+                      </tr>
+                      <tr *ngFor="let val of Report835.patient_ClaimDetail">
+                      
+                        <td class="font-weight-bold">PatCtrl:</td>
+                        <td>40639-P</td>
+                        <td class="font-weight-bold">Payor Claim Number:</td>
+                        <td>{{val.payor_Claim_Number}}</td>
+                        <td class="font-weight-bold">From Date:</td>
+                        <td>03/12/2019</td>
+                        <td class="font-weight-bold">To Date:</td>
+                        <td >03/12/2019</td>
+
+
+                      </tr>
+                      <tr class="mt-2">
+                      
+                        <td class="font-weight-bold"></td>
+                        <td class="font-weight-bold"></td>
+                        <td class="font-weight-bold"></td>
+                        <td class="font-weight-bold"></td>
+                        <td class="font-weight-bold"></td>
+                        <td class="font-weight-bold"></td>
+                        <td class="font-weight-bold"></td>
+                        <td class="font-weight-bold"></td>
+
+
+                      </tr>
+                        
+                    
+                      <tr class="table-bordered">
+                      
+                        <td class="font-weight-bold">ServiceDate</td>
+                        <td class="font-weight-bold">Unit</td>
+                        <td class="font-weight-bold">Servicecode</td>
+                        <td class="font-weight-bold">MOD</td>
+                        <td class="font-weight-bold">BIlledAmt</td>
+                        <td class="font-weight-bold">Denied Detail</td>
+                        <td class="font-weight-bold"  colspan="2">Claimed Amt</td>
+                        
+
+
+                      </tr>
+                    
+                      <tr class="table-bordered" *ngFor="let val1 of serviceLineDetail">
+                        <td class="font-weight-bold">{{val1.serviceDate}}</td>
+                        <td class="font-weight-bold">{{val1.unit}}</td>
+                        <td class="font-weight-bold">{{val1.servicecode}}</td>
+                        <td class="font-weight-bold">{{val1.mod}}</td>
+                        <td class="font-weight-bold">{{val1.billedAmt}}</td>
+                        <td class="font-weight-bold">{{val1.denied_Detail}}</td>
+                        <td class="font-weight-bold" colspan="2">{{val1.claimed_Amt}}</td>
+                      </tr>
+
+                      <tr *ngFor="let val of Report835.patient_ClaimDetail">
+                        <td class="font-weight-bold">TotalUnit</td>
+                        <td class="font-weight-bold">{{val.totalUnit}}</td>
+                        <td class="font-weight-bold">TotalBilledAmt</td>
+                        <td class="font-weight-bold">{{val.totalBilledAmt}}</td>
+                        <td class="font-weight-bold">TotalClaimAmt</td>
+                        <td class="font-weight-bold">{{val.totalClaimAmt}}</td>
+                        <td class="font-weight-bold" colspan="2"></td>
+                      </tr>
+
+                    
+                    
+                      <tr>
+                      
+                        <td></td>
+                        <td  colspan="2"  class="font-weight-bold">Not Posted Total</td>
+                        <td  colspan="2"  class="font-weight-bold">Posted Total</td>
+                        <td colspan="3" class="font-weight-bold">Overall Remittance Amount</td>
+
+                      </tr>
+                      <tr>
+                      
+                        <td></td>
+                        <td colspan="3">0.00</td>
+                        <td colspan="3">00.00</td>
+                        <td colspan="3">{{Report835.paymentDetail.remittance_Amount}}</td>
+                      
+
+                      </tr>
+                     
+                    </tbody>
+                  </table> -->
+                <div>Remittance Report</div>
+                <div *ngIf="viewFiles">
+                  <div>{{Report835.payorDetail.payorName}}</div>
+                 
+                  <div>{{Report835.payorDetail.payorStreet}}</div>
+                 
+                    <div>{{Report835.payorDetail.payorCity}} ,&nbsp;{{Report835.payorDetail.payorState}} &nbsp;{{Report835.payorDetail.payorZiPCode}}</div>
+                    <div    class="font-weight-bold">PayerID:{{Report835.payorDetail.payorId}}</div>
+                    <hr style="
+                    margin-top: 1.5%;
+                    border-top: 1px solid rgb(19, 17, 17);
+                    width: 100%;
+                    box-shadow: 0px 1px 1px #0c0c0c;
+                    " />
+                      <div class="row w-100">
+                        <div class="col-lg-4">
+                          <div class="font-weight-bold">{{Report835.companydetails.companyName}}</div>
+                          <div class="font-weight-bold">{{Report835.companydetails.companyAddress}}</div>
+                          <div class="font-weight-bold">{{Report835.companydetails.companyCity}}</div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="font-weight-bold">Payment Method:&nbsp;&nbsp;{{Report835.paymentDetail.payment_Method}}</div>
+                          <div class="font-weight-bold">Chk/EFT date:&nbsp;&nbsp;&nbsp;&nbsp;{{Report835.paymentDetail.chk_EFT_date|date:'MM/dd/yyyy'}}</div>
+                          <div class="font-weight-bold">Remittance Amount:&nbsp;{{Report835.paymentDetail.remittance_Amount}}</div>
+                        </div>
+                        <div class="col-lg-4">
+                          <div class="font-weight-bold">Provider#:&nbsp;&nbsp;{{Report835.paymentDetail.provider}}</div>
+                          <div class="font-weight-bold">Date:&nbsp;&nbsp;&nbsp;&nbsp;{{Report835.paymentDetail.date|date:'MM/dd/yyyy'}}</div>
+                          <div class="font-weight-bold">Check EFT NBR:&nbsp;{{Report835.paymentDetail.check_EFT_NBR}}</div>
+                        </div>
+                      </div>
+                      <hr style="
+                      margin-top: 1.5%;
+                      border-top: 1px solid rgb(19, 17, 17);
+                      width: 100%;
+                      box-shadow: 0px 1px 1px #0c0c0c;
+                      " />
+                      <span class="mt-1"></span>
+                      <ng-container *ngFor="let val of Report835.patient_ClaimDetail">
+                        <hr style="
+                        margin-top: 1.5%;
+                        border-top: 1px solid rgb(19, 17, 17);
+                        width: 100%;
+                        box-shadow: 0px 1px 1px #0c0c0c;
+                        " />
+                        <div class="row w-100">
+                         
+                          <div class="col-lg-2">
+                            Service Date
+                          </div>
+                          <div class="col-lg-1">
+                            POS
+                          </div>
+                          <div class="col-lg-1">
+                            NOS
+                          </div>
+                          <div class="col-lg-1">
+                            Proc
+                          </div>
+                          <div class="col-lg-1">
+                           MOD
+                          </div>
+                          <div class="col-lg-1">
+                            Billed
+                          </div>
+                          <div class="col-lg-2">
+                            Allowed
+                          </div>
+                          <div class="col-lg-2">
+                            Remark
+                          </div>
+                         
+                          <div class="col-lg-1">
+                            Payment
+                          </div>
+                        
+                         
+
+                        </div>
+                        <hr style="
+                        margin-top: 1.5%;
+                        border-top: 1px solid rgb(19, 17, 17);
+                        width: 100%;
+                        box-shadow: 0px 1px 1px #0c0c0c;
+                        " />
+                        <div class="row w-100">
+                          <div class="col-lg-4">
+                          Patient:{{val.patient}}
+                          </div>
+                          <div class="col-lg-2">
+                          HIC:{{val.hic}}
+                          </div>
+                        </div>
+                        
+                        <div class="row w-100 mt-1">
+                          <div class="col-lg-2">
+                          Pat Ctrl #:{{val.patCtrl}}
+                          </div>
+                          <div class="col-lg-5 pr-0 ">
+                            Payor Claim Number:{{val.payor_Claim_Number}}
+                          </div>
+                          <div class="col-lg-3">
+                            From Date:{{val.serviceLineDetail[0].serviceDate|date:'MM/dd/yyyy'}}
+                          </div>
+                          <div class="col-lg-2 pr-0">
+                            To Date:{{val.serviceLineDetail[val.serviceLineDetail.length-1].serviceDate|date:'MM/dd/yyyy'}}
+                          </div>
+                         
+                        </div>
+                      <ng-container *ngFor="let val1 of val.serviceLineDetail">
+                        <div class="row w-100">
+                         
+                          <div class="col-lg-2">
+                          {{val1.serviceDate|date:'MM/dd/yyyy'}}
+                          </div>
+                          <div class="col-lg-1">
+                            
+                          </div>
+                          <div class="col-lg-1">
+                           {{val.unit}}
+                          </div>
+                          <div class="col-lg-1">
+                           {{val1.servicecode}}
+                          </div>
+                          <div class="col-lg-1">
+                         {{val1.mod}}
+                          </div>
+                          <div class="col-lg-1">
+                            {{val1.billedAmt}}
+                          </div>
+                          <div class="col-lg-2 pr-0">
+                            {{val1.notes}}
+                          </div>
+                          <div class="col-lg-2">
+                            {{val1.denied_Detail}}
+                          </div>
+                         
+                          <div class="col-lg-1" style="
+                          text-align: right;
+                      ">
+                            {{val1.claimed_Amt}}
+                          </div>
+                        
+                         
+
+                        </div>
+                      </ng-container>
+                      <div class="row w-100">
+                         
+                        <div class="col-lg-3">
+                        
+                     <div class="mt-1">     {{val.patient}}</div>
+                        </div>
+                       
+                        <div class="col-lg-1">
+                          
+                          <div  class="mt-1"> PtResp:</div> 
+                        </div>
+                        <div class="col-lg-1">
+                          <div></div>
+                          <div  class="mt-1"> 0.00 </div>
+                        </div>
+                        <div class="col-lg-1">
+                       
+                        </div>
+                        <div class="col-lg-1">
+                          <hr style="
+                          margin-top: 1.5%;
+                          border-top: 1px solid rgb(19, 17, 17);
+                          width: 100%;
+                          box-shadow: 0px 1px 1px #0c0c0c;
+                          " />
+                          {{val.totalBilledAmt}}
+                        </div>
+                        <div class="col-lg-3">
+                        
+                        </div>
+                       
+                        <div class="col-lg-2">
+                          <hr style="
+                          margin-top: 1.5%;
+                          border-top: 1px solid rgb(19, 17, 17);
+                          width: 100%;
+                          box-shadow: 0px 1px 1px #0c0c0c;
+                          " />
+                          {{val.totalClaimAmt}}
+                        </div>
+                      
+                       
+
+                      </div>
+                    </ng-container>
+                    <div class="row">
+                      <div class="col-lg-4">
+
+                      </div>
+                      <div class="col-lg-1">
+
+                      </div>
+                    </div>
+                </div>
+              
+
+              </div>
+              <ng-template kendoPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+                <div class="kendofooter">
+                  <hr style="
+                  margin-top: 1.5%;
+                  border-top: 1px solid rgb(19, 17, 17);
+                  width: 100%;
+                  box-shadow: 0px 1px 1px #0c0c0c;
+                  " />
+                  <div>  Exception notes: Note 1: The full payment was not made on this service line.</div> 
+                  <div>   Note 2: Something has already been paid on this.</div> 
+                  <div>   Note 3: The payment amount is less than zero.</div> 
+                  <div>    Note 4.This is an old format submit claim id, cannot auto-post</div> 
+                </div>
+              </ng-template>
+            </kendo-pdf-export>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn blue-btn btn-sm">Delete</button> -->
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+<ngx-ui-loader></ngx-ui-loader>
+

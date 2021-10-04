@@ -1,0 +1,10 @@
+<!---------------------------------------client table-------------------------------------->
+<ng-container *ngIf="!isConsumer">
+<app-client-list *ngIf="!EditData" (EventToEdit)="dataEmitfromChild($event)"></app-client-list>
+</ng-container>
+<!--------------------------------------Client create/update-------------------------------->
+
+<app-client-create-edit *ngIf="EditData" (EventToEdit)="dataEmitfromChild($event)" [DataFromList]="EditOptions"></app-client-create-edit>
+
+<!----------------------------------Client Consumer Assesment----------------------------------->
+<app-consumerassesment *ngIf="isConsumer"  (EventToEdit)="dataEmitfromChild($event)" [DataFromList]="EditOptions"></app-consumerassesment>

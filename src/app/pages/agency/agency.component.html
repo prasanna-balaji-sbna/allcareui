@@ -1,0 +1,414 @@
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted row">
+        <h4 class="mb-0 font-header col-lg-8  col-md-6 col-sm-6 col-xs-12">Agency</h4>
+
+        <div class=" aligned_form col-lg-4 col-md-6 col-sm-6 col-xs-12 text_right  font-header ">
+          <label>Show agency&nbsp;&nbsp;</label>
+          <select class="form-control element_width" [(ngModel)]="agencyFilter"
+            (ngModelChange)="filterchange()">
+            <option [value]=agStatus.Key *ngFor="let agStatus of agencyStatusList">{{agStatus.Value}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+
+        <div class="row d-lg-none">
+          <div class="col">
+            <button type="button" class="btn blue-btn btn-sm" data-toggle="modal" data-target="#modal"
+            (click)="AgencyCreateupdate('new')">Add
+            Agency</button>
+           
+          </div>
+        
+          <div class="col text-right">
+            <button type="button" class="btn blue-btn btn-sm" (click)="Refresh()">
+              <i class="fa fa-repeat"> </i>Refresh
+            </button>
+          </div>
+      </div>
+        <div class="row no-gutters">
+          <div class="col-lg-7 col-md-7 col-sm-7 col-xs-5 d-none d-lg-block  mt-2 ">
+            <button type="button" class="btn blue-btn btn-sm mr-0" data-toggle="modal" data-target="#modal"
+              (click)="AgencyCreateupdate('new')">Add
+              Agency</button>
+          </div>
+       
+          <div class="text_right col-lg-3 col-md-6 col-sm-6 col-xs-12 mt-2 aligned_form padding-0">
+            <input type="text" placeholder="Agency name" (keyup.enter)="filterchange()"
+              class="form-control element_width" [(ngModel)]="SearchText" />
+            <i class="fa fa-search mt-1 " (click)="filterchange()"></i>
+          </div>
+          <div class="d-none d-lg-block col-lg-2  mt-2 ml-0">
+            <button type="button" class="btn blue-btn btn-sm  ml-0" (click)="Refresh()">
+              <i class="fa fa-repeat"> </i>Refresh
+            </button>
+          </div>
+          <!-- <div class="col-lg-3 mb-1">
+                      <ss-multiselect-dropdown class="custom-multiselect" [options]="columns" [settings]="columnsSettings"
+                  (ngModelChange)="changeColumns()" [(ngModel)]="columnsSelected"></ss-multiselect-dropdown> 
+            </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mb-2">
+  <div class="col pl-0">
+
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+
+        <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true'  [allowSorting]='true' allowPaging='true' [allowFiltering]='true' (actionBegin)="onActionComplete($event);actionBegin($event)"
+          [pageSettings]='initialPage' [filterSettings]='filterSettings'(resizeStop)="onResize($event)" (dataStateChange)= 'dataStateChange($event)' [showColumnChooser]= 'true' >
+          <e-columns>
+            <e-column field="agencyName" minWidth= 140 headerText="Name" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="agencyCode" minWidth= 100 headerText="Code" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="email" minWidth= 100 headerText="Email" type='string'  >
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="phone" minWidth= 100 headerText="Phone" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="street" minWidth= 100 headerText="Street" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="city" minWidth= 100 headerText="City" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="state" minWidth= 100 headerText="State" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column field="zipCode" minWidth= 100 headerText="Zip Code" type='number'></e-column>
+            <e-column field="status_Name" headerText="Status" minWidth= 100 type='number' >
+              <ng-template #filterTemplate let-data>
+                <ejs-dropdownlist id='dropdown'placeholder='Select a Status' [dataSource]='dropdata'
+                 [popupHeight]='height' ></ejs-dropdownlist>
+           </ng-template>
+            </e-column>
+            <e-column headerText="Action" uid="action" minWidth= 100 [showInColumnChooser]='false'>
+              <ng-template #template let-data>
+                <button class="btn btn-edit-table text-center" data-toggle="modal" data-target="#modal"
+                  (click)="AgencyCreateupdate('edit');selectAgencydetails(data)"><i
+                    class="fa fa-edit"></i></button>&nbsp;
+                <!-- <button class="btn btn-delete-table" data-toggle="modal" data-target="#deletemodal"
+                    (click)="selectAgencydetails(data)"><i 
+                      class="fa fa-trash"></i></button> -->
+              </ng-template>
+            </e-column>  
+              <!--------------------------------table header icon---------------->
+            <e-column width="50" [showInColumnChooser]='false'>
+              <ng-template #headerTemplate let-data>
+                <div>
+                 <span id='show' (click)='show()'><i  class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                </div>
+            </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- /////////////////////////// Agency Create and Update //////////////////////////////////// -->
+<span id="openModal" data-target="#modal" data-toggle="modal"></span>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel"><span *ngIf="ModelType =='new'">Agency
+            Creation</span> <span *ngIf="ModelType =='edit'">Agency Update</span> </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        <!-- <h5 class="modal-title" id="exampleModalLabel"  *ngIf="!isCreate">Create Care Coordinator</h5> -->
+
+      </div>
+      <div class="alert alert-warning alert-dismissible fade show" *ngIf="saveErr!=''" role="alert">
+        <p>{{saveErr}}</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+            (click)="saveErr=''">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+  
+              <div>
+                <label class="font-header">General Info</label>
+                <span id="companyspan" data-toggle="modal" data-target="#Companymodal"></span>
+                <button class="btn blue-btn btn-sm text_right" (click)="companyConfig(Agency)" 
+                  [disabled]="ModelType =='new'">Company</button>
+              </div>
+              <hr />
+              <form [formGroup]="AgencyGroup">
+                <div class="row">
+  
+                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3" >
+                    <div class="avatar-upload">
+                      <div class="avatar-edit">
+                        <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg"
+                          (change)="onSelectFile($event);checkpopup('Img')" />
+                        <label for="imageUpload"></label>
+                      </div>
+                      <div class="avatar-preview">
+                        <img src="../../../assets/images/profile.png" *ngIf="Agency.agencyLogo == null" />
+                        <img [src]="Agency.agencyLogo" *ngIf="Agency.agencyLogo != null">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 col-sm-2 col-md-2  col-xs-3 lablestyle">
+                    <label class="label">Status&nbsp;<sup class="super-script">&nbsp;*</sup></label>
+                  </div>
+                  <div class="col-lg-2   col-sm-3 col-md-3  col-xs-3 lablestyle">
+                    <select class="form-control" [(ngModel)]="Agency.statusLid" formControlName="Status"
+                    (ngModelChange)="checkpopup('Status');test(Agency.statusLid)">
+                      <option [value]=st.Key *ngFor="let st of statusList">{{st.Value}}</option>
+                    </select>
+                    <!-- <select [(ngModel)]="Agency.statusLid" style="width:128px;margin-left:5px" class="form-control" >
+                      <option [value]=st.Key *ngFor="let st of statusList">{{st.Value}}</option>
+                    </select> -->
+                  </div>
+                  <!-- <div *ngIf="AgencyGroup.controls.status.errors && submitted">
+                      <div style="color:red;text-align: left;" *ngIf="AgencyGroup.controls.status.errors.required">Agency status is
+                        required</div>
+                    </div> -->
+                  <div class="col-lg-6 col-sm-12  col-md-12  col-xs-12 lablestyle">
+                    <label class="label">Name&nbsp;<sup class="super-script">*</sup></label>
+                    <input type="text" class="form-control text_right width66" [(ngModel)]="Agency.agencyName"
+                      formControlName="AgencyName" (ngModelChange)="checkpopup('AgencyName')" />
+                  </div>
+                  <!-- <div *ngIf="AgencyGroup.controls.aname.errors && submitted">
+                      <div style="color:red;text-align: left;" *ngIf="AgencyGroup.controls.aname.errors.required">Agency name is
+                        required</div>
+                    </div> -->
+  
+  
+                </div>
+                <div class="row">
+                  <div class="col-lg-6  col-sm-12  col-md-12  col-xs-12 lablestyle">
+                    <label class="label">Code&nbsp;<sup class="super-script">&nbsp;*</sup></label>
+                    <input type="text" class="form-control text_right width66 " [(ngModel)]="Agency.agencyCode"
+                      (ngModelChange)="checkpopup('Code');checkfirstLetter($event,Agency.agencyCode)" (keypress)="omit_special_char($event)"   (keydown.space)="$event.preventDefault();" formControlName="AgencyCode"
+                      [attr.disabled]="ModelType !='new' ? 'disabled' : null" minlength="4" />
+                  </div>
+  
+                  <div class=" col-lg-6 col-sm-12  col-md-12  col-xs-12 lablestyle">
+                    <label class="label">Short Name</label>
+                    <input type="text" class="form-control text_right width66 " [(ngModel)]="Agency.agencyShortName"
+                      formControlName="AgencyShortName" (ngModelChange)="checkpopup('ShortName')" />
+                  </div>
+                  <!-- <div *ngIf="AgencyGroup.controls.asname.errors && submitted">
+                      <div style="color:red;text-align: left;" *ngIf="AgencyGroup.controls.asname.errors.required">Short name is
+                        required</div>
+                    </div> -->
+  
+                </div>
+                <div *ngIf="AgencyGroup.controls.AgencyCode.invalid && AgencyGroup.controls.AgencyCode.touched">
+                  <div style="color:red;text-align: left;" *ngIf="AgencyGroup.controls.AgencyCode.invalid">Agency code
+                    should be more than three character
+                  </div>
+                 
+                </div>
+                <div style="color:red;text-align: left;" *ngIf="alphaErr">Agency code
+                  should be starts with alphabets
+                  </div>
+                <div class="row">
+                  <div class="col-lg-6 col-sm-12  col-md-12  col-xs-12 lablestyle ">
+                    <label class="label">Email<sup class="super-script">&nbsp;*</sup></label>
+                    <input type="text" class="form-control text_right width66 " [(ngModel)]="Agency.email"
+                      formControlName="Email" (ngModelChange)="checkpopup('Email')" />
+                    <!-- <div *ngIf="AgencyGroup.controls.Email.invalid && AgencyGroup.controls.Email.touched">
+                        <div style="color:red;text-align: left;" *ngIf="AgencyGroup.controls.Email.errors">Enter valid email</div>
+                      </div> -->
+                  </div>
+                  <div class="col-lg-6 col-sm-12  col-md-12  col-xs-12 lablestyle">
+                    <label class="label">Phone</label>
+                    <input type="text" class="form-control text_right width66 " [(ngModel)]="Agency.phone"  minlength="14"
+                    maxlength="14"
+                      formControlName="Phone"  (ngModelChange)="DemographicPhoneFormat();checkpopup('Phone')"  (keypress)="keyPress($event)" />
+                      <!-- (keypress)="DemographicPhoneFormat($event)" -->
+                    <div
+                      *ngIf="AgencyGroup.controls.Phone.invalid && (AgencyGroup.controls.Phone.dirty ||AgencyGroup.controls.Phone.touched)">
+                      <div style="color:red;text-align: left;" *ngIf="AgencyGroup.controls.Phone.errors">Enter valid 10
+                        digit number</div>
+                    </div>
+                  </div>
+  
+  
+                </div>
+                <div class="row">
+                  <div class="col-lg-2 col-sm-4  col-md-4 col-xs-4 lablestyle">
+                    <label class="label">Street</label>
+                  </div>
+                  <div class="col-lg-8 col-sm-8 col-md-8 col-xs-8">
+                    <input type="text" class="form-control text_right street" [(ngModel)]="Agency.street"
+                      formControlName="Street" (ngModelChange)="checkpopup('Street')" />
+                    <!-- <div *ngIf="AgencyGroup.controls.street.errors && submitted">
+                          <div style="color:red;text-align: left;" *ngIf="AgencyGroup.controls.street.errors.required">Street is
+                            required</div>
+                        </div> -->
+                  </div>
+                  <!-- <div class="col-lg-2">
+                        <button class="btn btnclass" style="margin:5px"
+                        (click)="addressing(addresspopupalternate)">Alternate</button>
+                    </div>          -->
+                </div>
+                <div class="row ">
+  
+                    <label class="label ml-2 ">City State ZIP Code</label>
+                    <input type="text" class=" width20 " [(ngModel)]="Agency.city" formControlName="City"
+                      (ngModelChange)="checkpopup('City')" />
+                    <!-- <div *ngIf="AgencyGroup.controls.city.errors && submitted">
+                        <div style="color:red;text-align: left;" *ngIf="AgencyGroup.controls.city.errors.required">City is
+                          required</div>
+                      </div> -->
+                   
+                 
+                  <!-- <div *ngIf="AgencyGroup.controls.state.errors && submitted">
+                      <div style="color:red;text-align: left;" *ngIf="AgencyGroup.controls.state.errors.required">State is
+                        required</div>
+                    </div> --> 
+                    <!-- <input type="text" class=" width25 " [(ngModel)]="Agency.state" formControlName="State" maxlength="2"
+                      (ngModelChange)="checkpopup('State')" /> -->
+                      <ng-select [items]="stateList" class="width25" [searchable]="true" formControlName="State" [clearable]="true" bindLabel="name"
+                      bindValue="abbreviation"    [(ngModel)]="Agency.state" (ngModelChange)="checkpopup('State')">
+                    </ng-select>
+                  <input type="text" class=" width13" [(ngModel)]="Agency.zipCode" (ngModelChange)="checkpopup('Zip')"
+                    formControlName="ZipCode"  minlength="5" maxlength="10" (keypress)="keyPress($event)" />
+                  <button class="btn blue-btn btn-sm " type="button" [disabled]="Agency.state ==null 
+                    || Agency.state =='' ||
+                    Agency.state ==undefined || Agency.city ==null || Agency.city =='' || 
+                    Agency.city ==undefined" (click)="getzipcodeClient(Agency)">Get Zip</button>
+                    <!-- (click)="getzipcodeClient(list)" -->
+                  <!-- <button class="btn btnclass" style="margin:5px">Get ZIP Code</button> -->
+                
+                 
+              </div>  
+              <hr />
+                <label class="font-header">Alternate Address</label>
+                <hr />
+                <div class="row">
+                  <div class="col-lg-2 col-sm-4  col-md-4  col-xs-4 lablestyle">
+                    <label class="label">Street</label>
+                  </div>
+                  <div class="col-lg-8 col-sm-8 col-md-8 col-xs-8  ">
+                    <input type=" text" class="form-control text_right street " [(ngModel)]="Agency.alt_Street"
+                      formControlName="Alt_Street" (ngModelChange)="checkpopup('Alt_Street')">
+  
+                  </div>
+  
+                </div>
+                <div class="row ">
+                  <label class="label ml-2">City State ZIP Code</label>
+  
+                  <input type=" text" class=" width20" [(ngModel)]="Agency.alt_City" formControlName="Alt_City"
+                    (ngModelChange)="checkpopup('Alt_City')">
+                    <ng-select [items]="stateList" class="width25" [searchable]="true" formControlName="Alt_State" [clearable]="true" bindLabel="name"
+                    bindValue="abbreviation"    [(ngModel)]="Agency.alt_State" (ngModelChange)="checkpopup('Alt_State')">
+                  </ng-select>
+                  <!-- <input type=" text" class=" width25" [(ngModel)]="Agency.alt_State" formControlName="Alt_State"
+                    maxlength="2" (ngModelChange)="checkpopup('Alt_State')"> -->
+                  <input type=" text" class=" width13" [(ngModel)]="Agency.alt_Zipcode" formControlName="Alt_Zipcode"
+                    minlength="5" maxlength="10" (keypress)="keyPress($event)" (ngModelChange)="checkpopup('Alt_Zipcode')">
+                  <button class="btn blue-btn btn-sm" type="button" [disabled]="Agency.alt_State ==null 
+                      || Agency.alt_State =='' ||
+                      Agency.alt_State ==undefined || Agency.alt_City ==null || Agency.alt_City =='' || 
+                      Agency.alt_City ==undefined" (click)="getzipcodeClient1(Agency)">Get Zip</button>
+                      <!-- (click)="getzipcodeClient1(list)" -->
+                </div>
+  
+  
+  
+              </form>
+  
+            </div>
+          </div>
+        </div>
+       
+      </div>
+      <div class="modal-footer">
+        <button class="btn blue-btn btn-sm" (click)="SaveOrUpdateAgency();" [disabled]="!AgencyGroup.valid || alphaErr"><span
+            *ngIf="ModelType =='new'"> Save</span> <span *ngIf="ModelType =='edit'">Update & Close</span> </button>
+        <button type="button" class="btn blue-btn btn-sm" (click)="openDialog()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<span id="cancelmodal" data-toggle="modal" data-target="#closemodal"></span>
+  <div class="modal fade" id="closemodal">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header">Close Alert</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <label>You want to close without save?</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn btn-sm" (click)="closeFun()">Yes</button>
+        <button type="button" class="btn blue-btn btn-sm" id="closedeletemodal" data-dismiss="modal">No</button>
+      </div>
+      </div>
+      </div>
+    </div>
+
+<!-- /////////////////////////// Company Create and Update //////////////////////////////////// -->
+<span id="openModal1" data-target="#Companymodal" data-toggle="modal"></span>
+<div class="modal fade"  id="Companymodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog  modal-xl" role="document">
+    <div class="modal-content ml-4">
+   
+      <!-- <div class="modal-body"> -->
+        <!-- ================== Company TABLE VIEW ================ -->
+        <app-company-list *ngIf="!isEdit && ViewEdit.AgencyId != 0" (isViewEdit)="dataEmitfromChild($event)" [ViewEdit]="ViewEdit"></app-company-list>
+        <!-- ================== Company TABLE VIEW ================ -->
+
+
+        <!-- ================== Company EDIT/ADD VIEW ================ -->
+        <app-company-edit *ngIf="isEdit" (isViewEdit)="dataEmitfromChild($event)"    [ViewEdit]="ViewEdit"></app-company-edit> 
+        <!-- -->
+        <!-- ================== Company EDIT/ADD VIEW ================ -->
+      <!-- </div> -->
+ <div class="modal-footer">
+        <!-- <button class="btn blue-btn btn-sm" (click)="SaveOrUpdateAgency();"
+            [disabled]="!AgencyGroup.valid"><span *ngIf="ModelType =='new'"> Save &
+              Close</span> <span *ngIf="ModelType =='edit'">Update & Close</span> </button> -->
+        <button type="button" class="btn blue-btn btn-sm" *ngIf="!isEdit"(click)="ViewEdit.AgencyId = 0" data-dismiss="modal">Close</button>
+     </div> 
+    </div>
+  </div>
+</div>
+<ngx-ui-loader></ngx-ui-loader>

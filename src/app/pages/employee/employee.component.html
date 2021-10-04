@@ -1,0 +1,9 @@
+
+       <!------------------------------Employee  list Show ------------------------------>
+
+<app-employee-list *ngIf="!isEdit" (isViewEdit)="dataEmitfromChild($event)">    </app-employee-list>
+
+
+  <!------------------------------Employee  Add and Edit  Show ------------------------------>
+
+  <app-employee-edit *ngIf="isEdit" (isViewEdit)="dataEmitfromChild($event)" [ViewEdit]="ViewEdit">   </app-employee-edit>

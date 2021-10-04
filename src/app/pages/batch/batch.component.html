@@ -1,0 +1,2110 @@
+<!---------------------------------------------------------Create batch on claim selection------------->
+<div *ngIf="!isViewBatchDetails && !isCreateBatchDetails && !Profession && !view837">
+  <div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted row">
+          <h4 class="mb-0 font-header col-lg-8  col-md-6 col-sm-6 col-xs-12">Claims</h4>
+          <div class=" col-lg-4 col-md-6 col-sm-6 col-xs-12 text_right  font-header ">
+            <button type="button" class="btn blue-btn btn-sm text_right " (click)="reexport('success')"
+            [disabled]="BatchFileIdList.length==0 " *ngIf="selecctedTab=='Active'">Re-Export</button> &nbsp;
+            <button type="button" class="btn blue-btn btn-sm text_right mr-1" (click)="MovetoArchive('success')"
+              [disabled]="BatchFileIdList.length==0 " *ngIf="selecctedTab=='Active'">Move to archive</button> &nbsp;
+            <button type="button" class="btn blue-btn btn-sm text_right mr-2" (click)="ViewBatchData()"
+              [disabled]="global.globalAgencyId==0">View batches</button>
+            <button type="button" class="btn blue-btn btn-sm text_right mr-10 "
+              style="float: right;margin-right: 10px;display:none;" (click)="MovetoActive('success')"
+              [disabled]="BatchFileIdList.length==0" *ngIf="selecctedTab=='Ready to bill'">Move to active</button>
+          </div>
+        </div>
+        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+          <div class="row d-lg-none">
+            <div class="col">
+              <div class="row">
+                <span class="col-lg-4 col-md-6 col-sm-12 col-xs-12">Group<sup class="super-script">*</sup></span>
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"> <select class="form-control"
+                    [(ngModel)]="getBatchFilterList.groupId"
+                    (ngModelChange)="setDefaultgroupval(getBatchFilterList.groupId);checkOverallData()"
+                    [disabled]="global.globalAgencyId==0">
+                    <option [value]=st.Key *ngFor="let st of groupList">{{st.Value}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col text-right">
+              <div class="row">
+                <span class="col-lg-4 col-md-6 col-sm-12 col-xs-12">Payer</span>
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                  <select class="form-control" [(ngModel)]="getBatchFilterList.payorId"
+                    (ngModelChange)="setDefaultpayorval(getBatchFilterList.payorId);checkOverallData()"
+                    [disabled]="getBatchFilterList.groupId == ''">
+                    <option [value]=st.Key *ngFor="let st of payorList">{{st.Value}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-9">
+              <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 d-none d-lg-block  mt-2 ">
+                  <div class="row">
+                    <span class="col-lg-5 col-md-12 col-sm-12 col-xs-12">Group<sup class="super-script">*</sup></span>
+                    <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+                      <select class="form-control" [(ngModel)]="getBatchFilterList.groupId"
+                        (ngModelChange)="setDefaultgroupval(getBatchFilterList.groupId);checkOverallData()"
+                        [disabled]="global.globalAgencyId==0">
+                        <option></option>
+                        <option [value]=st.Key *ngFor="let st of groupList">{{st.Value}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 d-none d-lg-block mt-2">
+                  <div class="row">
+                    <span class="col-lg-5 col-md-12 col-sm-12 col-xs-12">Payer</span>
+                    <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+                      <ng-select class="form-control" [(ngModel)]="getBatchFilterList.payorId"  class="w100"
+                      [clearable]="true" [items]="payorList"  [searchable]="true" bindLabel="Value"  bindValue="Key"
+                        (ngModelChange)="setDefaultpayorval(getBatchFilterList.payorId);checkOverallData()"
+                        [disabled]="getBatchFilterList.groupId == ''">
+                        <!-- <option></option>
+                        <option [value]=st.Key *ngFor="let st of payorList">{{st.Value}}</option> -->
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 mt-2">
+                  <div class="row">
+                    <span class="col-lg-4 col-md-12 col-sm-12 col-xs-12 pl-0">Employee</span>
+                    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                      <ng-select class="form-control" [(ngModel)]="getBatchFilterList.employeeId"
+                      [clearable]="true" [items]="employeelists"  [searchable]="true" bindLabel="Value"  bindValue="Key"
+                        (ngModelChange)="setDefaultpayorval(getBatchFilterList.employeeId);checkOverallData()"
+                        [disabled]="global.globalAgencyId==0" class="w100">
+                        <!-- <option></option>
+                        <option [value]=st.Key *ngFor="let st of employeelists">{{st.Value}}</option> -->
+                      </ng-select>&nbsp;
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12 mt-2">
+                  <div class="row">
+                    <span class="col-lg-4 col-md-12 col-sm-12 col-xs-12">Client</span>
+                    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                      <ng-select  [(ngModel)]="getBatchFilterList.clientId" [clearable]="true" [items]="clientlist"  [searchable]="true"
+                        [disabled]="global.globalAgencyId==0" bindLabel="Value"  bindValue="Key" class="w100">
+                        <!-- <option></option>
+                        <option [value]=st.Key *ngFor="let st of clientlist">{{st.Value}}</option> -->
+                      </ng-select>&nbsp;
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="row">
+                <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12 mt-2">
+                  <div class="row">
+                    <span class="col-lg-5 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0">Resubmission</span>
+                    <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+                      <select class="form-control" [(ngModel)]="getBatchFilterList.resubmissionLid"
+                        
+                        [disabled]="global.globalAgencyId==0">
+                        <option></option>
+                        <option [value]=st.Key *ngFor="let st of ResubmissionList">{{st.Value}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12 mt-2 leftminus mr-1">
+                  <div class="row">
+                    <div class="col-6">
+                      <button type="button" class="btn blue-btn btn-sm" (click)="OnApplyGetBatchDetails()"
+                        [disabled]="getBatchFilterList.groupId==''">Apply</button></div>
+                    <div class="col-6">
+                      <button type="button" class="btn blue-btn btn-sm" [disabled]="global.globalAgencyId==0"
+                        (click)="ClearValues()">Clear</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-body  widget-body pt-2">
+          <div class="row mb-2">
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+              <label>Clearing House
+                <sup class="super-script">*</sup></label>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+              <select class="form-control" [(ngModel)]="batchList.clearingHouseId">
+                <option [value]=st.Key *ngFor="let st of clearingHouseList">{{st.Value}}</option>
+              </select>
+            </div>
+            <label class="star"><i>Note: * fields are mandatory</i></label>
+          </div>
+
+          <!-- TAB -->
+          <div class="row mb-2">
+            <div class="col pl-0">
+              <div widget class="card border-0 box-shadow">
+                <div class="card-body  widget-body pt-2">
+                  <section id="tabs" class="project-tab">
+                    <!-- <div class="container"> -->
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <nav>
+                          <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist" (click)="selectTab($event) ">
+                            <a class="nav-item nav-link active" id="nav-readytobill-tab" data-toggle="tab"
+                              href="#nav-readytobill" role="tab" aria-controls="nav-readytobill" aria-selected="true"
+                              (click)="tabchange('Ready to bill')"
+                              [ngClass]="{'mytab-inactive':selecctedTab!='Ready to bill','active':selecctedTab=='Ready to bill'}">Ready
+                              to bill
+                            </a>
+                            <a class="nav-item nav-link" id="nav-active-tab" data-toggle="tab" href="#nav-active"
+                              role="tab" aria-controls="nav-profile" aria-selected="false" (click)="tabchange('Active')"
+                              [ngClass]="{'mytab-inactive':selecctedTab!='Active','active':selecctedTab=='Active'}">Active</a>
+                            <a class="nav-item nav-link" id="nav-active-tab" data-toggle="tab" href="#nav-archive"
+                              role="tab" aria-controls="nav-profile" aria-selected="false"
+                              (click)="tabchange('Archive')"
+                              [ngClass]="{'mytab-inactive':selecctedTab!='Archive','active':selecctedTab=='Archive'}">Archive</a>
+                          </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                          <div class="tab-pane fade show active" id="nav-readytobill" role="tabpanel"
+                            aria-labelledby="nav-readytobill-tab"
+                            [ngClass]="{'active':selecctedTab=='Ready to bill','show':selecctedTab=='Ready to bill'}">
+                            <div class="row mb-2 mt-1">
+                              <!-- *ngIf="claimWithoutBatch.length!=0" -->
+                              <div class="col-lg-12 pl-0">
+                                <ejs-grid #grid [dataSource]='data | async' [allowResizing]='true' [allowSorting]='true'
+                                  allowPaging='true' [allowFiltering]='true' [pageSettings]='initialPage'
+                                  (actionBegin)="onActionComplete($event)" [filterSettings]='filterSettings'
+                                  (dataStateChange)='dataStateChange($event)' [showColumnChooser]='true'
+                                  (checkBoxChange)="BatchCreateOnChangeForAll($event)" (resizeStop)="onResize($event)"  >
+                                  <e-columns>
+                                    <e-column type='checkbox' uid="checkbox" maxWidth= 50 [showInColumnChooser]='false'>
+                                    </e-column>
+                                    <e-column field="clientName" minWidth=240 headerText="Client" type='string'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="preparedDate" minWidth=80 headerText="Prepared Date" type='date'
+                                      [format]='formatOptions' [allowFiltering]="false"></e-column>
+                                    <e-column field="payer_Name" minWidth=80 headerText="Payor" type='string'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="fromDate" minWidth=80 headerText="From Date" type='date'
+                                      [format]='formatOptions' [allowFiltering]="false"></e-column>
+                                    <e-column field="toDate" minWidth=80 headerText="To Date" type='date'
+                                      [format]='formatOptions' [allowFiltering]="false"></e-column>
+                                    <e-column field="totalAmount" minWidth=80 textAlign='Right' headerText="Total Amt."
+                                      type='string' [allowFiltering]="false" [allowSorting]='false'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="paidAmount" minWidth=80 textAlign='Right' headerText="Paid Amt."
+                                      type='string' [allowFiltering]="false" [allowSorting]='false'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="note" minWidth=80 headerText="Note" type='string'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="claimId"  minWidth= 80 headerText="Claim Id" type='number'  [allowFiltering]="false"  [allowSorting]='false'></e-column>
+                                    <e-column headerText="Action" minWidth= 60  uid="action" [showInColumnChooser]='false'  [allowFiltering]="false"  [allowSorting]='false'>
+                                      <ng-template #template let-data>
+                                        <button class="btn btn-edit-table text-center" data-toggle="modal"
+                                          data-target="#modal" (click)="EnableProfesionClaim(data)"
+                                          *ngIf="!showEditorView"><i class="fa fa-edit "></i></button>
+                                        <button class="btn btn-delete-table text-center" data-toggle="modal"
+                                          data-target="#deleteclaim" (click)="claimmasterId=data.claimMasterId"><i
+                                            class="fa fa-trash "></i></button>
+                                        <!-- <button class="btn btn-edit-table text-center" data-toggle="modal"
+                                          data-target="#modal" (click)="EnableProfesionClaim(data)"
+                                          *ngIf="showEditorView"><i class="fa fa-eye "></i></button> -->
+                                      </ng-template>
+                                    </e-column>
+                                    <!--------------------------------table header icon---------------->
+                                    <e-column maxWidth="50" [showInColumnChooser]='false'>
+                                      <ng-template #headerTemplate let-data>
+                                        <div>
+                                          <span id='show' (click)='show()'><i class="fa fa-cog fa-lg"
+                                              aria-hidden="true"> </i></span>
+                                        </div>
+                                      </ng-template>
+                                    </e-column>
+                                  </e-columns>
+                                </ejs-grid>
+                              </div>
+
+                              <!-- </div>
+                            </div> -->
+                            </div>
+                          </div>
+                          <div class="tab-pane fade" id="nav-active" role="tabpanel" aria-labelledby="nav-active-tab"
+                            [ngClass]="{'active':selecctedTab=='Active','show':selecctedTab=='Active'}">
+                            <div class="row p-2">
+                              <!-- *ngIf="claimWithoutBatch.length!=0" -->
+                              <div class="col-lg-12 ">
+                                <ejs-grid #gridactive [allowResizing]='true' [dataSource]='dataactive| async' [allowSorting]='true'
+                                  allowPaging='true' [allowFiltering]='true' [pageSettings]='initialPage'
+                                  (actionBegin)="onActionCompleteActive($event)" [filterSettings]='filterSettings'
+                                  (dataStateChange)='dataStateChangeActive($event)' [showColumnChooser]='true'
+                                  (checkBoxChange)="BatchCreateOnChangeForAllActive($event)" (resizeStop)="onResize_active($event)"  >
+                                  <e-columns>
+                                    <e-column type='checkbox'  uid="checkbox" minWidth= 50 [showInColumnChooser]='false'></e-column>
+                                    <e-column  field="clientName" minWidth= 140  headerText="Client" type='string'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="preparedDate" minWidth=80 headerText="Prepared Date" type='date'
+                                      [format]='formatOptions' [allowFiltering]="false"></e-column>
+                                    <e-column field="payer_Name" minWidth=80 headerText="Payor" type='string'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="fromDate" minWidth=80 headerText="From Date" type='date'
+                                      [format]='formatOptions' [allowFiltering]="false"></e-column>
+                                    <e-column field="toDate" minWidth=80 headerText="To Date" type='date'
+                                      [format]='formatOptions' [allowFiltering]="false"></e-column>
+                                    <e-column field="totalAmount" minWidth=80 headerText="Total Amt." type='string'
+                                      [allowFiltering]="false" [allowSorting]='false'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="paidAmount" minWidth=80 headerText="Paid Amt." type='string'
+                                      [allowFiltering]="false" [allowSorting]='false'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="note" minWidth=100 headerText="Note" type='string'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="claimId" minWidth=80 headerText="Claim Id" type='string'
+                                      [allowFiltering]="false" [allowSorting]='false'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="claimStatus" headerText="Status" minWidth=100 type='string'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-dropdownlist id='dropdown' placeholder='Select a Status'
+                                          [dataSource]='dropdata' [popupHeight]='height'></ejs-dropdownlist>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="export" headerText="Exported" minWidth=100 type='string'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-dropdownlist id='dropdown1' placeholder='Select a Status'
+                                          [dataSource]='exportdatadata' [popupHeight]='height'></ejs-dropdownlist>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="resubmission" headerText="Resubmission" minWidth=100 type='string'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-dropdownlist id='dropdown2' placeholder='Select a Status'
+                                          [dataSource]='resumissiondropdata' [popupHeight]='height'></ejs-dropdownlist>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column  width=80 headerText="Action"  uid="action" [showInColumnChooser]='false' [allowFiltering]="false"  [allowSorting]='false'>
+                                      <ng-template #template let-data>
+
+                                        <!-- <button class="btn btn-edit-table text-center" data-toggle="modal"
+                                        data-target="#modal" (click)="EnableProfesionClaim(data)"
+                                        *ngIf="!showEditorView"><i class="fa fa-edit "></i></button> -->
+                                        <button class="btn btn-edit-table text-center" data-toggle="modal"
+                                          data-target="#modal" (click)="EnableProfesionClaim(data)"><i
+                                            class="fa fa-eye "></i></button>
+                                        <button class="btn btn-delete-table text-center" data-toggle="modal"
+                                          data-toggle="modal" data-target="#deleteclaim"
+                                          (click)="claimmasterId=data.claimMasterId"><i
+                                            class="fa fa-trash "></i></button>
+                                      </ng-template>
+                                    </e-column>
+                                    <!--------------------------------table header icon---------------->
+                                    <e-column width="50" [showInColumnChooser]='false'>
+                                      <ng-template #headerTemplate let-data>
+                                        <div>
+                                          <span id='showactive' (click)='showactive()'><i class="fa fa-cog fa-lg"
+                                              aria-hidden="true"> </i></span>
+                                        </div>
+                                      </ng-template>
+                                    </e-column>
+                                  </e-columns>
+                                </ejs-grid>
+                              </div>
+                            </div>
+                          </div>
+                          <!--------------------------------------------------archive view------------------------------------------------------------>
+                          <div class="tab-pane fade" id="nav-archive" role="tabpanel" aria-labelledby="nav-archive-tab"
+                            [ngClass]="{'active':selecctedTab=='Archive','show':selecctedTab=='Archive'}">
+                            <div class="row  p-2">
+                              <!-- *ngIf="claimWithoutBatch.length!=0" -->
+                              <div class="col-lg-12">
+                                <ejs-grid #gridarchive [allowResizing]='true' [dataSource]='data |async' [allowSorting]='true'
+                                  allowPaging='true' [allowFiltering]='true' [pageSettings]='initialPage'
+                                  (actionBegin)="onActionCompleteArchive($event)" [filterSettings]='filterSettings'
+                                  (dataStateChange)='dataStateChange($event)' [showColumnChooser]='true'
+                                  (checkBoxChange)="BatchCreateOnChangeForAllArchive($event)" (resizeStop)="onResize_archive($event)" >
+                                  <e-columns>
+                                    <e-column type='checkbox' uid="checkbox" maxWidth= 50 width='50' textAlign='center' [allowEditing]='true'
+                                      editType="booleanedit" [edit]='checkparams' [showInColumnChooser]='false'>
+                                    </e-column>
+                                    <e-column field="clientName" minWidth=140 headerText="Client" type="string">
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="preparedDate" minWidth=80 headerText="Prepared Date" type='date'
+                                      [format]='formatOptions' [allowFiltering]="false"></e-column>
+                                    <e-column field="payer_Name" minWidth=80 headerText="Payor">
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="fromDate" minWidth=80 headerText="From Date" type='date'
+                                      [format]='formatOptions' [allowFiltering]="false"></e-column>
+                                    <e-column field="toDate" minWidth=80 headerText="To Date" type='date'
+                                      [format]='formatOptions' [allowFiltering]="false"></e-column>
+                                    <e-column field="totalAmount" minWidth=80 headerText="Total Amt." textAlign='Right'
+                                      textAlign='Right' type="string" [allowFiltering]="false" [allowSorting]='false'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="paidAmount" minWidth=80 textAlign='Right' headerText="Paid Amt."
+                                      textAlign='Right' type="string" [allowFiltering]="false" [allowSorting]='false'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="note" minWidth=100 headerText="Note" type="string">
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column field="claimId" minWidth=80 headerText="Claim Id" type="string"
+                                      [allowFiltering]="false" [allowSorting]='false'>
+                                      <ng-template #filterTemplate let-data>
+                                        <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                                      </ng-template>
+                                    </e-column>
+                                    <e-column headerText="Action" minWidth= 60 uid="action"  [showInColumnChooser]='false' [allowFiltering]="false"  [allowSorting]='false'>
+                                      <ng-template #template let-data>
+                                        <button class="btn btn-edit-table text-center" data-toggle="modal"
+                                          data-target="#modal" (click)="EnableProfesionClaim(data)"
+                                          *ngIf="showEditorView"><i class="fa fa-eye "></i></button>
+                                      </ng-template>
+                                    </e-column>
+                                    <!--------------------------------table header icon---------------->
+                                    <e-column width="50" [showInColumnChooser]='false'>
+                                      <ng-template #headerTemplate let-data>
+                                        <div>
+                                          <span id='showarchive' (click)='showarchive()'><i class="fa fa-cog fa-lg"
+                                              aria-hidden="true"> </i></span>
+                                        </div>
+                                      </ng-template>
+                                    </e-column>
+                                  </e-columns>
+                                </ejs-grid>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="global.globalAgencyId==0" class="text-center">
+            <label class="agencywarn"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view details</label>
+          </div>
+          <div class="text-center">
+            <!-- <label class="labelmsg" *ngIf="global.globalAgencyId!=0 && claimWithoutBatch.length==0">
+              No Data Available!
+            </label> -->
+
+          </div>
+          <div class="row ">
+            <div class="col text-right">
+              <span id="spancreatebatch" data-toggle="modal" data-target="#CreateBatchDetail"></span>
+              <button class="btn blue-btn btn-sm float:right" (click)="createBatchFile()"
+                *ngIf="selecctedTab =='Ready to bill'"
+                [disabled]="batchList.clearingHouseId==null
+           || batchList.clearingHouseId=='' || batchList.clearingHouseId==undefined || BatchFileIdList.length==0 ||getBatchFilterList.groupId=='' ">
+                Create
+              </button></div>
+
+            <button class="btn blue-btn btn-sm float:right" *ngIf="selecctedTab=='Active'"
+              (click)="ActivecreateBatchFile()"
+              [disabled]="batchList.clearingHouseId==null
+             || batchList.clearingHouseId=='' || batchList.clearingHouseId==undefined || BatchFileIdList.length==0 || getBatchFilterList.groupId==''  ">Create
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!---------------------------------------------Batch creation--------------------------------------------->
+<span id="openModal1" data-target="#CreateBatchDetail" data-toggle="modal"></span>
+<div class="modal fade" id="CreateBatchDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header">Created Batch Details</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <table class="table  table-hover table-bordered mt-3">
+          <thead>
+            <th class="pointer">Batch No.
+            </th>
+            <th class="pointer">Filepath
+            </th>
+            <th class="pointer" style="text-align: center;">Download
+            </th>
+            <th class="pointer" style="text-align: center;">View
+            </th>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="width: 100px;">
+                {{CreatedBatchList?.batchno}}
+              </td>
+              <td style="width: 100px;">
+                {{CreatedBatchList?.fileName}}
+              </td>
+              <td class="text-center p-0">
+                <button class="btn blue-btn btn-sm mr-2" (click)="downloadFile(CreatedBatchList?.filePath)"> <i
+                    class="fa fa-download" aria-hidden="true"></i></button></td>
+                    <td class="text-center p-0">
+                <button class="btn blue-btn btn-sm" data-toggle="modal" data-target="#viewbatch" (click)="openfile()">
+                  <i class="fa fa-eye" aria-hidden="true"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <div class="text-right">
+          <button class="btn blue-btn btn-sm text-right" type="button" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-------------------------------Batch professional view----------------------------->
+
+<div *ngIf="Profession">
+  <div widget class="card border-0 box-shadow">
+    <div class="card-header transparent  text-muted row">
+      <h4 class="font-header col-lg-10 col-md-10 col-sm-6 col-xs-6 ">Claim Bill (837 Professional) </h4>
+
+      <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6  text-right">
+        <button class="btn blue-btn btn-sm " [disabled]="true"><i class="fa fa-print" aria-hidden="true"></i>
+          Print
+        </button>
+      </div>
+    </div>
+    <div class="card-body  widget-body pt-2">
+      <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 line">
+          <label>Payer:&nbsp;&nbsp;{{ProfessionClaimList.payerName}}</label><br />
+          <label>Total
+            charges:&nbsp;&nbsp;$ {{ProfessionClaimList.totalcharges}}</label><br />
+          <label>Amount
+            Paid:&nbsp;&nbsp;$ {{ProfessionClaimList.amountPaid}}</label><br />
+          <label>Balance
+            Due:&nbsp;&nbsp;$ {{ProfessionClaimList.balanceDue}}</label>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 line">
+          <div class="row ml-7 mt-22 ">
+            <div class="col">
+              <div class="row">
+                <label class="label col-lg-4 col-md-4 col-sm-12 col-xs-12">Resubmission
+                  code</label>
+                <select [(ngModel)]="ProfessionClaimList.resubmissionLid"
+                  [disabled]="showEditorView"
+                  class="form-control col-lg-7 col-md-7 col-sm-12 col-xs-12">
+                  <option [value]=st.Key *ngFor="let st of ResubmissionList">{{st.Value}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row ml-7 mt-12">
+            <label class="label col-lg-4 col-md-4 col-sm-12 col-xs-12">Payer Claim Control
+              #</label>
+            <input type="text" class="form-control col-lg-7 col-md-7 col-sm-12 col-xs-12"
+              [(ngModel)]="ProfessionClaimList.payerClaimControl" [disabled]="showEditorView" />
+
+          </div><br />
+          <div class="row ml-7 mt-12">
+            <label class="label col-lg-4 col-md-4 col-sm-12 col-xs-12">Note</label>
+            <textarea class="form-control  col-lg-7 col-md-7 col-sm-12 col-xs-12" [(ngModel)]="ProfessionClaimList.note"
+              [disabled]="showEditorView"></textarea>
+          </div>
+        </div>
+        <div class="col-lg-4  col-md-6 col-sm-12 col-xs-12">
+          <div class="row ml-55 mt-30">
+            <button class="btn blue-btn btn-sm ml-3" (click)="updateProfessionalClaim('success')" *ngIf="!update">
+              Update
+            </button>
+            <button class="btn blue-btn btn-sm ml-3" (click)="CloseProfesionClaim()">
+              Close
+            </button>
+            <button class="btn blue-btn btn-sm ml-3" (click)="checkboxFun()" *ngIf="selecctedTab=='Active'"> Edit</button>
+          </div>
+          <!-- <div class="row ml-55 mt-5">
+            <label class="label mr-2 ml-3">Exported</label>
+             <input type="checkbox" class="top8 checkbox checkbox-primary styled "
+              [(ngModel)]="ProfessionClaimList.exported" [disabled]="update"
+              (ngModelChange)="checkboxFun(ProfessionClaimList.exported)">
+            <label class="label ml-2">Un-check to
+              Re-Export claim</label> 
+              <button class="btn blue-btn btn-sm ml-3" (click)="checkboxFun()" > Edit</button>
+          </div> -->
+
+        </div>
+      </div>
+      <!-- <div class="col-lg-12"> -->
+      <label class="subs">Subscriber</label>
+      <hr class="mt-0" />
+      <div class="row">
+        <div class="col-lg-6  col-md-12 col-sm-12  col-xs-12 p-0">
+          <div class="row">
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-6 col-sm-12  col-xs-12">First Name</label>
+                <input type="text" class="form-control  col-lg-7  col-md-5 col-sm-12  col-xs-12"
+                  [(ngModel)]="ProfessionClaimList.subscriberFirstName" [disabled]="showEditorView" />
+              </div>
+            </div>
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-6 col-sm-12 col-xs-12">Middle Name</label>
+                <input type="text" class="form-control  col-lg-7  col-md-5 col-sm-12  col-xs-12"
+                  [(ngModel)]="ProfessionClaimList.subscriberMiddleName" [disabled]="showEditorView" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-6 col-sm-12  col-xs-12">Last Name</label>
+                <input type="text" class="form-control  col-lg-7  col-md-5 col-sm-12  col-xs-12"
+                  [(ngModel)]="ProfessionClaimList.subscriberLastName" [disabled]="showEditorView" />
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4 col-md-6 col-sm-12 col-xs-12">DOB</label>
+                <my-date-picker class="col-lg-7 col-md-5 col-sm-12 col-xs-12 pr-0 pl-0" [options]="myDatePickerOptions"
+                  (dateChanged)="onDateChanged($event);" (inputFieldChanged)="DOBdatechange($event)"
+                  placeholder="mm/dd/yyyy" [selDate]="ProfessionClaimList.subscriberDOB" [disabled]="showEditorView">
+                </my-date-picker>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">Gender</label>
+                <select value="Gender" class="form-control col-lg-7  col-md-7 col-sm-12  col-xs-12 "
+                  [(ngModel)]="ProfessionClaimList.subscriberGenderLid" [disabled]="showEditorView">
+                  <option [value]=st.Key *ngFor="let st of genderList">{{st.Value}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">Member Id</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.subscriberMemberID" [disabled]="showEditorView" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">Refferal#</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.subscriberRefferal" [disabled]="showEditorView" />
+              </div>
+            </div>
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">Prior Auth#</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.subscriberPriorAuth" [disabled]="showEditorView" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6  col-md-12 col-sm-12  col-xs-12">
+          <div class="row">
+            <div class="col-lg-4  col-md-3 col-sm-12  col-xs-12">
+              <label class="label">Address Line 1</label> </div>
+            <div class="col-lg-8  col-md-8 col-sm-12  col-xs-12">
+              <input type="text" class="form-control " [(ngModel)]="ProfessionClaimList.subscriberAddressLine1"
+                [disabled]="showEditorView" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4  col-md-3 col-sm-12  col-xs-12">
+              <label class="label">Address Line 2</label>
+            </div>
+            <div class="col-lg-8  col-md-8 col-sm-12  col-xs-12">
+              <input type="text" class="form-control " [(ngModel)]="ProfessionClaimList.subscriberAddressLine2"
+                [disabled]="showEditorView" />
+            </div>
+          </div>
+          <div class="row p-0">
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label  col-lg-4  col-md-4 col-sm-6  col-xs-12">City</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control  "
+                  [(ngModel)]="ProfessionClaimList.subscriberCity" [disabled]="showEditorView" />
+              </div>
+            </div>
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label  col-lg-4  col-md-4 col-sm-6  col-xs-12">State</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.subscriberState" [disabled]="showEditorView" maxlength="2" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label  col-lg-4  col-md-4 col-sm-6  col-xs-12">ZIP Code</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control"
+                  [(ngModel)]="ProfessionClaimList.subscriberZIPCode" [disabled]="showEditorView" minlength="5"
+                  maxlength="10" (keypress)="keyPress($event)" />
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <button class="btn blue-btn btn-sm " type="button" [disabled]="showEditorView"
+                  (click)="getzipcodeSUbscriber()">Get Zip</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+
+      <label class="subs">Provider Information</label>
+      <hr />
+      <div class="row">
+        <div class="col-lg-6">
+          <label class="label">Billing Provider: </label><br />
+          <div class="row">
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label  col-lg-4  col-md-4 col-sm-6  col-xs-12">NPI</label>
+                <input type="text" class=" col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control   "
+                  [(ngModel)]="ProfessionClaimList.billingNPI" [disabled]="showEditorView" />
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12 ">
+              <div class="row">
+                <label class="label col-lg-6 col-md-6 col-sm-12  col-xs-12">Provider #</label>
+                <input type="text" class=" col-lg-5 col-md-5 col-sm-12  col-xs-12 form-control    "
+                  [(ngModel)]="ProfessionClaimList.billingProvider" [disabled]="showEditorView" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">Tax ID</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.billingTaxID" [disabled]="showEditorView" />
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-6 col-md-6 col-sm-12  col-xs-12">Organization</label>
+                <input type="text" class=" col-lg-5 col-md-5 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.billingOrganization" [disabled]="showEditorView" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="row">
+            <div class="col-lg-4  col-md-3 col-sm-12  col-xs-12">
+              <label class="label">Address Line 1</label>
+            </div>
+            <div class="col-lg-8  col-md-8 col-sm-12  col-xs-12">
+              <input type="text" class="form-control " [(ngModel)]="ProfessionClaimList.billingAddressLine1"
+                [disabled]="showEditorView" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4  col-md-3 col-sm-12  col-xs-12">
+              <label class="label">Address Line 2</label>
+            </div>
+            <div class="col-lg-8  col-md-8 col-sm-12  col-xs-12">
+              <input type="text" class="form-control " [(ngModel)]="ProfessionClaimList.billingAddressLine2"
+                [disabled]="showEditorView" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12 ">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">City</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.billingCity" [disabled]="showEditorView" />
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">State</label>
+                <input type="text" class="form-control col-lg-7  col-md-7 col-sm-12  col-xs-12 "
+                  [(ngModel)]="ProfessionClaimList.billingState" [disabled]="showEditorView" maxlength="2" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12 ">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">ZIP Code</label>
+                <input type="text" class=" col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.billingZIPCode" [disabled]="showEditorView" minlength="5"
+                  maxlength="10" (keypress)="keyPress($event)" />
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12">
+              <button class="btn blue-btn btn-sm" type="button" [disabled]="showEditorView"
+                (click)="getzipcodeBilling()">Get Zip</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="row" style="white-space: pre;" *ngIf="ProfessionClaimList.renderingProviderCode!='NOID'">
+        <div class="col-lg-12">
+          <label class="label">Rendering
+            Provider:</label><br />
+        </div>
+        <div class="col-lg-6 col-md-12 col-sm-12  col-xs-12">
+          <div class="row">
+
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+
+                <label class="label col-lg-5  col-md-5 col-sm-6  col-xs-12">First Name</label>
+                <input type="text" class="col-lg-6  col-md-6 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.renderingFirstName" [disabled]="showEditorView" />
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12 ">
+              <div class="row">
+
+                <label class="label col-lg-5  col-md-5 col-sm-6  col-xs-12">Last Name</label>
+                <input type="text" class="col-lg-6  col-md-6 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.renderingLastName" [disabled]="showEditorView" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+
+                <label class="label col-lg-5  col-md-5 col-sm-6  col-xs-12">Middle Name</label>
+                <input type="text" class="col-lg-6  col-md-6 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.renderingMiddleName" [disabled]="showEditorView" />
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+        <div class="col-lg-6 col-md-12 col-sm-12  col-xs-12">
+          <div class="row">
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">NPI</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.renderingNPI" [disabled]="true" />
+
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12 ">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">Provider #</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.renderingProvider"
+                  [disabled]="showEditorView||ProfessionClaimList.renderingProvider==null" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-6">
+          <label class="subs">Destination Insurance</label>
+          <hr class="mt-0" />
+        </div>
+        <div class="col-lg-3">
+          <label class="subs">Diagnosis Code</label>
+          <hr class="mt-0" />
+        </div>
+        <div class="col-lg-3">
+          <label class="subs">Place of Service</label>
+          <hr class="mt-0" />
+        </div>
+      </div>
+
+
+
+      <!-- <label style="margin-left: 5px;margin-right:0px;margin-top:5px;font-weight: 600;font-weight: bolder">Billing Provider: &nbsp;</label><br/> -->
+      <div class="row">
+
+
+        <div class="col-lg-6">
+          <div class="row">
+            <div class="col-lg-6  col-md-6 col-sm-12  col-xs-12">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">Payer Name</label>
+                <input type="text" class=" col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.destinationPayerName" [disabled]="showEditorView" />
+
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12  col-xs-12 ">
+              <div class="row">
+                <label class="label col-lg-4  col-md-4 col-sm-6  col-xs-12">Payer ID</label>
+                <input type="text" class="col-lg-7  col-md-7 col-sm-12  col-xs-12 form-control "
+                  [(ngModel)]="ProfessionClaimList.destinationPayerId" [disabled]="showEditorView" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="row">
+            <div class="col">
+              <input type="text" class="col-lg-12  col-md-12 col-sm-12  col-xs-12 form-control "
+                [(ngModel)]="ProfessionClaimList.destinationDiagnosisCode" [disabled]="showEditorView" />
+            </div>
+
+
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="row">
+            <div class="col">
+              <input type="text" class="col-lg-12  col-md-12 col-sm-12  col-xs-12 form-control "
+                [(ngModel)]="ProfessionClaimList.destinationPOS" [disabled]="showEditorView" />
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <label class="subs">Authorization Information</label>
+      <hr class="mt-0" />
+      <!-- <label style="margin-left: 5px;margin-right:0px;margin-top:5px;font-weight: 600;font-weight: bolder">Billing Provider: &nbsp;</label><br/> -->
+
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div class="row">
+                  <label class="label col-lg-4 col-md-4 col-sm-6 col-xs-12">Authorization</label>
+                  <input type="text" class="form-control  col-lg-2 col-md-2 col-sm-6 col-xs-12" [disabled]="true" />
+                  <label class="label col-lg-2 col-md-2 col-sm-6 col-xs-12">PWK</label>
+                  <input type="text" class=" form-control col-lg-3 col-md-3 col-sm-6 col-xs-12" [disabled]="true" />
+                </div>
+
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="row">
+                  <label class="label col-lg-4 col-md-4 col-sm-12 col-xs-12">HR</label>
+                  <input type="text" class=" form-control col-lg-7 col-md-7 col-sm-12 col-xs-12" [disabled]="true" />
+                </div>
+
+
+
+
+              </div>
+            </div>
+
+          </div>
+          <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="row">
+                  <label class="label col-lg-6 col-md-6 col-sm-12 col-xs-12">Certificate of need</label>
+                  <input type="text" class=" form-control col-lg-5 col-md-5 col-sm-12 col-xs-12" [disabled]="true" />
+
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="row">
+                  <label class="label col-lg-7 col-md-7 col-sm-12 col-xs-12">Prior
+                    Authorization #</label>
+                  <input type="text" class=" form-control col-lg-4 col-md-4 col-sm-12 col-xs-12" [disabled]="true" />
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+      </div>
+
+      <label class="subs">Attachment</label>
+      <hr class="mt-0" />
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+            <div class="row">
+              <label class="label col-lg-3 col-md-3 col-sm-12 col-xs-12">Report Type</label>
+              <select value="" class="form-control col-lg-3 col-md-3 col-sm-6 col-xs-12" [(ngModel)]="gender"
+                [disabled]="true">
+                <option value="A">Ambulace certification</option>
+                <option value="S">Support data for claim</option>
+
+              </select>
+              <label class="label col-lg-2 col-md-2 col-sm-6 col-xs-12">Txn</label>
+              <select value="" class="form-control col-lg-3 col-md-3 col-sm-6 col-xs-12" [(ngModel)]="gender"
+                [disabled]="true">
+                <option value="A1">Electronically</option>
+                <option value="S1">By Fax</option>
+                <option value="S11">By Mail</option>
+                <option value="S12">PDF</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-lg-5 col-md-5 col-sm12 col-xs-12">
+            <div class="row">
+              <label class="label col-lg-5 col-md-5 col-sm-12 col-xs-12">Control Number</label>
+              <input type="text" class="form-control col-lg-6 col-md-6 col-sm-12 col-xs-12" [disabled]="true" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <label class="subs">Service Line Information</label>
+      <hr class="mt-0" />
+
+      <div class="row mb-12 ml-3">
+
+        <button type="button" class="btn blue-btn btn-sm ml-2 mr-3" [disabled]="showEditorView" data-toggle="modal"
+          data-target="#createService" (click)="addServiceLine()">
+          Add Service
+        </button>
+        <button type="button" class="btn blue-btn btn-sm " [disabled]="showEditorView" data-toggle="modal"
+        data-target="#markAsPaid"   (click)="MakeMarkServicePaid()">
+          Mark As Paid in Full
+        </button>
+
+      </div>
+      <div class="col-lg-12">
+        <table id="tabledata" class="tableclass table-responsive table-hover table-bordered">
+          <thead>
+            <tr class="row1" style="text-align: center">
+              <th class="pointer " style="min-width:100px">Service Date</th>
+              <th class="pointer " style="min-width:100px"> Code</th>
+              <th class="pointer " style="min-width:100px">Mod 1</th>
+              <th class="pointer " style="min-width:100px">Mod 2</th>
+              <th class="pointer " style="min-width:100px">Mod 3</th>
+              <th class="pointer " style="min-width:100px">Units</th>
+              <th class="pointer " style="min-width:100px">Gross Charges</th>
+              <th class="pointer " style="min-width:100px">Net Charges</th>
+              <th class="pointer " style="min-width:100px">Posted Date</th>
+              <th class="pointer " style="min-width:100px">Paid Date</th>
+              <th class="pointer " style="min-width:100px">Balance Due</th>
+              <th class="pointer " style="min-width:100px">Paid Amount</th>
+              <th class="pointer " style="min-width:100px">Denial Code</th>
+              <th style="min-width:150px;text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row1" *ngFor="let pc of ProfessionClaimList.serviceDetailsList">
+              <td class="tab " style="text-align:left;">{{pc.fromDate | date:'MM/dd/yyyy'}}</td>
+              <td class="tab " style="text-align:left;">{{pc.code}}</td>
+              <td class="tab " style="text-align:left;">{{pc.modifier1}}</td>
+              <td class="tab " style="text-align:left;">{{pc.modifier2}}</td>
+              <td class="tab " style="text-align:left;">{{pc.modifier3}}</td>
+              <td class="tab " style="text-align:left;">{{pc.totalUnits}}</td>
+              <td class="tab " style="text-align:left;">{{pc.grossCharges}}</td>
+              <td class="tab " style="text-align:left;">{{pc.netCharges}}</td>
+              <td class="tab " style="text-align:left;">{{pc.postedDate | date:'MM/dd/yyyy'}}</td>
+              <td class="tab " style="text-align:left;">{{pc.paidDate   | date:'MM/dd/yyyy'}}</td>
+              <td class="tab " style="text-align:left;">{{pc.balanceDue}}</td>
+              <td class="tab " style="text-align:left;">{{pc.paidAmount}}</td>
+              <td class="tab " style="text-align:left;">{{pc.denialCode}}</td>
+              <td style="text-align: center;padding: 0px;min-width: 150px;">
+                <button class="btn btn-edit-table" [disabled]="showEditorView" data-toggle="modal"
+                  data-target="#createService" (click)="updateServiceLine(pc)"><i class="fa fa-edit"></i></button>&nbsp;
+                <button class="btn btn-delete-table" [disabled]="showEditorView" data-toggle="modal"
+                  data-target="#deletemodal" (click)="deleteServiceLine(pc);"><i class="fa fa-trash"></i></button>
+                <!-- <button class="btn btnclass" [disabled]="showEditorView" style="background-color: red;color: white;"
+                (click)="deleteServiceLine(pc);"><i class="fa fa-trash"></i></button> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- //==========================Add service line==================// -->
+<span id="openModal2" data-target="#createService" data-toggle="modal"></span>
+<div class="modal fade" id="createService" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" *ngIf="addClaimServiceLine">Create Service Line</h5>
+        <h5 class="modal-title font-header" *ngIf="!addClaimServiceLine">Update Service Line</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row alert ml-3 mt-2 mr-3 alert-warning" *ngIf="deleteError!=''">
+          <strong>{{deleteError}}</strong>
+        </div>
+        <div>
+          <form #f="ngForm">
+            <div class="row">
+              <div class="col">
+                <div class="row">
+                  <label class="center-block col-lg-3 col-md-3 col-sm-12 col-xs-12">Service Date</label>
+                  <my-date-picker class="pl-0 pr-0 col-lg-7 col-md-7 col-sm-12 col-xs-12 " name="fromDate"
+                    [options]="myDatePickerOptions" [selDate]="ClaimServiceLineList.fromDate"
+                    (inputFieldChanged)="Servicedatechange($event)" (dateChanged)="onServiceDateChanged($event)"
+                    required>
+                  </my-date-picker>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="row">
+                  <label class="center-block col-lg-3 col-md-3 col-sm-12 col-xs-12">Total Units </label>
+                  <input type="number" class=" col-lg-7 col-md-7 col-sm-12 col-xs-12 form-control" name="totalUnits"
+                    [(ngModel)]="ClaimServiceLineList.totalUnits" required>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="row">
+                  <label class="center-block col-lg-3 col-md-3 col-sm-12 col-xs-12">Net Charges </label>
+                  <input type="number" class=" col-lg-7 col-md-7 col-sm-12 col-xs-12 form-control" name="netCharges"
+                    [(ngModel)]="ClaimServiceLineList.netCharges">
+
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="row">
+                  <label class="center-block col-lg-3 col-md-3 col-sm-12 col-xs-12">Paid Date</label>
+                  <my-date-picker class="pl-0 pr-0 col-lg-7 col-md-7 col-sm-12 col-xs-12 " name="paidDate"
+                    [options]="myDatePickerOptions" [selDate]="ClaimServiceLineList.paidDate"
+                    (inputFieldChanged)="Paiddatechange($event)" (dateChanged)="PaidDateChanged($event)"
+                    [disabled]="addClaimServiceLine ">
+                  </my-date-picker>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="row">
+                  <label class="center-block col-lg-3 col-md-3 col-sm-12 col-xs-12">Paid Amount </label>
+                  <input type="number" class=" col-lg-7 col-md-7 col-sm-12 col-xs-12 form-control" name="paidAmount"
+                    [(ngModel)]="ClaimServiceLineList.paidAmount" [disabled]="addClaimServiceLine ">
+
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn blue-btn btn-sm" (click)="saveServiceLine()" [disabled]="!f.valid"><span
+            *ngIf="addClaimServiceLine"> Save & Close</span> <span *ngIf="!addClaimServiceLine">Update & Close</span>
+        </button>
+        <button type="button" class="btn blue-btn btn-sm" (click)="addClaimServiceLine=false;ServicedatechangeDate=0;"
+          data-dismiss="modal">Close</button>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- /////////////================================View 837 Report=================================//////////////// -->
+<span id="openModal3" data-target="#viewbatch" data-toggle="modal"></span>
+<div class="modal fade" id="viewbatch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <h5 class="modal-title font-header">View 837</h5>
+        <div class="text-right">
+          <button class="btn blue-btn btn-sm mr-2" data-dismiss="modal">Close</button>
+          <button (click)="kendopdfdownloadList()" class="btn blue-btn btn-sm ">
+            Download
+          </button>
+        </div>
+
+      </div>
+      <div class="modal-body">
+
+
+        <div class="reportscroll">
+
+
+          <kendo-pdf-export #pdflist paperSize="A4">
+            <DIV id="page_1" style="width: 730px;">
+
+
+              <!-- <TABLE cellpadding=0 cellspacing=0 class="t0"> 
+                <TR>
+                  <TD colspan=3 rowspan=2 class="tr0 td0">
+                    <P class="p0 ft0">Exported Claims Report</P>
+                  </TD>
+                  <TD class="tr1 td1">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr1 td2">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr1 td3">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr1 td4">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr1 td5">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr1 td6">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr1 td7">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD colspan=2 class="tr1 td8">
+                    <P class="p2 ft2">{{today}}</P>
+                  </TD>
+                </TR>
+                <TR>
+                  <TD class="tr2 td1">
+                    <P class="p1 ft3">&nbsp;</P>
+                  </TD>
+                  <TD class="tr2 td2">
+                    <P class="p1 ft3">&nbsp;</P>
+                  </TD>
+                  <TD class="tr2 td3">
+                    <P class="p1 ft3">&nbsp;</P>
+                  </TD>
+                  <TD class="tr2 td4">
+                    <P class="p1 ft3">&nbsp;</P>
+                  </TD>
+                  <TD class="tr2 td5">
+                    <P class="p1 ft3">&nbsp;</P>
+                  </TD>
+                  <TD class="tr2 td6">
+                    <P class="p1 ft3">&nbsp;</P>
+                  </TD>
+                  <TD class="tr2 td7">
+                    <P class="p1 ft3">&nbsp;</P>
+                  </TD>
+                  <TD class="tr2 td9">
+                    <P class="p1 ft3">&nbsp;</P>
+                  </TD>
+                  <TD class="tr2 td10">
+                    <P class="p1 ft3">&nbsp;</P>
+                  </TD>
+                </TR>
+                <TR>
+                  <TD colspan=2 class="tr3 td8">
+                    <P class="p0 ft4">File Name:</P>
+                  </TD>
+                  <TD colspan=5 class="tr3 td11">
+                    <P class="p3 ft4">{{CreatedBatchList.invoice837P.file_Name}}</P>
+                  </TD>
+                  <TD class="tr3 td5">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr3 td6">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr3 td7">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr3 td9">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr3 td10">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                </TR>
+                <TR>
+                  <TD colspan=2 class="tr4 td8">
+                    <P class="p0 ft4">File Creation Date:</P>
+                  </TD>
+                  <TD class="tr4 td12">
+                    <P class="p3 ft4">{{CreatedBatchList.invoice837P.file_Creation_Date| date:'MM/dd/yyyy'}}</P>
+                  </TD>
+                  <TD class="tr4 td1">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td2">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td3">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td4">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td5">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td6">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td7">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td9">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td10">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                </TR>
+                <TR>
+                  <TD colspan=4 class="tr5 td13">
+                    <P class="p0 ft4">Submission/Control Num: {{CreatedBatchList.invoice837P.submission_Control_Number}}
+                    </P>
+                  </TD>
+                  <TD colspan=2 class="tr5 td14">
+                    <P class="p4 ft2">&nbsp;</P>
+                  </TD>
+                  <TD class="tr5 td4">
+                    <P class="p5 ft2">&nbsp;</P>
+                  </TD>
+                  <TD class="tr5 td5">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr5 td6">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr5 td7">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr5 td9">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr5 td10">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                </TR>
+                <TR>
+                  <TD colspan=2 class="tr4 td8">
+                    <P class="p0 ft4">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td12">
+                    <P class="p3 ft4">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td1">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td2">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td3">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td4">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td5">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td6">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td7">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td9">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr4 td10">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                </TR>
+                <TR>
+                  <TD colspan=12 class="tr6 td0">
+                    <P class="p0 ft5">{{CreatedBatchList.invoice837P.compnay_Name}}</P>
+                  </TD>
+                  <TD class="tr6 td1">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr6 td2">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr6 td3">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr6 td4">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr6 td5">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr6 td6">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr6 td7">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr6 td9">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr6 td10">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                </TR>
+                <TR>
+                  <TD class="tr0 td15">
+                    <P class="p3 ft6">Claim ID</P>
+                  </TD>
+                  <TD class="tr0 td16">
+                    <P class="p6 ft6">From Date</P>
+                  </TD>
+                  <TD class="tr0 td12">
+                    <P class="p7 ft6">To Date</P>
+                  </TD>
+                  <TD class="tr0 td1">
+                    <P class="p1 ft6">POS</P>
+                  </TD>
+                  <TD colspan=3 class="tr0 td17">
+                    <P class="p8 ft6">Procedure Modifier Rendering</P>
+                  </TD>
+                  <TD class="tr0 td5">
+                    <P class="p1 ft6">Last Name</P>
+                  </TD>
+                  <TD class="tr0 td6">
+                    <P class="p9 ft6 pl-0">Units</P>
+                  </TD>
+                  <TD class="tr0 td7">
+                    <P class="p10 ft6">Charges</P>
+                  </TD>
+                  <TD class="tr0 td9">
+                    <P class="p11 ft6">Net</P>
+                  </TD>
+                  <TD class="tr0 td10">
+                    <P class="p12 ft6">Balance</P>
+                  </TD>
+                </TR>
+
+                <TR>
+                  <TD class="tr7 td18">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td19">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td20">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td21">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td22">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td23">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td24">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td25">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td26">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td27">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td28">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                  <TD class="tr7 td29">
+                    <P class="p1 ft7">&nbsp;</P>
+                  </TD>
+                </TR>
+                <TR>
+                  <TD class="tr8 td15">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr8 td16">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr8 td12">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr8 td1">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr8 td2">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr8 td3">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr8 td4">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr8 td5">
+                    <P class="p1 ft1">&nbsp;</P>
+                  </TD>
+                  <TD class="tr8 td6">
+                    <P class="p13 ft8 pl-0">{{CreatedBatchList.invoice837P.totalUnits}}</P>
+                  </TD>
+                  <TD class="tr8 td7">
+                    <P class="p11 ft9 pl-0">{{CreatedBatchList.invoice837P.totalCharges}}</P>
+                  </TD>
+                  <TD class="tr8 td9">
+                    <P class="p0 ft10">{{CreatedBatchList.invoice837P.totalNetCharges}}</P>
+                  </TD>
+                  <TD class="tr8 td10">
+                    <P class="p14 ft8">{{CreatedBatchList.invoice837P.totalBalance}}</P>
+                  </TD>
+                </TR>
+                <ng-container *ngFor="let val of CreatedBatchList.invoice837P.claimDetail837PInvoice">
+                  <TR>
+                    <TD colspan=2 class="tr4 td8">
+                      <P class="p15 ft8">{{val.payorInvoice837P.payor_Name}}</P>
+                    </TD>
+                    <TD class="tr4 td12">
+                      <P class="p1 ft1">&nbsp;</P>
+                    </TD>
+                    <TD class="tr4 td1">
+                      <P class="p1 ft1">&nbsp;</P>
+                    </TD>
+                    <TD class="tr4 td2">
+                      <P class="p1 ft1">&nbsp;</P>
+                    </TD>
+                    <TD class="tr4 td3">
+                      <P class="p1 ft10">{{val.payorInvoice837P.payor_Id}}</P>
+                    </TD>
+                    <TD class="tr4 td4">
+                      <P class="p1 ft1">&nbsp;</P>
+                    </TD>
+                    <TD class="tr4 td5">
+                      <P class="p1 ft1">&nbsp;</P>
+                    </TD>
+                    <TD class="tr4 td6">
+                      <P class="p16 ft9 pl-0">{{val.totalUnits}}</P>
+                    </TD>
+                    <TD class="tr4 td7">
+                      <P class="p11 ft9 pl-0" >{{val.totalCharges}}</P>
+                    </TD>
+                    <TD class="tr4 td9">
+                      <P class="p0 ft10">{{val.totalNetCharges}}</P>
+                    </TD>
+                    <TD class="tr4 td10">
+                      <P class="p17 ft11">{{val.totalBalance}}</P>
+                    </TD>
+                  </TR>
+                  <TR>
+                    <TD colspan=3 class="tr0 td0">
+                      <P class="p15 ft12">
+                        {{val.client_Last_Name}},&nbsp;{{val.client_First_Name}}&nbsp; {{ val.client_Middle_Name!=null?val.client_Middle_Name:''}}
+                      </P>
+                    </TD>
+                    <TD class="tr0 td1">
+                      <P class="p1 ft13">ID:</P>
+                    </TD>
+                    <TD colspan=2 class="tr0 td14">
+                      <P class="p18 ft13">{{val.insurence_No}}</P>
+                    </TD>
+                    <TD class="tr0 td4">
+                      <P class="p1 ft1">&nbsp;</P>
+                    </TD>
+                    <TD class="tr0 td5">
+                      <P class="p1 ft1">&nbsp;</P>
+                    </TD>
+                    <TD class="tr0 td6">
+                      <P class="p16 ft6 pl-0">{{val.totalUnits}}</P>
+                    </TD>
+                    <TD class="tr0 td7">
+                      <P class="p11 ft6 pl-0">{{val.totalCharges}}</P>
+                    </TD>
+                    <TD class="tr0 td9">
+                      <P class="p0 ft10">{{val.otalNetCharges}}</P>
+                    </TD>
+                    <TD class="tr0 td10">
+                      <P class="p17 ft10">{{val.totalBalancaCharges}}</P>
+                    </TD>
+                  </TR>
+
+                  <ng-container *ngFor="let val1 of val.serviceInvoice837P">
+                    <TR>
+                      <TD class="tr0 td15">
+                        <P class="p19 ft6">{{val.claim_No}}</P>
+                      </TD>
+                      <TD class="tr0 td16">
+                        <P class="p20 ft6">{{val1.serviceDate| date:'MM/dd/yyyy'}}</P>
+                      </TD>
+                      <TD class="tr0 td12">
+                        <P class="p21 ft6">{{val1.serviceDate| date:'MM/dd/yyyy'}}</P>
+                      </TD>
+                      <TD class="tr0 td1">
+                        <P class="p10 ft6">{{val1.service_Location}}</P>
+                      </TD>
+                      <TD class="tr0 td2">
+                        <P class="p22 ft6">{{val1.service_Code}}</P>
+                      </TD>
+                      <TD class="tr0 td3">
+                        <P class="p23 ft6">{{val.modifier1}}</P>
+                      </TD>
+                      <TD class="tr0 td4">
+                        <P class="p13 ft6">{{val1.rendering_Firstname}}</P>
+                      </TD>
+                      <TD class="tr0 td5">
+                        <P class="p18 ft6">{{val1.rendering_LastName}}</P>
+                      </TD>
+                      <TD class="tr0 td6">
+                        <P class="p16 ft6 pl-0">{{val1.totalUnits}}</P>
+                      </TD>
+                      <TD class="tr0 td7">
+                        <P class="p24 ft6 pl-0">{{val1.totalCharges}}</P>
+                      </TD>
+                      <TD class="tr0 td9">
+                        <P class="p25 ft10">{{val1.totalNetCharges}}</P>
+                      </TD>
+                      <TD class="tr0 td10">
+                        <P class="p26 ft10">{{val1.totalNetCharges}}</P>
+                      </TD>
+                    </TR>
+                  </ng-container>
+                </ng-container>
+              </TABLE>
+               <div>
+                <hr style="
+margin-top: 1.5%;
+border-top: 1px solid rgb(19, 17, 17);
+width: 93%;
+box-shadow: 0px 1px 1px #0c0c0c;
+">
+              </div> 
+              <TR> 
+                 <TABLE cellpadding=0 cellspacing=0 class="t1">
+                  <TR>
+                    <TD class="tr11 td30">
+                      <P class="p1 ft6">Grand Totals:</P>
+                    </TD>
+
+                    <TD class="tr11 td7">
+                      <P class="p27 ft6 pl-0">{{CreatedBatchList.invoice837P.totalUnits}}</P>
+                    </TD>
+                    <TD class="tr11 td8">
+                      <P class="p27 ft6">{{CreatedBatchList.invoice837P.totalCharges}}</P>
+                    </TD>
+                    <TD class="tr11 td9">
+                      <P class="p27 ft6">{{CreatedBatchList.invoice837P.totalNetCharges}}</P>
+                    </TD>
+                    <TD class="tr11 td10">
+                      <P class="p27 ft6">{{CreatedBatchList.invoice837P.totalBalance}}</P>
+                    </TD>
+                  </TR>
+                </TABLE>  -->
+
+              <div class="row pl-0 pr-0">
+                <div class="col-lg-10">
+                  <h5>Exported Claims Report</h5>
+                </div>
+                <div class="col-lg-2">{{today}}</div>
+              </div>
+              <div class="row pl-0 pr-0">
+                <div class="col-lg-12 font-weight-bold">File Name:{{CreatedBatchList?.invoice837P?.file_Name}}</div>
+              </div>
+              <div class="row pl-0 pr-0">
+                <div class="col-lg-12 font-weight-bold">File Creation
+                  Date:{{CreatedBatchList?.invoice837P?.file_Creation_Date| date:'MM/dd/yyyy'}}</div>
+              </div>
+              <div class="row pl-0 pr-0">
+                <div class="col-lg-12 font-weight-bold">Submission/Control Num:
+                  {{CreatedBatchList?.invoice837P?.submission_Control_Number}}</div>
+              </div>
+              <div class="row pl-0 pr-0">
+                <div class="col-lg-12 font-weight-bold">
+                  <h5> {{CreatedBatchList?.invoice837P?.compnay_Name}} </h5>
+                </div>
+              </div>
+              <div class="row pl-0 pr-0">
+                <div class="col-lg-1 pr-0 font-weight-bold">
+                  Claim ID
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  From Date
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  To Date
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  POS
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  Procedure
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  Modifier
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  Rendering
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  Last Name
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  Units
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  Charges
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  Net
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bold">
+                  Balance
+                </div>
+              </div>
+              <hr style="
+         margin-top: 1.5%;
+         border-top: 1px solid rgb(19, 17, 17);
+         width: 100%;
+         box-shadow: 0px 1px 1px #0c0c0c;
+         ">
+              <!-- <div class="row pl-0 pr-0">
+                <div class="col-lg-1 pl-0 pr-0">
+
+                </div>
+                <div class="col-lg-1 pl-0 pr-0">
+
+                </div>
+                <div class="col-lg-1 pl-0 pr-0">
+
+                </div>
+                <div class="col-lg-1 pl-0 pr-0">
+
+                </div>
+                <div class="col-lg-1 pl-0 pr-0">
+
+                </div>
+                <div class="col-lg-1 pl-0 pr-0">
+
+                </div>
+                <div class="col-lg-1 pl-0 pr-0">
+
+                </div>
+                <div class="col-lg-1 pl-0 pr-0">
+
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+                  {{CreatedBatchList?.invoice837P?.totalUnits}}
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+                  {{CreatedBatchList?.invoice837P?.totalCharges}}
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+                  {{CreatedBatchList?.invoice837P?.totalNetCharges}}
+                </div>
+                <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+                  {{CreatedBatchList?.invoice837P?.totalBalance}}
+                </div>
+              </div> -->
+              <ng-container *ngFor="let val of CreatedBatchList?.invoice837P?.claimDetail837PInvoice">
+
+                <div class="row pl-0 pr-0">
+
+                  <div class="col-lg-4  pr-0 font-weight-bolder">
+                    {{val?.payor_Name}}
+                  </div>
+                  <div class="col-lg-4 pl-0 pr-0 font-weight-bolder">
+                    {{val?.payor_Id}}
+                  </div>
+
+
+
+                  <!-- <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+            {{val?.totalUnits}} 
+           </div>
+           <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+            {{val?.totalCharges}}
+           </div>
+           <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+            {{val?.totalNetCharges}}
+           </div>
+           <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+            {{val?.totalBalancaCharges}}
+           </div> -->
+                </div>
+                <ng-container *ngFor="let val2 of val?.claimDetail">
+                  <div class="row pl-0 pr-0">
+
+                    <div class="col-lg-4  pr-0 font-weight-bolder">
+                      {{val2?.client_Last_Name}},&nbsp;{{val2?.client_First_Name}}&nbsp;
+                      {{ val2?.client_Middle_Name!=null?val?.client_Middle_Name:''}}
+                    </div>
+                    <div class="col-lg-4 pl-0 pr-0 font-weight-bolder">
+                      ID:{{val2?.insurence_No}}
+                    </div>
+
+
+
+                 
+                  </div>
+                  <ng-container *ngFor="let val1 of val2?.serviceInvoice837P">
+                    <div class="row  pl-0 pr-0">
+
+                      <div class="col-lg-1">{{val2?.claim_No}}</div>
+
+                      <div class="col-lg-1 pl-0 pr-0">{{val1?.serviceDate| date:'MM/dd/yyyy'}}</div>
+                      <div class="col-lg-1 pl-0 pr-0">{{val1?.serviceDate| date:'MM/dd/yyyy'}}</div>
+                      <div class="col-lg-1 pl-0 pr-0">{{val1?.service_Location}}</div>
+                      <div class="col-lg-1 pl-0 pr-0">{{val1?.service_Code}}</div>
+                      <div class="col-lg-1 pl-0 pr-0">{{val?.modifier1}}</div>
+                      <div class="col-lg-1 pl-0 pr-0">{{val1?.rendering_Firstname}}</div>
+                      <div class="col-lg-1 pl-0 pr-0">{{val1?.rendering_LastName}}</div>
+                      <div class="col-lg-1 pl-0 pr-0">{{val1?.totalUnits}}</div>
+                      <div class="col-lg-1 pl-0 pr-0">${{val1?.totalCharges}}</div>
+                      <div class="col-lg-1 pl-0 pr-0">${{val1?.totalNetCharges}}</div>
+                      <div class="col-lg-1 pl-0 pr-0">${{val1?.totalNetCharges}}</div>
+                    </div>
+                  </ng-container>
+                  <div class="row pl-0 pr-0 mt-2">
+
+                    <div class="col-lg-4  pr-0 font-weight-bolder">
+                     
+                    </div>
+                    <div class="col-lg-4 pl-0 pr-0 font-weight-bolder">
+                     
+                    </div>
+
+
+
+                    <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+                      {{val2?.totalUnits}}
+                    </div>
+                    <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+                      ${{val2?.totalCharges}}
+                    </div>
+                    <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+                      ${{val2?.totalNetCharges}}
+                    </div>
+                    <div class="col-lg-1 pl-0 pr-0 font-weight-bolder">
+                      ${{val2?.totalBalancaCharges}}
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            
+              <hr style="
+      margin-top: 1.5%;
+      border-top: 1px solid rgb(19, 17, 17);
+      width: 100%;
+      box-shadow: 0px 1px 1px #0c0c0c;
+      ">
+              <div class="row">
+                <div class="col-lg-6"></div>
+                <div class="col-lg-2">Grand Totals:</div>
+                <div class="col-lg-1 pl-0 pr-0">{{CreatedBatchList?.invoice837P?.totalUnits}}</div>
+                <div class="col-lg-1 pl-0 pr-0">${{CreatedBatchList?.invoice837P?.totalCharges}}</div>
+
+                <div class="col-lg-1 pl-0 pr-0">${{CreatedBatchList?.invoice837P?.totalNetCharges}}</div>
+
+                <div class="col-lg-1 pl-0 pr-0">${{CreatedBatchList?.invoice837P?.totalBalance}}</div>
+
+              </div>
+            </DIV>
+          </kendo-pdf-export>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /////////////================================View Batch =================================//////////////// -->
+<div *ngIf="isViewBatchDetails && !isCreateBatchDetails && !Profession&&!view837">
+  <div class="row mb-2">
+    <div class="col pl-0">
+      <div widget class="card border-0 box-shadow">
+        <div class="card-header transparent  text-muted row">
+          <h4 class="mb-0 font-header col-lg-10  col-md-10 col-sm-6 col-xs-12">Batch Details</h4>
+
+          <button class="btn blue-btn btn-sm float:right" (click)="goBack()">Close</button>
+        </div>
+        <div class="card-body  widget-body pb-0 pt-2 mb-4">
+
+          <div class="row" *ngIf="global.globalAgencyId==0">
+            <div style="text-align: center;" class="col-lg-12">
+              <label style="color:#ff0000;font-weight: bolder;"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select
+                agency
+                to view details</label>
+            </div>
+          </div>
+
+          <!-- <nb-alert status="danger" *ngIf="getBatchDetailErr != '' " closable (close)="getBatchDetailErr=''"
+        style="margin:5px">
+
+        {{getBatchDetailErr}}
+
+      </nb-alert> -->
+ 
+          <ejs-grid #gridviewbatch [dataSource]='batchfile | async' [allowResizing]='true'  allowPaging='true'   [pageSettings]='initialPage'   [allowFiltering]='true' [allowSorting]='true'(actionBegin)="onActionCompleteviewBatch($event)"   (actionComplete)="test($event)"
+            [filterSettings]='filterSettings'  (dataStateChange)='dataStateChangeViewbatch($event)' [showColumnChooser]='true' (resizeStop)="onResizeBatchView($event)" >
+            <e-columns>
+              <e-column minWidth=100 field="batchno" type='string' headerText="Batch No.">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth=100 field="claimStatus" headerText="Claim Status" type="string"
+                [allowFiltering]='false'>
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth=100 field="companyName" headerText="Company" type="string" [allowFiltering]='false'>
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth=100 field="clearingHouseName" headerText="Clearing House" type="string"
+                [allowFiltering]='false'>
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 field="createDate" type='date' headerText="Generated Date" [format]='formatOptions'    ></e-column>
+              <e-column minWidth= 100 headerText="Action" uid="action" textAlign='center' [showInColumnChooser]='false'>
+                <ng-template #template let-data>
+
+                  <button class="btn btn-edit-table text-center mr-2" (click)="downloadBatchFile(data)"><i
+                      class="fa fa-download"></i></button>
+                  <button class="btn btn-edit-table text-center" data-toggle="modal" data-target="#viewbatch"
+                    (click)="poenpdf2(data.index)"><i class="fa fa-eye "></i></button>
+
+                  <!-- <button class="btn btn-delete-table" data-toggle="modal" data-target="#deletemodal"
+                                                    (click)="selectAgencydetails(data)"><i 
+                                                      class="fa fa-trash"></i></button> -->
+                </ng-template>
+              </e-column>
+
+            </e-columns>
+          </ejs-grid>
+
+          <div *ngIf="global.globalAgencyId!=0 && batchData.length == 0"
+            style="text-align: center;font-weight: bolder;">
+            No data available!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <ngx-ui-loader *ngIf="loadingview"></ngx-ui-loader>
+</div>
+<!---------------------------------------------delete service line----------------->
+<span id="openModal4" data-target="#deletemodal" data-toggle="modal"></span>
+<div class="modal fade" id="deletemodal" data-backdrop="static">
+  <div class="modal-dialog delete-zip" role="document">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title font-header">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <label>Do you want to delete this record ?</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn btn-sm" (click)="deleteServiceLineConfirm()">Delete</button>
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!----------------------------------------child templete---------------------------------------------------------------------->
+
+<ng-template #childtemplatedataws let-data>
+  <div>
+    <button class="btn btn-delete-table" data-toggle="modal" data-target="#deleteBatchclaim"
+      (click)="claimmasterId=data.claimMasterId;BatchNumber=data.id">
+      <i class="fa fa-trash fa-lg"></i></button>
+  </div>
+</ng-template>
+
+
+<!---------------------------------------------delete service line----------------->
+<span id="deleteclaimdata" data-target="#deleteclaim" data-toggle="modal"></span>
+<div class="modal fade" id="deleteclaim" data-backdrop="static">
+  <div class="modal-dialog delete-zip" role="document">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title font-header">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <label>Do you want to delete this record ?</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn btn-sm" (click)="deleteClaim()">Delete</button>
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<span id="deleteBatchclaimdata" data-target="#deleteBatchclaim" data-toggle="modal"></span>
+<div class="modal fade" id="deleteBatchclaim" data-backdrop="static">
+  <div class="modal-dialog delete-zip" role="document">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title font-header">Delete Record</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <label>Do you want to delete this record ?</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue-btn btn-sm" (click)="deleteBatchClaim()">Delete</button>
+        <button type="button" class="btn blue-btn btn-sm" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mark as paid full modal program -->
+<span id="openMarkPaidModal" data-target="#markAsPaid" data-toggle="modal"></span>
+<div class="modal fade" id="markAsPaid"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header">Pay details</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="markAsPaidForm">
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <label class="center-block col-lg-3 col-md-3 col-sm-12 col-xs-12">Paid Date<sup class="super-script">*</sup></label>
+                <my-date-picker class="pl-0 pr-0 col-lg-7 col-md-7 col-sm-12 col-xs-12 " name="nmapaiddate"
+                  [options]="myDatePickerOptions" [selDate]="Markaspaidlist.paidDate" formControlName="mapaiddate"
+                  (inputFieldChanged)="MarkPaiddatechange($event)" (dateChanged)="onMarkPaidDateChanged($event)"
+                  required>
+                </my-date-picker>
+              </div>
+            </div>
+          </div>
+        
+          <div class="modal-footer">
+            <button type="submit" class="btn blue-btn btn-sm" (click)="MarkServicePaid()" [disabled]="!markAsPaidForm.valid">
+              <span> Save & Close</span>
+            </button>
+            <button type="button" class="btn blue-btn btn-sm"  data-dismiss="modal">Close</button>  
+           </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ngx-ui-loader *ngIf="loading==true"></ngx-ui-loader>

@@ -1,0 +1,43 @@
+<div class="card-body  widget-body pb-0 pt-2 mb-4">
+    <div class="row">           
+        <div class="offset-lg-10 col-lg-2 text-right">
+        <button type="button"  class="btn btn-primary btn-sm" (click)="AddStartofcare('new')" *ngIf="fp.startofcarecreate">
+            Add Start of Care
+        </button>
+        </div>
+    </div>
+
+<ejs-grid #grid [dataSource]='data|async' [allowResizing]='true'  [allowSorting]='true' allowPaging='true' [allowFiltering]='true'
+[pageSettings]='initialPage' (dataStateChange)='dataStateChange($event)' [filterSettings]='filterOptions' (resizeStop)="onResize($event)" (actionBegin)="onActionComplete($event)"  >
+<e-columns>
+  <e-column minWidth= 100 field="startDate" headerText="Start Of Care"  type='date' [format]='formatOptions'></e-column>
+  <e-column minWidth= 100 field="companyName" headerText="Company">
+    <ng-template #filterTemplate let-data>
+      <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+    </ng-template>
+  </e-column>
+  <e-column minWidth= 100 field="dischargeStatus" headerText="Discharge" [allowFiltering]='false'>
+    <ng-template #filterTemplate let-data>
+      <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+    </ng-template>
+  </e-column>
+  <e-column minWidth= 100 field="dischargeDate" headerText="Discharge Date" type='date' [format]='formatOptions'  [allowFiltering]='false'></e-column>      
+  <e-column minWidth= 100 field="dischargeCode" headerText="Discharge Status Code"  [allowFiltering]='false'>
+    <ng-template #filterTemplate let-data>
+      <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+    </ng-template>
+  </e-column>
+  <e-column minWidth= 100 uid="action" headerText="Actions" textAlign='center'>
+    <ng-template #template let-data>
+      <button class="btn btn-edit-table" (click)="Datatoedit(data);AddStartofcare('edit');" *ngIf="fp.startofcareupdate"><i class="fa fa-edit"></i></button>
+      <button class="btn btn-delete-table"   (click)="Datatoedit(data);AddStartofcare('delete');" *ngIf="fp.startofcaredelete"><i class="fa fa-trash fa-lg"></i></button>
+    </ng-template>
+  </e-column>
+</e-columns>
+</ejs-grid>
+
+
+</div>
+
+
+<ngx-ui-loader></ngx-ui-loader>

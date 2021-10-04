@@ -1,0 +1,293 @@
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted">
+        <div class="row">
+          <div class="col-lg-9">
+            <h4 class="mb-0 font-header">Client</h4>
+          </div>
+          <div class="col-lg-3">
+            <label>Show Client&nbsp;</label>
+            <select class="d-inline-flex w-50 form-control" [(ngModel)]="getClient.statusLid"
+              (ngModelChange)="filterchange()" [disabled]="global.globalAgencyId==0">
+              <option [value]=cliStatus.Key *ngFor="let cliStatus of ClientStatus">{{cliStatus.Value}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="row">
+              <div class="col-lg-3 pl-0 pr-0">
+                <button type="button" class="btn blue-btn btn-sm" (click)="AddClient('new')"
+                  [disabled]="global.globalAgencyId==0" *ngIf="fp.cilentcreate && fp.COB_Config_AddNew">
+                  Add Client
+                </button>
+              </div>
+              <div class="col-lg-3 pl-0 pr-0">
+                <button type="button" class="btn blue-btn btn-sm" (click)="AidReport()"
+                  [disabled]="global.globalAgencyId==0">
+                  Aide Report
+                </button>
+              </div>
+              <div class="col-lg-3">
+                <button type="button" (click)="report()" class="btn blue-btn btn-sm"
+                  [disabled]="global.globalAgencyId==0">
+                  Report
+                </button>
+              </div>
+              <div class="col-lg-3 pl-0">
+                <button type="button" *ngIf="global.globalAgencyId!=0" (click)="getQp()" class="btn blue-btn btn-sm"
+                  data-target="#QPinfo" data-toggle="modal" [disabled]="global.globalAgencyId==0">
+                  QP Info
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="row">
+              <div class="col-lg-2 pr-0 pl-0">
+
+                <button class="btn blue-btn btn-sm" type="button" (click)="excelformatfunction()"
+                  *ngIf="fp.COB_Config_CSVImport" [disabled]="global.globalAgencyId==0">Excel Template</button>
+              </div>
+              <div class="col-lg-7 pl-0 pr-0">
+                <div class="custom-file w-75 mb-1" *ngIf="fp.COB_Config_CSVImport">
+                  <input type="file" class="custom-file-input" id="customFile" name="filename" #myInput accept=".xlsx"
+                    [disabled]="global.globalAgencyId==0" (change)=onFileChanged($event.target.files) (click)="myInput.value = null">
+                  <label *ngIf="selected" class="custom-file-label" for="customFile">{{selectedFileName}}</label>
+                  <label *ngIf="!selected" class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+
+
+                <button class="btn blue-btn btn-sm ml-5 mt-1"
+                  [disabled]="global.globalAgencyId==0|| selectedFileName==''||selectedFileName==null"
+                  (click)="uploadClient()" *ngIf="fp.COB_Config_CSVImport"><i class="fa fa-upload fa-lg"></i></button>
+              </div>
+              <div class="col-lg-2 d-inline-flex">
+
+                <input type="text" placeholder="Client name" [(ngModel)]="Searchtext"
+                  (keyup.enter)="filtername(Searchtext)" [disabled]="global.globalAgencyId==0" class="form-control w-75
+                  ">
+
+                <i class="fa fa-search mt-1"  (click)="filtername(Searchtext)"  [ngClass]="{'disablesearch':global.globalAgencyId==0}"></i>
+              </div>
+
+              <div class="col-lg-1 pl-0 pr-0">
+
+                <button class="btn blue-btn btn-sm" type="button" (click)="Refresh()"
+                  [disabled]="global.globalAgencyId==0"><i class="fa fa-repeat">&nbsp;</i>Refresh</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--================================== Client Ejs Grid================================================================-->
+<div class="row mb-2">
+  <div class="col pl-0">
+
+    <div widget class="card border-0 box-shadow">
+      <div class="card-body  widget-body pt-2">
+        <div *ngIf="global.globalAgencyId==0" class="text-center text-danger">
+          <label class="font-red"><i class="fa fa-info-circle fa-lg"></i>&nbsp;Select agency to view details</label>
+        </div>
+        <ejs-grid #grid [dataSource]='data|async' [allowResizing]='true' *ngIf="global.globalAgencyId!=0" [allowSorting]='true'
+          allowPaging='true' [allowFiltering]='true' [pageSettings]='initialPage' [filterSettings]='filterOptions'
+          (actionBegin)="onActionComplete($event)" (dataStateChange)='dataStateChange($event)'
+          [showColumnChooser]='true' (resizeStop)="onResize($event)" >
+          <e-columns>
+            <e-column  minWidth= 130 field="name" headerText="Name" type='string'>
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column  minWidth= 130 field="qPname" headerText="QP Name" type='string'>
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column  minWidth= 80 field="dob" headerText="DOB" type='date' [format]='formatOptions'></e-column>
+            <e-column  width=80  field="age" headerText="Age" type='number'></e-column>
+            <e-column minWidth= 100 field="phone1" headerText="Phone" type='string'>
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 80  field="street" headerText="Street" type='string'>
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 80 field="zipCode" headerText="ZIP Code" type='string'>
+              <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+              </ng-template>
+            </e-column>
+            <e-column minWidth= 100 field="status_Name" headerText="Status" type='string'>
+              <ng-template #filterTemplate let-data>
+                <ejs-dropdownlist id='dropdown' placeholder='Select a Status' [dataSource]='dropdata'
+                  [popupHeight]='height'>
+                </ejs-dropdownlist>
+              </ng-template>
+            </e-column>
+            <e-column width=80 minWidth= 80  uid="action" headerText="Actions" [showInColumnChooser]='false'>
+              <ng-template #template let-data>
+                <button class="btn btn-edit-table" (click)="Clientdatatobind(data);AddClient('edit');"
+                  *ngIf="fp.cilentupdate"><i class="fa fa-edit"></i></button>&nbsp;
+
+              </ng-template>
+            </e-column>
+            <e-column width="50" [showInColumnChooser]='false'>
+              <ng-template #headerTemplate let-data>
+                <div>
+                  <span id='show' (click)='show()'><i class="fa fa-cog fa-lg" aria-hidden="true"> </i></span>
+                </div>
+              </ng-template>
+            </e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-------------------------------------------Qp Info------------------------------------------------------------------------->
+<span id="QPopen" data-toggle="modal" data-target="#QPinfo"></span>
+<div class="modal hide fade modalbackgrod" id="QPinfo" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog  ICD-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">QP-Client Mapping</h5>
+
+      </div>
+      <div class="modal-body ICD-modalbody">
+        <div class="row">
+          <div class="col-lg-3">
+            <label>Client&nbsp;</label>
+            <ng-select class="d-inline-flex w-50" [clearable]="true" [(ngModel)]="QPFilter.Client" bindLabel="Value"
+              bindValue="Key" [items]="ClientDropDown" [disabled]="global.globalAgencyId==0">
+
+            </ng-select>
+          </div>
+          <div class="col-lg-3">
+            <label>Employee</label>
+            <ng-select class="d-inline-flex w-50 " [clearable]="true" [(ngModel)]="QPFilter.QPEMP" bindLabel="Value"
+              bindValue="Key" [items]="EmployeeDropdown" [disabled]="global.globalAgencyId==0">
+
+            </ng-select>
+          </div>
+          <div class="col-lg-3">
+            <label>Status&nbsp;</label>
+            <select class="d-inline-flex w-50 form-control" [(ngModel)]="QPFilter.Status"
+              [disabled]="global.globalAgencyId==0">
+              <option [value]=cliStatus.Key *ngFor="let cliStatus of ClientStatus">{{cliStatus.Value}}
+              </option>
+            </select>
+          </div>
+          <div class="col-lg-3">
+
+            <button class="btn blue-btn btn-sm"  (click)="getClientEmployee()">Apply </button>
+          </div>
+        </div>
+        <div>
+          <ejs-grid #grid [dataSource]='ClientEmployee' [allowResizing]='true'  [allowSorting]='true' [allowFiltering]='true'[allowPaging]='true'
+            [filterSettings]='filterOptions'>
+            <e-columns>
+              <e-column minWidth= 100 field="clientName" headerText="Client" type="string">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 field="employeeName" headerText="Employee" type="string">
+                <ng-template #filterTemplate let-data>
+                  <ejs-maskedtextbox placeholder="Enter the value"></ejs-maskedtextbox>
+                </ng-template>
+              </e-column>
+              <e-column minWidth= 100 headerText="Actions"  textAlign='center'>
+                <ng-template #template let-data>
+                  <button class="btn btn-edit-table " data-target="#QPAddandUpdate" data-toggle="modal"
+                    (click)="editmap(data)"><i class="fa fa-edit"></i></button>&nbsp;
+
+                </ng-template>
+              </e-column>
+            </e-columns>
+          </ejs-grid>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-primary" data-target="#QPAddandUpdate" (click)="newmap()"
+          data-toggle="modal">Create New Mapping</button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="Qpsetdefault()" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!------------------------------ Add and Update ------------------------------------------------------------------------->
+
+<span id="QPAddopen" data-toggle="modal" data-target="#QPAddandUpdate"></span>
+<div class="modal hide fade modalbackgrod" id="QPAddandUpdate" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog  ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-header" id="exampleModalLabel">QP-Client Mapping</h5>
+
+      </div>
+      <div class="modal-body ">
+        <div class="row">
+          <div class="col-lg-4">
+            <label>Client<sup class="super-script mr-1">*</sup></label>
+          </div>
+          <div class="col-lg-6">
+            <ng-select class="d-inline-flex w-100" [(ngModel)]="saveClientEmployee.clientId" bindLabel="Value"
+              bindValue="Key" [items]="ClientDropDown" [disabled]="global.globalAgencyId==0">
+
+            </ng-select>
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col-lg-4">
+            <label>Employee<sup class="super-script mr-1">*</sup></label>
+          </div>
+          <div class="col-lg-6">
+            <ng-select class="d-inline-flex w-100 " [(ngModel)]="saveClientEmployee.employeeId" bindLabel="Value"
+              bindValue="Key" [items]="EmployeeDropdown" [disabled]="global.globalAgencyId==0">
+
+            </ng-select>
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col-lg-4">
+            <label>Status<sup class="super-script mr-1">*</sup></label>
+          </div>
+          <div class="col-lg-6">
+            <select class="d-inline-flex w-100 form-control" [(ngModel)]="saveClientEmployee.statusLid"
+              [disabled]="global.globalAgencyId==0">
+              <option [value]=cliStatus.Key *ngFor="let cliStatus of QpStatusDropdown">{{cliStatus.Value}}
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn blue-btn btn-sm" [disabled]="(saveClientEmployee.clientId==0)&&(saveClientEmployee.employeeId==0)
+        && (saveClientEmployee.statusLid==0)" (click)="saveClientEmployeedata(saveClientEmployee)">Save </button>
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<ngx-ui-loader *ngIf="global.globalAgencyId!=0"></ngx-ui-loader>

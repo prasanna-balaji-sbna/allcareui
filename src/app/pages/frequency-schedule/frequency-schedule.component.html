@@ -1,0 +1,224 @@
+<div class="row mb-2">
+  <div class="col pl-0">
+    <div widget class="card border-0 box-shadow">
+      <div class="card-header transparent  text-muted row">
+        <h4 class="mb-0 font-header col-lg-8  col-md-6 col-sm-6 col-xs-12">Frequency Schedule</h4>
+
+
+      </div>
+      <div class="card-body  widget-body pb-0 pt-2 mb-4">
+
+
+        <div class="row no-gutters">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12   mt-2 ">
+            <div class="row">
+              <label class="col-lg-2">Client</label>
+              <select class="form-control col-lg-9" style="margin-left:2px">
+                <option></option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12   mt-2 ">
+            <div class="row">
+
+              <label class="col-lg-4">Frequency</label>
+              <ejs-multiselect id='multiselectelement' style="width: 50%;" [dataSource]='sportsData' [fields]='fields'
+                [mode]='mode' [placeholder]='placeholder'></ejs-multiselect>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row no-gutters">
+
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-2 ">
+            <div class="row"> <input class="checkbox checkbox-primary styled" style="margin-left: 14px;margin-top: 4px;"
+                type="checkbox">
+              <label class="col-lg-2">Shift</label>
+              <select class="form-control col-lg-4" style="margin-left: -23px;margin-right: 9px;">
+                <option></option>
+
+
+              </select>
+              <button type="button" class=" form-control col-lg-4" class="btn blue-btn btn-sm">Create, Add, Edit Bi
+                Weekly Shifts</button>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-5  mt-2 ">
+            <div class="row"> <input class="checkbox checkbox-primary styled" style="margin-left: 14px;margin-top: 4px;"
+                type="checkbox">
+              <label class="col-lg-5">Intermidient</label>
+              <button type="button" class=" form-control col-lg-4" class="btn blue-btn btn-sm">Intermidient
+                List</button>
+            </div>
+          </div>
+
+        </div>
+        <div class="row no-gutters" style="margin-top:10px;">
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12   mt-2 ">
+            <h5 class="mb-0 font-header">Date Range</h5>
+          </div>
+          <div>
+            <h5 class="mb-0 font-header ">Interim Schedule Creation</h5>
+          </div>
+
+        </div>
+        <div class="row no-gutters">
+          <div class="col-lg-8">
+            <div class="row">
+              <div class="col-lg-6   col-md-6 col-sm-12 col-xs-12   mt-2 ">
+                <div class="row">
+    
+                  <label class="col-lg-4">Start date</label>
+                  <my-date-picker [options]="myDatePickerOptions" style="width: 300%;margin-left:6px;" [selDate]="startDate"
+                    placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','startDate')"
+                    (dateChanged)="newdates($event,'datechagned','startDate')" class="col-lg-7">
+                  </my-date-picker>
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12   mt-2 ">
+                <div class="row">
+    
+                  <label class="col-lg-4">End date</label>
+                  <my-date-picker [options]="myDatePickerOptions" style="width: 300%;margin-left:6px;" class="col-lg-7" [selDate]="endDate"
+                    placeholder="mm/dd/yyyy" (inputFieldChanged)="newdates($event,'inputchage','endDate')"
+                    (dateChanged)="newdates($event,'datechagned','endDate')">
+                  </my-date-picker>
+                </div>
+              </div>
+            </div>
+          </div>
+     
+
+
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12   mt-2 ">
+            <div class="row">
+
+              <label class="col-lg-4">Service Code</label>
+              <select class="form-control col-lg-5" style="margin-left: -9px;margin-right: 9px;">
+                <option></option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row no-gutters">
+          <div class="col-lg-8">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12   mt-2 ">
+                <div class="row">
+    
+                  <label class="col-lg-5">Result</label>
+                  <select class="form-control col-lg-6" style="margin-left: -9px;margin-right: 9px;">
+                    <option></option>
+    
+    
+                  </select>
+                </div>
+              </div>
+             
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12   mt-2 ">
+                <div class="row">
+    
+                  <label class="col-lg-5">Service Agreement</label>
+                  <select class="form-control col-lg-6" style="margin-left: -9px;margin-right: 9px;">
+                    <option></option>
+                  </select>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12   mt-2 ">
+            <div class="row">
+
+              <label class="col-lg-4">Company</label>
+              <select class="form-control col-lg-5" style="margin-left: -9px;margin-right: 9px;">
+                <option></option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-xs-5   mt-2 ">
+           
+          </div> -->
+
+        
+        </div>
+
+        
+        <div class="row no-gutters">
+          <div class="col-lg-8">
+            <div class="row">
+           
+
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12   mt-2 ">
+                <div class="row">
+    
+                  <label class="col-lg-5">Start Time</label>
+                  <input class="form-control col-lg-6" style="margin-left: -9px" type="type">
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12   mt-2 ">
+                <div class="row">
+    
+                  <label class="col-lg-5">End Time</label>
+                  <input class="form-control col-lg-6" style="margin-left: -9px;" type="type">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12   mt-2 ">
+            <div class="row">
+
+              <label class="col-lg-4">Payer</label>
+              <select class="form-control col-lg-5" style="margin-left: -9px;margin-right: 9px;">
+                <option></option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row no-gutters mt-4">
+          <div class="col-lg-3 col-md-6 col-sm6">
+            <div class="row">
+
+              <input class="checkbox checkbox-primary styled" style="margin-left: 14px;margin-top: 4px;"
+                type="checkbox">
+              <label class="col-lg-8">Show Inactive Employees</label>
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12   mt-2 ">
+            <div class="row">
+              <label class="col-lg-4">Employee</label>
+              <!-- <select class="form-control col-lg-7">
+                <option></option>
+              </select> -->
+              <ng-select  class="form-control col-lg-7"  [searchable]="true" [clearable]="true"
+              [items]="EmployeeTypeList" bindLabel="name" class="tdropdown" bindValue="id"
+               class="tdropdown" >
+          </ng-select>
+              <!-- <ng-select [searchable]="true" [clearable]="true"
+              [items]="EmployeeDropDown" bindLabel="Value" class="tdropdown" bindValue="Key"
+              (change)="timesheetclose=true" (ngModelChange)="enableEmp(Employee)">
+          </ng-select> -->
+            </div>
+          </div>
+          <!-- <div class="col-lg-1"></div> -->
+          <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12   mt-2 ">
+            <div class="row">
+
+              <button type="button" class=" form-control " class="btn blue-btn btn-sm">
+                Create Scheduled Appoinments</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
